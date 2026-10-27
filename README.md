@@ -126,7 +126,6 @@ panmigrate/           后端
 └─ web/               前端（index.html / app.js / 三份样式表）
 tests/                253 个单元测试
 docs/                 打包、部署、架构、界面规范、macOS 适配说明
-posters/              宣传图与源文件
 vendor/               二维码库（内联，免 pip 安装）
 ```
 

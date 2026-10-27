@@ -36,7 +36,7 @@ _full_*.png
 _collapsed*.png
 
 # ---------- 仓库里不需要的二进制/历史产物 ----------
+# 宣传海报只留本地：属营销素材、体积大，不进代码仓库（要分发就走 Release 附件）
+posters/
 # qrcode 自带的命令行小工具（Windows exe），运行时用不到，只保留包本体
 vendor/bin/
-# 早期宣传图（当前版本在 posters/v126/）
-posters/poster-[1-5].png
