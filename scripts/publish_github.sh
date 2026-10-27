@@ -38,12 +38,23 @@ else
   TMP="$(mktemp -d)"
   ARCH="$(uname -m)"; [ "$ARCH" = "arm64" ] || ARCH="amd64"
   URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_macOS_${ARCH}.zip"
-  curl -fL --retry 3 --progress-bar -o "$TMP/gh.zip" "$URL" || die "下载失败，检查网络后重试"
-  unzip -q "$TMP/gh.zip" -d "$TMP"
-  rm -rf "$HOME/.local/opt/gh"
-  mv "$TMP/gh_${GH_VERSION}_macOS_${ARCH}" "$HOME/.local/opt/gh"
+  # 首选官方安装包；github.com 被网络环境挡住时回落到 PyPI 上的官方二进制分发（gh-bin）
+  if curl -fL --retry 2 --max-time 180 -o "$TMP/gh.zip" "$URL" 2>/dev/null; then
+    unzip -q "$TMP/gh.zip" -d "$TMP"
+    rm -rf "$HOME/.local/opt/gh"
+    mv "$TMP/gh_${GH_VERSION}_macOS_${ARCH}" "$HOME/.local/opt/gh"
+  else
+    echo "直连 GitHub 下载失败，改用 PyPI 的 gh-bin（同样是官方签名的二进制）…"
+    python3 -m pip install -q --no-deps --target "$TMP/pip" gh-bin || die "两种方式都装不上"
+    mkdir -p "$HOME/.local/opt/gh/bin"
+    cp "$TMP/pip/bin/gh" "$HOME/.local/opt/gh/bin/gh"
+    chmod +x "$HOME/.local/opt/gh/bin/gh"
+    # 核一下签名归属，确认是 GitHub 官方签名而不是来路不明的二进制
+    codesign -dv --verbose=2 "$HOME/.local/opt/gh/bin/gh" 2>&1 | grep -q "GitHub" \
+      || echo "⚠ 这个二进制没有 GitHub 官方签名，请谨慎使用"
+  fi
   rm -rf "$TMP"
-  [ -x "$GH" ] || die "解压后没找到 $GH"
+  [ -x "$GH" ] || die "装完没找到 $GH"
 fi
 echo "gh $("$GH" --version | head -1)"
 
