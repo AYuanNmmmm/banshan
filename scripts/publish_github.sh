@@ -78,7 +78,14 @@ echo "署名：$OWNER <${GH_ID}+${OWNER}@users.noreply.github.com>"
 
 # ---------- 5. push ----------
 say "5/6 推送到 GitHub"
-git push -u origin main
+if ! git push -u origin main; then
+  echo
+  echo "推送被拒。常见原因：仓库在网页上建的时候勾了 README / LICENSE，远端已有提交。"
+  echo "两种解法："
+  echo "  a) 删掉那个空仓库（Settings → Delete this repository），再跑一次本脚本；"
+  echo "  b) 确认远端没有有用内容后，强制推：git push -u origin main --force"
+  die "推送失败"
+fi
 
 # ---------- 6. Release ----------
 say "6/6 发布 $TAG"
