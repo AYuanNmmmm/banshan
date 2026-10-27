@@ -1,0 +1,3140 @@
+:root {
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --line: #e4e8ee;
+  --text: #1b2027;
+  --muted: #68727e;
+  --faint: #98a1ad;
+  --accent: #FF4D14;
+  --accent-2: #E03C00;
+  --accent-soft: #FFEDE6;
+  --ok: #15803d;
+  --ok-soft: #ecfdf3;
+  --warn: #b45309;
+  --warn-soft: #fffbeb;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .07);
+  --shadow-lg: 0 2px 6px rgba(16, 24, 40, .06), 0 16px 40px rgba(16, 24, 40, .10);
+  --line-soft: #e3e8ef;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, #eaf1ff 0%, transparent 55%),
+    radial-gradient(1000px 500px at 100% 0%, #f0fbf6 0%, transparent 50%),
+    var(--bg);
+  color: var(--text);
+  font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+/* 细腻的底纹纹理：淡网格线，铺在渐变背景之上，不抢内容 */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, .045) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+/* 内容层压到底纹之上；底部留足呼吸空间，否则最后一块（日志）会紧贴窗口底边 */
+.wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 24px 48px; }
+
+/* ---------------- 顶部品牌栏 ---------------- */
+.topbar {
+  position: relative; z-index: 1;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 1px 8px rgba(16,24,40,.04);
+  margin-bottom: 20px;
+  padding: 12px 0;
+}
+.tb-in { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 0 24px; }
+
+.brand { display: flex; align-items: center; gap: 11px; }
+.logo {
+  display: inline-flex; width: 42px; height: 42px; border-radius: 11px;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, .28);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.logo:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37, 99, 235, .38); }
+.logo svg { display: block; width: 42px; height: 42px; border-radius: 10px; }
+.brand-txt { line-height: 1.2; }
+.brand-txt strong {
+  display: block; font-size: 19px; font-weight: 700; letter-spacing: .01em;
+  background: #141414;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.brand-txt .slogan {
+  display: block; font-size: 12px; color: var(--muted); margin-top: 2px;
+  letter-spacing: .02em;
+}
+
+/* 右侧：副标题 + 状态胶囊，横向排列 */
+.tb-right { display: flex; align-items: center; gap: 14px; }
+
+.badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px; font-size: 12px;
+  background: #fff; border: 1px solid var(--line); color: var(--muted);
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+.dot.ok { background: var(--ok); }
+.dot.warn { background: var(--warn); }
+.dot.err { background: var(--danger); }
+.dot.run { background: var(--accent); }
+
+/* ---------------- 卡片 ---------------- */
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  transition: box-shadow .2s ease, border-color .2s ease;
+  animation: card-in .4s ease both;
+}
+.card:hover { border-color: #d6dfee; box-shadow: var(--shadow-lg); }
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card h2 {
+  font-size: 14px; font-weight: 600; margin: 0 0 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card h2 .ic {
+  display: inline-flex; width: 20px; height: 20px; border-radius: 6px;
+  background: var(--accent-soft); color: var(--accent);
+  align-items: center; justify-content: center; font-size: 11px;
+}
+.card h2 .tag { font-weight: 400; font-size: 12px; color: var(--faint); }
+
+section.card > h2:first-child { margin-top: 0; }
+
+/* ---------------- 两端 + 方向箭头 ---------------- */
+
+.end { position: relative; overflow: hidden; }
+.end::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+}
+.end-src::before { background: linear-gradient(180deg, var(--accent-2), var(--accent)); }
+.end-dst::before { background: linear-gradient(180deg, #34d399, #15803d); }
+
+.end h2 .tag { margin-left: auto; }
+/* 网盘平台 logo：官方原版图标，紧跟标题一眼认出是哪家 */
+.prov-logo {
+  display: inline-flex; width: 32px; height: 32px; border-radius: 8px;
+  align-items: center; justify-content: center;
+  background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(16, 24, 40, .06);
+  flex-shrink: 0; overflow: hidden;
+}
+.prov-logo img { display: block; object-fit: contain; max-width: 100%; max-height: 100%; }
+.h2-txt { display: inline-flex; align-items: center; }
+/* 两块端面板是全页最高的板块，内部间距收紧一点，别把纵向节奏压得太沉 */
+.end h2 { margin-bottom: 11px; }
+.end .note { margin-top: 8px; padding: 8px 10px; }
+.end label.f { margin-bottom: 10px; }
+.end .auth-sec { margin-top: 11px; }
+.end .dir-label { margin-top: 13px; margin-bottom: 6px; }
+.end .pathbox { padding: 7px 10px; }
+/* 形状与交互统一在下方「交换按钮」那一段定义 */
+.swap-btn:active:not(:disabled) { transform: scale(.96); }
+.swap-btn svg { transition: transform .25s ease; }
+.swap-btn:disabled { opacity: .55; cursor: default; }
+@keyframes spin { to { transform: rotate(180deg); } }
+
+@media (max-width: 900px) {
+  
+  .swap-btn svg { transform: rotate(90deg); }
+  .swap { padding: 4px 0; }
+}
+
+/* ---------------- 迁移主控 ---------------- */
+
+button.lg { padding: 9px 18px; font-size: 13.5px; font-weight: 500; }
+button.primary.lg { box-shadow: 0 2px 8px rgba(37, 99, 235, .26); }
+
+/* 进度条：带条纹动画，跑起来时有流动感 */
+.progress {
+  height: 8px; background: #e9edf3; border-radius: 999px; overflow: hidden;
+}
+.progress > i {
+  display: block; height: 100%; width: 0; border-radius: 999px;
+  background: var(--accent);
+  transition: width .4s ease;
+}
+.progress.lg-prog { height: 12px; }
+.progress.lg-prog > i {
+  background: var(--accent);
+  background-size: 100% 100%, 22px 22px;
+}
+.progress.running > i { animation: flow 1.1s linear infinite; }
+.progress.done > i {
+  background: var(--ok);
+  background-image: var(--ok);
+  animation: none;
+}
+@keyframes flow { to { background-position: 0 0, 22px 0; } }
+
+/* ---------------- 表单 ---------------- */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+
+label.f { display: block; margin-bottom: 12px; }
+label.f span { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+/* 分片大小那行：目标网盘固定分片时，在后面补一句「（百度网盘固定 4MB）」 */
+.chunk-tip { font-style: normal; color: var(--faint); margin-left: 2px; }
+input[type=number]:disabled { background: #f4f6f8; color: var(--faint); cursor: not-allowed; }
+
+input[type=text], input[type=password], input[type=number], input[type=search], select, textarea {
+  width: 100%; padding: 8px 10px; font-size: 13px; font-family: inherit;
+  color: var(--text); background: #fff;
+  border: 1px solid var(--line); border-radius: 8px; outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
+textarea { resize: vertical; min-height: 60px; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+
+button {
+  font: inherit; font-size: 13px; cursor: pointer; border-radius: 8px;
+  border: 1px solid var(--line); background: #fff; color: var(--text);
+  padding: 7px 14px; transition: background .15s, border-color .15s, opacity .15s, transform .1s;
+}
+button:hover:not(:disabled) { background: #f3f4f6; border-color: #d4d8dd; }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary {
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  border-color: var(--accent); color: #fff;
+}
+button.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+}
+button.ghost { border-color: transparent; background: transparent; color: var(--accent); padding: 2px 6px; }
+button.danger { color: var(--danger); border-color: #f3c9c9; }
+button.sm { padding: 4px 10px; font-size: 12px; }
+
+.row { display: flex; align-items: center; gap: 8px; }
+.row.spread { justify-content: space-between; }
+.hint { font-size: 12px; color: var(--faint); line-height: 1.6; margin: 6px 0 0; }
+.hint.warn { color: var(--warn); }
+.hint.err { color: var(--danger); }
+
+.note {
+  font-size: 12px; color: var(--muted); line-height: 1.65;
+  background: #fafbfc; border: 1px solid var(--line); border-left: 2px solid var(--line);
+  border-radius: 6px; padding: 9px 11px; margin: 10px 0 0;
+}
+.note.plan { border-left-color: #d1d5db; }
+
+/* ---------------- 预设档 ---------------- */
+.presets {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+.preset {
+  text-align: left; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid var(--line); background: #fff; cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+.preset b { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+.preset span { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.preset:hover:not(:disabled) {
+  border-color: var(--accent-2); background: #fbfdff;
+  transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, .10);
+}
+.preset:active:not(:disabled) { transform: translateY(0); }
+.preset.on {
+  border-color: var(--accent); background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.preset.on b { color: var(--accent); }
+.preset.custom { border-style: dashed; }
+
+.adv { margin-top: 14px; }
+.adv > summary {
+  cursor: pointer; font-size: 12.5px; color: var(--muted);
+  padding: 6px 0; list-style: none; user-select: none;
+}
+.adv > summary::-webkit-details-marker { display: none; }
+.adv > summary::before {
+  content: "▸"; display: inline-block; margin-right: 6px;
+  transition: transform .15s; color: var(--faint);
+}
+.adv[open] > summary::before { transform: rotate(90deg); }
+.adv-body {
+  margin-top: 10px; padding: 14px; border-radius: 10px;
+  background: #fafbfd; border: 1px solid var(--line);
+}
+
+/* ---------------- 表格 ---------------- */
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th {
+  text-align: left; font-weight: 500; color: var(--muted); font-size: 12px;
+  padding: 0 10px 8px; border-bottom: 1px solid var(--line);
+}
+td { padding: 7px 10px; border-bottom: 1px solid #f1f3f5; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+
+.scroll { max-height: 340px; overflow: auto; }
+/* 给日志一个稳定的最小体量：只有一行「等待操作」时不会塌成一条细缝，
+   页面收尾才站得住。但别给太高，否则空状态下整块显得空旷。 */
+.logbox {
+  min-height: 92px; max-height: 220px; overflow: auto;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px; line-height: 1.75; color: var(--muted);
+}
+/* 空日志时把提示居中，比顶在左上角好看；有日志内容时 :only-child 不成立，恢复正常流 */
+.logbox > .hint:only-child {
+  display: flex; align-items: center; justify-content: center; min-height: 72px;
+}
+.logbox div { white-space: pre-wrap; word-break: break-all; }
+.logbox .lv-error { color: var(--danger); }
+.logbox .lv-warn { color: var(--warn); }
+
+/* ---------------- 弹层 ---------------- */
+.mask {
+  position: fixed; inset: 0; background: rgba(16, 20, 26, .42);
+  display: none; align-items: center; justify-content: center; z-index: 50; padding: 24px;
+  backdrop-filter: blur(2px);
+}
+.mask.on { display: flex; }
+.dialog {
+  background: #fff; border-radius: 14px; width: 100%; max-width: 560px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.22); overflow: hidden;
+}
+.dialog header {
+  padding: 14px 18px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.dialog header strong { font-size: 14px; font-weight: 600; }
+.dialog .body { padding: 12px 18px; max-height: 52vh; overflow: auto; }
+.dialog footer {
+  padding: 12px 18px; border-top: 1px solid var(--line);
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+
+.crumbs { font-size: 12px; color: var(--muted); margin-bottom: 8px; word-break: break-all; }
+.crumbs a { color: var(--accent); cursor: pointer; text-decoration: none; }
+.dirlist { display: flex; flex-direction: column; }
+.dirlist .it {
+  display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+  border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.dirlist .it:hover { background: #f5f7fa; }
+.dirlist .it.file { color: var(--faint); cursor: default; }
+.dirlist .it.file:hover { background: transparent; }
+.dirlist .it .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dirlist .it.pickable { cursor: pointer; }
+.dirlist .it.picked { background: var(--accent-soft); }
+.dirlist .it.picked .nm { color: var(--text); }
+/* 目标端文件夹行的「选择」按钮：一眼看出能直接设为目标目录 */
+.dirlist .it .pick-dir {
+  margin-left: auto; padding: 2px 10px; font-size: 12px;
+  opacity: 0; transition: opacity .15s ease;
+}
+.dirlist .it:hover .pick-dir { opacity: 1; }
+.dirlist .it .pick-dir:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: #1b2027; color: #fff; padding: 10px 18px; border-radius: 10px;
+  font-size: 13px; z-index: 80; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s; max-width: 80vw;
+  box-shadow: 0 8px 24px rgba(0,0,0,.24);
+}
+.toast.on { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* 进度条下方「正在传哪个文件·第几片」一行 */
+.prog-active { margin: 6px 0 0; min-height: 16px; font-size: 12px; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ============================================================
+   登录板块可收起：登录完把版面让给「选文件」
+   ============================================================ */
+.end h2 { display: flex; align-items: center; gap: 6px; }
+.end h2 .h2-txt { flex: 0 0 auto; }
+.end h2 .tag { flex: 0 0 auto; }
+.end h2 .sum {
+  display: none; flex: 1 1 auto; min-width: 0;
+  font-size: 12px; font-weight: 400; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.end.collapsed { padding-top: 14px; padding-bottom: 14px; }
+.end.collapsed > *:not(h2) { display: none; }
+.end.collapsed h2 .sum { display: block; }
+.end.collapsed h2 .fold { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+/* ============================================================
+   浏览弹窗：图标 / 列表两种视图
+   ============================================================ */
+
+/* 文件类型图标 */
+.dirlist .it .fico { display: inline-flex; flex: 0 0 auto; width: 18px; justify-content: center; }
+.dirlist .it .fico svg { width: 17px; height: 17px; }
+.fico[data-k="dir"] { color: #e8a33d; }
+.fico[data-k="image"] { color: #12b886; }
+.fico[data-k="video"] { color: #7048e8; }
+.fico[data-k="audio"] { color: #e8590c; }
+.fico[data-k="archive"] { color: #7b8794; }
+.fico[data-k="doc"] { color: #1c7ed6; }
+.fico[data-k="file"] { color: #97a3b4; }
+
+/* 图标视图：网格卡片 */
+.dirlist.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px; padding: 2px;
+}
+.dirlist.grid .it {
+  flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 5px; padding: 14px 8px 10px; min-height: 104px;
+  border: 1px solid var(--line); border-radius: 10px; text-align: center;
+  position: relative; background: #fff; transition: border-color .15s ease, background .15s ease;
+}
+.dirlist.grid .it:hover { background: #f8fafd; border-color: #c9d5e6; }
+.dirlist.grid .it.file:hover { background: #f8fafd; }
+.dirlist.grid .it .fico { width: auto; margin-bottom: 2px; }
+.dirlist.grid .it .fico svg { width: 34px; height: 34px; }
+.dirlist.grid .it .nm {
+  flex: 0 0 auto; width: 100%; font-size: 12px; line-height: 1.35; white-space: normal;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; word-break: break-all;
+}
+.dirlist.grid .it .hint { font-size: 11px; margin: 0 !important; }
+.dirlist.grid .it .pick { position: absolute; top: 7px; left: 7px; margin: 0; width: auto; }
+.dirlist.grid .it .pick-dir {
+  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  margin: 0; padding: 1px 9px; font-size: 11px; opacity: 0;
+}
+.dirlist.grid .it:hover .pick-dir { opacity: 1; }
+.dirlist.grid .it.picked { border-color: var(--accent); background: var(--accent-soft); }
+
+/* =====================================================================
+   v2 布局：左右分栏（侧栏放两端与设置，主区放选文件与迁移作业）
+   为什么这么分：源/目标改为侧栏内**上下排列**后，折叠任一端只是纵向收缩，
+   侧栏宽度和主区宽度都不变，不会再出现「一边 64px、一边 400px」的失衡。
+   ===================================================================== */
+.wrap { max-width: 1440px; }
+
+/* ---------------- 左栏 ---------------- */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  position: sticky;
+  top: 74px;
+}
+
+/* 收起态：只留一行摘要，高度约 44px */
+.side .end.collapsed { padding: 12px 16px; }
+
+/* 侧栏里的设置卡：预设改两列，高级设置纵向排列 */
+.setup.mini { padding: 14px 16px 16px; }
+
+/* ---------------- 右栏 ---------------- */
+.main { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------------- 文件浏览器（常驻，不再弹抽屉） ---------------- */
+.browser { padding: 0; overflow: hidden; }
+.br-tools { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+.seg button {
+  padding: 4px 10px; font-size: 12.5px; line-height: 1.5; color: var(--muted);
+  background: #fff; border: 0; cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on { color: var(--accent); background: var(--accent-soft); }
+
+.br-path {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px 8px;
+}
+.br-up {
+  flex: 0 0 auto; width: 26px; height: 26px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--muted); background: #fff;
+  border: 1px solid var(--line); border-radius: 7px; cursor: pointer;
+  transition: all .15s ease;
+}
+.br-up:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.br-up:disabled { opacity: .38; cursor: default; }
+.br-path .crumbs { font-size: 12.5px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.br-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 0 14px 10px;
+}
+.br-bar input[type="search"] { width: 200px; }
+.br-bar #br-pickinfo { margin: 0 0 0 auto; font-size: 12px; }
+
+.br-pathbox { padding: 0 14px 10px; }
+.br-pathbox textarea { min-height: 64px; }
+
+.br-body {
+  display: grid;
+  grid-template-columns: 178px minmax(0, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  min-height: 340px;
+}
+.br-nav {
+  border-right: 1px solid var(--line);
+  background: #fbfcfe;
+  padding: 8px 6px;
+  overflow-y: auto;
+  max-height: 460px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  padding: 6px 8px; font-size: 12.5px; color: var(--text); text-align: left;
+  background: none; border: 0; border-radius: 7px; cursor: pointer;
+}
+.nav-item:hover { background: var(--accent-soft); color: var(--accent); }
+.nav-item .fico { flex: 0 0 auto; }
+.nav-item .fico svg { width: 16px; height: 16px; }
+.nav-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.br-listwrap { overflow: auto; max-height: 460px; }
+.br-listwrap .dirlist { padding: 8px 10px; }
+.br-listwrap .dirlist .it { border-radius: 8px; }
+.br-listwrap .dirlist.grid { padding: 10px; }
+
+/* ---------------- 迁移作业（进度 + 清单 + 任务表 合并） ---------------- */
+.job { padding: 16px 18px 18px; }
+
+.job-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.job .prog-wrap { margin-top: 2px; }
+
+.list-ops { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.list-ops .chk { gap: 5px; font-size: 12.5px; color: var(--muted); cursor: pointer; }
+.list-ops .chk input { width: auto; }
+
+.list-filter {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.list-filter input[type="search"] { width: 190px; }
+.list-filter select { width: auto; }
+.list-filter #pick-info { margin: 0; }
+.list-filter #list-info { margin: 0 0 0 auto; }
+
+/* ---------------- 响应式 ---------------- */
+@media (max-width: 1180px) {
+  
+  .br-body { grid-template-columns: 158px minmax(0, 1fr); }
+}
+@media (max-width: 1024px) {
+  
+  .side { position: static; }
+  /* 窄屏：两端改成并排一行，避免占满首屏 */
+  .side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .side .swap-line { grid-column: 1 / -1; }
+  .side .setup { grid-column: 1 / -1; }
+  .br-body { grid-template-columns: minmax(0, 1fr); }
+  .br-nav {
+    display: flex; gap: 6px; overflow-x: auto; border-right: 0;
+    border-bottom: 1px solid var(--line); max-height: none; padding: 8px 10px;
+  }
+  .br-nav .nav-item { width: auto; flex: 0 0 auto; background: #fff; border: 1px solid var(--line); }
+  .br-listwrap { max-height: 380px; }
+}
+@media (max-width: 720px) {
+  .side { grid-template-columns: minmax(0, 1fr); }
+  .job-actions { margin-left: 0; }
+  .job-actions button { flex: 1 1 auto; }
+  .br-bar input[type="search"] { width: 100%; }
+}
+
+/* 面包屑分隔符 */
+.crumbs .sep { color: var(--faint); margin: 0 5px; font-size: 11px; }
+.crumbs a { color: var(--muted); text-decoration: none; cursor: pointer; }
+.crumbs a:hover { color: var(--accent); text-decoration: underline; }
+.crumbs a:last-of-type { color: var(--text); font-weight: 600; }
+
+/* ---- 侧栏撑满视口：日志在底部吃掉剩余高度，左右两栏视觉等长 ---- */
+.side { min-height: calc(100vh - 104px); }
+
+/* 收起态：标题里的网盘名标签会和摘要重复，藏掉它 */
+.end.collapsed h2 .tag { display: none; }
+
+/* =====================================================================
+   v3 布局：方向条置顶 + 源/目标并行（源更大）
+   ===================================================================== */
+
+/* ---------- 迁移方向条 ---------- */
+.dir-bar {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 16px; margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+.dir-side.dst { justify-content: flex-end; }
+
+.dir-side.dst .dir-tag { background: #f3f0ff; color: #6d47d9; }
+.dir-name { font-size: 13.5px; font-weight: 650; white-space: nowrap; }
+
+.dir-note { font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+
+/* 交换按钮就是这套界面的「点睛」：橙色实心方块 + 悬停整体旋转 */
+.swap-btn {
+  width: 46px; height: 46px; border-radius: 12px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; background: var(--accent); color: #fff;
+  box-shadow: 0 4px 14px rgba(255, 77, 20, .30), 0 1px 2px rgba(16, 24, 40, .08);
+  transition: transform .26s cubic-bezier(.2, .9, .3, 1.15),
+              box-shadow .26s ease, background .18s ease;
+  cursor: pointer;
+}
+.swap-btn:hover:not(:disabled) {
+  background: var(--accent-2);
+  transform: rotate(180deg) scale(1.06);
+  box-shadow: 0 8px 22px rgba(255, 77, 20, .40);
+}
+.swap-btn:active:not(:disabled) {
+  transform: rotate(180deg) scale(.94);
+  box-shadow: 0 2px 8px rgba(255, 77, 20, .28);
+}
+.swap-btn:disabled { opacity: .45; cursor: default; box-shadow: none; }
+
+/* ---------- 源 / 目标 两栏（源更大） ---------- */
+.panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.col { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.col > .card { margin: 0; }
+
+/* 面板在这两栏里的排版（比原来的侧栏版宽松一点） */
+.col .end { padding: 14px 16px 16px; }
+.col .end h2 { font-size: 13px; }
+.col .end h2 .fold { padding: 1px 8px; font-size: 11.5px; }
+.col .end.collapsed { padding: 12px 16px; }
+.col .end .note { font-size: 11.5px; line-height: 1.55; margin: 6px 0 10px; }
+.col .end .f > span { font-size: 12px; }
+
+/* ---------- 浏览器头部（不再是 tab，改成标题 + 工具） ---------- */
+.br-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 16px; border-bottom: 1px solid var(--line);
+  background: #fafbfd;
+}
+.br-head h2 {
+  margin: 0; font-size: 13.5px; display: flex; align-items: center; gap: 6px;
+}
+.br-head .tag { font-size: 11px; padding: 1px 7px; }
+.br-tools { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.br-tools .hint { margin: 0; font-size: 12px; }
+
+/* ---------- 目标：写入位置选择器 ---------- */
+.tdir { padding: 14px 16px 16px; }
+.tdir h2 { font-size: 13px; margin-bottom: 10px; }
+
+/* 目标端目录栏与源端保持一致（旧的 tdir-cur 已删除，这条覆盖不再需要） */
+.tdir .br-path { padding: 7px 10px; }
+.tdir-list {
+  border: 1px solid var(--line); border-radius: 8px; background: #fbfcfe;
+  padding: 6px; min-height: 130px; max-height: 320px; overflow-y: auto;
+}
+.tdir-list .nav-item { width: 100%; }
+.tdir-empty { padding: 10px; font-size: 12px; color: var(--faint); }
+
+/* ---------- 底部：设置 + 日志 ---------- */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 16px; margin-top: 16px; align-items: start;
+}
+.bottom-grid > .card { margin: 0; }
+.bottom-grid .log-card { display: flex; flex-direction: column; min-height: 220px; }
+.bottom-grid .log-card .logbox { flex: 1 1 auto; min-height: 0; max-height: 320px; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1120px) {
+  .panels { grid-template-columns: minmax(0, 1fr); }
+  .bottom-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .dir-bar { flex-wrap: wrap; gap: 8px; }
+  
+  .dir-side.dst { justify-content: flex-start; }
+  
+  .dir-note { display: none; }
+  
+}
+
+/* =====================================================================
+   排版规范收口：字号/间距/控件高度统一，避免"到处是 12.3px"的散乱
+   ===================================================================== */
+:root {
+  /* 字号阶梯：全局只用这几档 */
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 12.5px;
+  --fs-md: 13px;
+  --fs-lg: 14.5px;
+  --fs-xl: 17px;
+  /* 铸岩：等宽字体用于标签/数字/英文小标题 */
+  --font-label: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  /* 间距阶梯：4 的倍数 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --pad-card: 18px;
+  --radius-md: 10px;
+}
+
+/* 卡片统一内边距与标题节奏（浏览器卡片内部自己排，排除） */
+.card:not(.browser) { padding: var(--pad-card); }
+.card:not(.browser) > h2 {
+  font-size: var(--fs-lg); line-height: 1.35;
+  margin: 0 0 var(--sp-3);
+}
+.card:not(.browser) > h2 + .hint { margin-top: -4px; }
+.card .hint { font-size: var(--fs-sm); line-height: 1.6; }
+.card h2 .tag { vertical-align: middle; }
+
+/* 控件高度统一，避免一行里高矮不齐 */
+input[type="text"], input[type="search"], input[type="password"],
+input[type="number"], select, textarea { font-size: var(--fs-sm); }
+button.sm { min-height: 26px; padding: 3px 10px; font-size: var(--fs-xs); }
+button.lg { min-height: 34px; padding: 7px 16px; font-size: var(--fs-md); }
+
+/* 统计压成一行：把「已选清单」整体上提，表格可视行数翻倍 */
+.stats-inline {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 6px 14px; margin: 12px 0 0;
+  font-size: var(--fs-xs); color: var(--muted);
+}
+.stats-inline .si {
+  display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap;
+}
+.stats-inline .si b {
+  font-size: var(--fs-md); font-weight: 650; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.stats-inline .si-bar { width: 1px; height: 12px; background: var(--line); }
+
+/* 清单表格：表头吸顶，滚动区自带描边 */
+.job .scroll {
+  max-height: 420px; overflow: auto;
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+}
+.job .scroll table { border-collapse: separate; border-spacing: 0; }
+.job .scroll thead th {
+  position: sticky; top: 0; z-index: 2; background: #fafbfd;
+  padding: 9px 10px; border-bottom: 1px solid var(--line);
+}
+.job .scroll tbody td { padding: 8px 10px; }
+
+/* 标题层级：卡片标题(lg) > 区块标题(md) > 正文(sm) > 辅助(xs) */
+
+.tdir h2, .br-head h2 { font-size: var(--fs-md); }
+
+/* ---------- 移动端：收紧留白、按钮全宽、表格横向滚动而不是挤压 ---------- */
+@media (max-width: 760px) {
+  .wrap { padding: 0 12px 32px; }
+  .card:not(.browser) { padding: 14px; }
+  .card:not(.browser) > h2 { font-size: var(--fs-md); }
+  .dir-bar { padding: 10px 12px; }
+  
+  .job-actions { width: 100%; margin-left: 0; }
+  .job-actions button { flex: 1 1 calc(50% - 8px); }
+  .list-ops { margin-left: 0; width: 100%; }
+  .list-filter input[type="search"] { width: 100%; }
+  .job .scroll { max-height: 340px; }
+  /* 表格保持最小宽度，超出由 .scroll 横向滚动，不把列挤成一字一行 */
+  .job .scroll table { min-width: 620px; }
+  .stats-inline { gap: 4px 10px; font-size: var(--fs-2xs); }
+  .toast { left: 12px; right: 12px; transform: none; text-align: center; }
+}
+
+/* 移动端方向条：源/目标并排在上，交换按钮单独一行通栏，避免挤成一团 */
+@media (max-width: 720px) {
+  .dir-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px 10px;
+    padding: 10px 12px;
+  }
+  
+  .dir-side.dst { justify-content: flex-end; }
+  .dir-note { display: none; }
+  
+  
+
+  
+  .swap-btn { width: 100%; justify-content: center; }
+}
+
+/* 移动端方向条：显式定位，保证「源 | 目标」同一行，交换按钮在下一行通栏 */
+@media (max-width: 720px) {
+  .dir-bar > .dir-side:first-child { grid-area: 1 / 1 / 2 / 2; }
+  .dir-bar > .dir-side.dst { grid-area: 1 / 2 / 2 / 3; }
+  .dir-bar > .dir-mid { grid-area: 2 / 1 / 3 / 3; }
+}
+
+/* =====================================================================
+   v4：方向条重做（起终点卡片 + 中间单一对调按钮）+ 板块折叠
+   ===================================================================== */
+.dir-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+
+/* 起终点卡片：左侧色条区分源/目标，不再靠文字标签猜 */
+.dir-card {
+  min-width: 0;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  background: #f8fafd;
+}
+.dir-card.dst { border-left-color: #7c5cd6; }
+.dir-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.dir-badge {
+  flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: .02em;
+  padding: 1px 7px; border-radius: 5px;
+  background: var(--accent-soft); color: var(--accent);
+}
+.dir-card.dst .dir-badge { background: #f3f0ff; color: #6d47d9; }
+.dir-name {
+  font-size: 14px; font-weight: 650; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* 登录状态：一个小圆点 + 文字，未登录用琥珀色提示 */
+.dir-state {
+  margin-left: auto; flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--muted); white-space: nowrap;
+}
+.dir-state::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: #c9d2e0;
+}
+.dir-state.on { color: var(--ok); }
+.dir-state.on::before { background: var(--ok); }
+.dir-state.off { color: var(--warn); }
+.dir-state.off::before { background: var(--warn); }
+
+.dir-foot { display: flex; align-items: center; gap: 8px; }
+.dir-note { font-size: 11.5px; color: var(--faint); }
+.dir-set {
+  margin-left: auto; flex: 0 0 auto;
+  font-size: 11.5px; padding: 2px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: #fff; color: var(--muted);
+  cursor: pointer; transition: all .15s ease;
+}
+.dir-set:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+/* 未登录时这个按钮变成醒目的「去登录」 */
+.dir-set.need {
+  background: var(--warn); border-color: var(--warn); color: #fff; font-weight: 600;
+}
+.dir-set.need:hover { background: #92400e; border-color: #92400e; color: #fff; }
+
+/* 中间：只有一个圆形对调按钮，两侧细线把两卡「连起来」 */
+.dir-swap {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; padding: 0 8px;
+}
+.dir-swap::before, .dir-swap::after {
+  content: ""; position: absolute; top: 50%; width: 18px; height: 1px;
+  background: var(--line);
+}
+.dir-swap::before { right: 100%; }
+.dir-swap::after { left: 100%; }
+.swap-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--muted); background: #fff; border: 1px solid var(--line);
+  cursor: pointer; transition: transform .25s ease, background .15s ease, color .15s ease;
+}
+.swap-btn:hover:not(:disabled) {
+  color: #fff; background: var(--accent); border-color: var(--accent);
+  transform: rotate(180deg);
+}
+.swap-btn:disabled { opacity: .45; cursor: default; }
+.swap-label { font-size: 10.5px; color: var(--faint); }
+
+/* ---------------- 板块折叠：折叠后只剩标题行 ---------------- */
+.fold-btn {
+  margin-left: auto; flex: 0 0 auto;
+  font-size: 11.5px; padding: 1px 10px; border-radius: 999px;
+  border: 1px solid var(--line); background: #fff; color: var(--muted);
+  cursor: pointer; transition: all .15s ease;
+}
+.fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.card-head, .tdir-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.card-head h2, .tdir-head h2 { margin: 0 !important; }
+.job-top .fold-btn, .list-head .fold-btn { margin-left: auto; }
+
+.list-ops { margin-left: 0; margin-bottom: 8px; }
+
+/* ---------------- 响应式 ---------------- */
+@media (max-width: 900px) {
+  .dir-bar { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dir-swap { flex-direction: row; gap: 8px; padding: 2px 0; }
+  .dir-swap::before, .dir-swap::after { display: none; }
+  .swap-btn { width: 36px; height: 36px; }
+}
+
+/* 折叠只收「内容」，标题行的操作按钮始终留在外面 */
+.job-top .job-actions { margin-left: auto; }
+.job-top .fold-btn { margin-left: 8px; }
+.list-head .list-ops { margin-left: auto; margin-bottom: 0; }
+.list-head .fold-btn { margin-left: 8px; }
+
+/* 面板折叠后整块隐藏：方向条上已经有「网盘 + 登录状态 + 目录」，
+   再留一行摘要就是重复信息，白白占高度 */
+.panels .end.collapsed { display: none; }
+/* 展开后它与浏览器之间有间距（卡片本身 margin 为 0） */
+.panels .end:not(.collapsed) { margin-bottom: 0; }
+
+/* 清单默认只露 ~6 行，剩下的靠滚动（整块还能折叠） */
+.job .scroll { max-height: 268px; }
+@media (max-width: 760px) { .job .scroll { max-height: 220px; } }
+
+/* =====================================================================
+   v5：设置面板改为浮层 —— 展开时不再把下方内容往下挤
+   ===================================================================== */
+.col { position: relative; }
+
+.panels .end {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  background: #fff;
+  box-shadow: var(--shadow-lg);
+  /* 太高就自己滚，别撑破视口 */
+  max-height: min(72vh, 600px);
+  overflow-y: auto;
+}
+/* 面板右上角的关闭按钮做成图标，和方向条上的入口区分开 */
+.side-close {
+  margin-left: 8px; flex: 0 0 auto;
+  width: 24px; height: 24px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--muted);
+  background: #fff; border: 1px solid var(--line); border-radius: 7px;
+  cursor: pointer; transition: all .15s ease;
+}
+.side-close:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+
+/* 方向条上的入口在「已展开」时变成强调态，提示再点一下就收起 */
+.dir-set.open {
+  color: var(--accent); border-color: var(--accent); background: var(--accent-soft);
+  font-weight: 600;
+}
+
+/* =====================================================================
+   v6：两栏等高 —— 消除左右底部参差的空白
+   做法：栅格改为 stretch，列内最后一张卡片 flex:1，内部列表自适应撑开
+   ===================================================================== */
+.panels { align-items: stretch; }
+.col { height: 100%; }
+
+.col .browser,
+.col .tdir {
+  flex: 1 1 auto;
+  display: flex; flex-direction: column;
+  min-height: 0;
+}
+.col .browser > .fold-body,
+.col .tdir > .fold-body {
+  flex: 1 1 auto;
+  display: flex; flex-direction: column;
+  min-height: 0;
+}
+/* 浏览器：列表区吃掉剩余高度 */
+.col .browser .br-body { flex: 1 1 auto; min-height: 260px; }
+.col .browser .br-listwrap { max-height: none; }
+.col .browser .br-nav { max-height: none; }
+/* 目标端：目录列表同样撑开，卡片不再比左边矮一截 */
+.col .tdir .tdir-list { flex: 1 1 auto; max-height: none; min-height: 140px; }
+
+/* 底部：设置与日志等高，日志框吃掉多余空间 */
+.bottom-grid { align-items: stretch; }
+.bottom-grid > .card { display: flex; flex-direction: column; }
+.bottom-grid .log-card > .fold-body { flex: 1 1 auto; display: flex; min-height: 0; }
+.bottom-grid .log-card .logbox { flex: 1 1 auto; max-height: none; }
+
+/* 折叠态时别把列撑高（卡片已经 display:none，这里兜一下） */
+.panels .end.collapsed { flex: 0 0 auto; }
+
+/* 窄屏堆叠时不需要等高，恢复自然高度 */
+@media (max-width: 1120px) {
+  .panels { align-items: start; }
+  .col { height: auto; }
+  .col .browser, .col .tdir { flex: 0 0 auto; }
+  .col .browser .br-body { min-height: 300px; }
+  .bottom-grid { align-items: start; }
+  .bottom-grid > .card { display: block; }
+  .bottom-grid .log-card > .fold-body { display: block; }
+}
+
+/* 两栏等高但**限高**：内容再多也只在内部滚，不把整页拉长
+   （不限高时 16 个文件会把栏撑到 790px，目标栏跟着变空壳） */
+.col .browser,
+.col .tdir { max-height: 486px; }
+.col .browser > .fold-body,
+.col .tdir > .fold-body { min-height: 0; }
+.col .browser .br-body {
+  flex: 1 1 auto; min-height: 0; overflow: hidden;
+}
+.col .browser .br-listwrap { max-height: none; overflow-y: auto; }
+.col .browser .br-nav { max-height: none; overflow-y: auto; }
+.col .tdir .tdir-list { flex: 1 1 auto; min-height: 120px; overflow-y: auto; }
+
+@media (max-width: 1120px) {
+  .col .browser, .col .tdir { max-height: none; }
+  .col .browser .br-listwrap { max-height: 380px; }
+  .col .tdir .tdir-list { max-height: 300px; }
+}
+
+/* =====================================================================
+   v7：间距统一 + 防溢出（截图里源栏右侧按钮被右栏盖住 = 内容溢出卡片）
+   ===================================================================== */
+
+/* 卡片不许把内容漏到旁边去 */
+.col .browser,
+.col .tdir,
+.job { overflow: hidden; }
+.col > .card { min-width: 0; }
+
+/* 浏览器头部：标题可收缩，右侧工具不挤压、不溢出 */
+.br-head h2 {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.br-head h2 .tag { flex: 0 0 auto; }
+.br-tools { flex: 0 0 auto; flex-wrap: nowrap; }
+.br-head { min-width: 0; }
+
+/* 目标端头部同理 */
+.tdir-head h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdir-head .fold-btn { flex: 0 0 auto; }
+
+/* 把纵向节奏统一成 16px */
+.wrap > .dir-bar { margin-bottom: 16px; }
+.wrap > .panels { margin: 0; }
+.wrap > .job { margin: 16px 0 0; }
+.bottom-grid { margin-top: 16px; }
+
+/* 卡片内部的横向节奏也收一收 */
+.br-bar { gap: 8px; }
+.br-bar input[type="search"] { flex: 0 1 200px; min-width: 140px; }
+
+/* 窄屏工具条允许换行，避免按钮被切 */
+@media (max-width: 1280px) {
+  .br-head { flex-wrap: wrap; }
+  .br-tools { flex-wrap: wrap; }
+}
+
+/* =====================================================================
+   v8：折叠后不该再撑着大空框
+   ===================================================================== */
+/* 之前给日志卡设了 min-height:220px，折叠后这块高度还在，看着像个空盒子。
+   改成只在展开时保底高度，折叠态只留标题行。 */
+.bottom-grid .log-card { min-height: 0; }
+.bottom-grid .log-card:not(.is-folded) { min-height: 220px; }
+
+/* 折叠态整体收紧，标题行就是全部 */
+.card.is-folded { padding-top: 12px; padding-bottom: 12px; }
+.card.is-folded > .card-head,
+.card.is-folded > .tdir-head,
+.card.is-folded > .br-head,
+.card.is-folded > .job-top { margin-bottom: 0; }
+.card.is-folded .fold-body { display: none !important; }
+
+/* 两栏都折叠时不要互相拉扯高度 */
+.bottom-grid > .card.is-folded { align-self: start; }
+
+/* 一排只留一个折叠控件：右侧那张卡不再重复显示「收起」
+   （两块是联动收放的，两个按钮做同一件事只会让人以为要各点一次） */
+.tdir-head .fold-btn,
+.bottom-grid .log-card .card-head .fold-btn { display: none; }
+
+/* 左侧那个按钮承担整排的开合，图标稍加强调 */
+.col-src .br-head .fold-btn,
+.bottom-grid .setup .card-head .fold-btn {
+  font-weight: 600;
+}
+
+/* =====================================================================
+   v9：底部改为「一个统一容器 + 两栏分割」
+   原来设置和日志是两个独立卡片，并排时中间有缝、显得零碎；
+   收进一个框里用分割线分开，底部就变成和上面同级的一个整块。
+   ===================================================================== */
+.bottom-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+  margin: 16px 0 0;
+  overflow: hidden;
+}
+
+/* 竖向分割线：只画在第二栏左侧，保证外框是完整的一个矩形 */
+
+/* 日志栏：展开时保底高度，收起时只剩标题行 */
+.bottom-panel .log-col { min-height: 0; }
+.bottom-panel .log-col:not(.is-folded) { min-height: 188px; }
+.bottom-panel .log-col > .fold-body {
+  flex: 1 1 auto; display: flex; min-height: 0;
+}
+.bottom-panel .log-col .logbox { flex: 1 1 auto; max-height: none; }
+
+/* 折叠态：两栏一起收紧，外框只剩一行标题 */
+.bottom-panel .bp-col.is-folded { padding-top: 12px; padding-bottom: 12px; }
+.bottom-panel .bp-col.is-folded .card-head { margin-bottom: 0; }
+
+/* 一排只留一个折叠控件（左边那个控制整块） */
+.bottom-panel .log-col .fold-btn { display: none; }
+
+/* 窄屏：改上下堆叠，分割线转成横向 */
+@media (max-width: 1120px) {
+  .bottom-panel { grid-template-columns: minmax(0, 1fr); }
+  
+
+}
+
+/* =====================================================================
+   v10：格式筛选改为「可搜索的候选下拉」，不再手输
+   ===================================================================== */
+.ext-filter { position: relative; flex: 0 0 auto; }
+
+.ext-trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 32px; padding: 4px 11px;
+  font-size: var(--fs-sm); color: var(--text);
+  background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  cursor: pointer; transition: all .15s ease; white-space: nowrap;
+}
+.ext-trigger:hover { border-color: var(--accent); color: var(--accent); }
+.ext-trigger.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.ext-trigger svg { opacity: .6; transition: transform .15s ease; }
+.ext-trigger.open svg { transform: rotate(180deg); }
+
+.ext-menu {
+  position: absolute; z-index: 60; top: calc(100% + 6px); left: 0;
+  width: 248px;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.ext-search { padding: 8px 8px 6px; border-bottom: 1px solid var(--line); }
+.ext-search input { width: 100%; min-height: 30px; font-size: var(--fs-sm); }
+.ext-list { max-height: 232px; overflow-y: auto; padding: 6px; }
+
+.ext-item {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 6px 9px; font-size: var(--fs-sm); text-align: left;
+  background: none; border: 0; border-radius: 7px; cursor: pointer;
+  color: var(--text);
+}
+.ext-item:hover { background: #f5f8ff; }
+.ext-item.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.ext-item .ext-name { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; }
+.ext-item .ext-count {
+  flex: 0 0 auto; font-size: var(--fs-2xs); color: var(--muted);
+  background: #f1f4f8; border-radius: 999px; padding: 0 7px;
+}
+.ext-item.on .ext-count { background: #fff; color: var(--accent); }
+.ext-item .ext-dot {
+  flex: 0 0 auto; width: 8px; height: 8px; border-radius: 2px;
+}
+.ext-empty { padding: 12px 10px; font-size: var(--fs-xs); color: var(--faint); text-align: center; }
+.ext-clear {
+  width: 100%; margin-top: 2px; padding: 6px; font-size: var(--fs-xs);
+  color: var(--muted); background: none; border: 0; border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+.ext-clear:hover { color: var(--danger); }
+
+/* =====================================================================
+   v11：折叠按钮统一放标题行最右，且同排两张卡都有（对称、位置一致）
+   之前右侧卡的按钮被隐藏，导致「一边有展开、一边什么都没有」，很怪。
+   ===================================================================== */
+/* 工具组不再抢右对齐，让位给折叠按钮 */
+.br-head .br-tools { margin-left: 0; flex: 0 0 auto; }
+.br-head h2 { flex: 1 1 auto; min-width: 0; }
+/* 所有折叠按钮统一：靠右、同一尺寸、同一文案位置 */
+.br-head .fold-btn,
+.tdir-head .fold-btn,
+.card-head .fold-btn { margin-left: 8px; flex: 0 0 auto; }
+
+/* 恢复右侧卡与日志栏的折叠按钮（与左侧成对出现，点任一个两边同步） */
+.tdir-head .fold-btn,
+.bottom-panel .log-col .fold-btn { display: inline-flex; }
+
+/* 折叠态：两边都收成同高的一行，视觉对称 */
+.col .browser.is-folded,
+.col .tdir.is-folded { min-height: 0; }
+.col .browser.is-folded .br-head,
+.col .tdir.is-folded .tdir-head { padding-bottom: 0; }
+
+/* =====================================================================
+   v12：一排只留一个折叠按钮，且它属于「这一排」而不是任何一张卡片
+   ===================================================================== */
+.row-head {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 8px 2px;
+}
+.row-head .row-title {
+  margin: 0; font-size: var(--fs-xs); font-weight: 600;
+  color: var(--muted); letter-spacing: .02em;
+}
+.row-head .fold-btn { margin-left: auto; }
+
+/* 卡片标题行里不再有折叠按钮，右侧只保留各自的内容控件 */
+.br-head, .tdir-head, .card-head { justify-content: flex-start; }
+.card-head h2 { margin-right: auto; }
+
+/* =====================================================================
+   v13：折叠就彻底收起 —— 卡片整块消失，不留残框
+   之前折叠只是隐藏 body，标题行还杵在那儿，看着像"折叠异常"。
+   ===================================================================== */
+.col .browser.is-folded,
+.col .tdir.is-folded,
+.bottom-panel .bp-col.is-folded { display: none; }
+
+/* 排标题条与下方卡片左对齐、间距收紧 */
+.row-head { margin: 0 0 6px; padding: 0 2px; }
+.row-head + .panels { margin-top: 0; }
+.row-head .row-title {
+  font-size: var(--fs-xs); font-weight: 600;
+  color: var(--muted); letter-spacing: .02em;
+}
+/* 一排收起后，标题条下面不再留空白 */
+.row-head.is-collapsed { margin-bottom: 0; }
+
+/* 底部统一框：两栏都收起时框本身也不显示（避免留一条空边框） */
+.bottom-panel.is-empty { display: none; }
+.panels.is-empty { display: none; }
+
+/* =====================================================================
+   v14：折叠 = 保留标题与功能，只收内容
+   （v13 曾让整块消失，那样虽然干净，但折叠后连「视图切换/新建文件夹」
+     都一起没了，用起来反而多一步）
+   ===================================================================== */
+.panels .col > .card.is-folded,
+.bottom-grid > .card.is-folded { display: flex; }
+
+.card.is-folded {
+  background: #fbfcfe;
+  border: 1px dashed #d9e0ea;
+  box-shadow: none;
+  padding: 6px 14px;
+  min-height: 0;
+}
+.card.is-folded .br-head,
+.card.is-folded .tdir-head,
+.card.is-folded .card-head {
+  padding: 0; margin: 0; background: none; border: 0;
+  min-height: 30px; align-items: center;
+}
+.card.is-folded .job-top { margin-bottom: 0; }
+.card.is-folded .list-head { margin-bottom: 0; }
+
+/* 底部改回两个独立卡片 */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  margin: 0;
+}
+.bottom-grid > .card { display: flex; flex-direction: column; margin: 0; }
+.bottom-grid > .card:not(.is-folded) { min-height: 188px; }
+.bottom-grid .log-card .fold-body { flex: 1 1 auto; display: flex; min-height: 0; }
+.bottom-grid .log-card .logbox { flex: 1 1 auto; max-height: none; }
+
+/* 排标题条：与卡片左沿对齐，和下方卡片贴紧一点 */
+.row-head { margin: 0 0 6px; padding: 0 4px; }
+.row-head + .panels,
+.row-head + .bottom-grid { margin-top: 0; }
+
+@media (max-width: 1120px) {
+  .bottom-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* 折叠条不要虚线框（看着像输入框），改成浅底、无边框的「收起状态」 */
+.card.is-folded {
+  background: #f4f7fb;
+  border: 1px solid transparent;
+  box-shadow: none;
+  padding: 7px 14px;
+  color: var(--muted);
+}
+.card.is-folded .br-head,
+.card.is-folded .tdir-head,
+.card.is-folded .card-head { background: none; }
+.card.is-folded h2 { color: var(--muted); font-weight: 600; }
+.card.is-folded h2 .ic { opacity: .5; }
+
+/* =====================================================================
+   v15：四个板块统一为「标题条 + 卡片」
+   文件与目标 / 迁移作业 / 已选清单 / 设置与日志，间距与结构完全一致
+   ===================================================================== */
+/* 统一节奏：条上方 16、下方 6；紧跟方向条的第一个条不要上方间距 */
+.row-head { margin: 16px 0 6px; padding: 0 4px; }
+.wrap > .dir-bar + .row-head { margin-top: 0; }
+
+/* 迁移作业卡片：按钮行移到内容顶部，进度紧随其后 */
+.job .job-actions { margin: 0 0 12px; }
+.job .prog-wrap { margin-top: 0; }
+.job #quota-info { margin-top: 10px !important; }
+
+/* 已选清单（独立卡片）：操作行与筛选行在上，表格限高滚动 */
+.picked-card .list-ops { margin: 0 0 10px; }
+.picked-card .list-filter { margin-bottom: 10px; }
+.picked-card .scroll {
+  max-height: 320px; overflow: auto;
+  border: 1px solid var(--line); border-radius: 10px;
+}
+.picked-card .scroll thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: #fafbfd; padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.picked-card .scroll tbody td { padding: 8px 10px; }
+
+@media (max-width: 760px) {
+  .picked-card .scroll { max-height: 260px; }
+}
+
+/* 折叠态配色：原来用的 #f4f7fb 和页面底色几乎一样，等于没区分。
+   改成更有存在感的浅蓝灰 + 淡边框，一眼能看出「这里是收起的」 */
+.card.is-folded {
+  background: #e9f0fa;
+  border: 1px solid #d5e0ef;
+  box-shadow: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.card.is-folded:hover { background: #e2ebf8; border-color: #c3d3e8; }
+.card.is-folded h2,
+.card.is-folded h3 { color: #5a6779; }
+.card.is-folded h2 .ic { opacity: .55; }
+.card.is-folded .tag { background: #fff; color: var(--muted); }
+
+/* 折叠后每张卡都保留一行功能，四个板块高度接近，不会出现 16px 空条 */
+.job .job-actions { margin: 0 0 12px; }
+.card.is-folded.job .job-actions,
+.card.is-folded .job-actions { margin: 0; }
+.card.is-folded .list-ops { margin: 0; }
+.picked-card .list-ops { margin: 0 0 10px; }
+.card.is-folded .list-ops { margin-bottom: 0; }
+
+/* =====================================================================
+   v16：迁移作业的「操作 + 进度」并排一行，折叠后两者都外显
+   ===================================================================== */
+.job-bar {
+  display: flex; align-items: center; gap: 16px;
+  margin: 0 0 12px;
+}
+.job-bar .job-actions { margin: 0; flex: 0 0 auto; }
+
+.prog-inline .progress { flex: 1 1 auto; min-width: 90px; margin: 0; }
+.prog-inline #prog-right {
+  flex: 0 0 auto; margin: 0; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* 折叠后这一行不留下边距 */
+.card.is-folded .job-bar { margin-bottom: 0; }
+.card.is-folded .job-actions { margin: 0; }
+
+/* 窄屏：按钮与进度上下堆叠，进度条通栏 */
+@media (max-width: 900px) {
+  .job-bar { flex-wrap: wrap; gap: 10px; }
+  
+}
+
+/* =====================================================================
+   v17：标题条对齐、清单折叠露三行、作业重心右移
+   ===================================================================== */
+/* 标题条去掉内缩，标题文字与卡片左边框对齐、按钮与卡片右边框对齐 */
+.row-head { margin: 14px 0 6px; padding: 0; }
+.row-head .row-title { color: #5c6a7e; font-size: 12.5px; }
+.row-head .fold-btn { margin-left: auto; }
+
+/* 迁移作业：按钮组收紧，进度条吃到剩余宽度（重心不再压在左边） */
+.job-bar { gap: 14px; }
+.job-actions { gap: 8px; }
+
+.prog-inline .progress { min-width: 180px; }
+
+/* 扫描这类次要操作独占一行，不和主操作抢视觉 */
+
+.job-sub .hint { margin: 0; }
+
+/* 已选清单收起时：隐藏筛选行，表格只露表头 + 3 行 */
+.picked-card.is-folded .list-filter { display: none; }
+.picked-card.is-folded .list-ops { margin-bottom: 8px; }
+/* 收起时只露 3 行：靠「隐藏第 4 行起」来控制，不给容器写死高度。
+   之前写死 max-height:148px，但实际表头+3 行是 152px，第三行被切掉一半。 */
+.picked-card.is-folded .scroll {
+  max-height: none;
+  overflow: hidden;
+  border-color: #dde6f2;
+}
+.picked-card.is-folded .scroll tbody tr:nth-child(n+4) { display: none; }
+.picked-card.is-folded .scroll thead th { position: static; }
+
+/* 已选清单收起时要「露三行」，必须压过 .card.is-folded .fold-body 的 !important */
+.picked-card.is-folded > .fold-body {
+  display: block !important;
+  padding-top: 0;
+}
+/* 标题条里标题与标签之间留出呼吸 */
+.row-title .tag { margin-left: 6px; }
+/* 标题文字与卡片内文字左对齐（卡片 padding 18） */
+.row-head { padding-left: 18px; }
+.row-head .fold-btn { margin-left: auto; }
+
+/* 统计行右侧不再空着：容量信息推到同一行末端，左右平衡 */
+.stats-inline .si-grow { flex: 1 1 auto; }
+.stats-inline #quota-info {
+  margin: 0; flex: 0 0 auto; font-size: var(--fs-xs);
+  color: var(--faint); text-align: right;
+}
+
+/* 折叠态：保留各卡片的标题行；右侧的辅助说明标签收起来，避免折叠条太长 */
+.card.is-folded .card-head .tag { display: none; }
+
+/* =====================================================================
+   v18：按截图标注收口
+   ① 折叠时把操作按钮全部收起（只留卡片标题）
+   ② 说明类文字在折叠条上不要白底框，否则浅蓝底上很跳
+   ③ 标题条内标题与右侧按钮垂直居中、行高统一
+   ===================================================================== */
+
+/* ① 折叠态：视图切换、清单批量操作都收起 */
+.card.is-folded .br-tools,
+.card.is-folded .list-ops { display: none; }
+/* 折叠后已选清单只留表头 + 三行，不需要额外下边距 */
+.card.is-folded .list-ops { margin: 0; }
+
+/* ② 去掉说明标签的底框，避免在浅蓝折叠条上突兀 */
+.card.is-folded .tag {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #7b8798;
+  font-weight: 500;
+}
+.card.is-folded .tag::before { content: "· "; opacity: .6; }
+
+/* ③ 标题条：标题与按钮同一基线、垂直居中 */
+.row-head {
+  display: flex;
+  align-items: center;
+  min-height: 26px;
+  padding-left: 18px;
+  margin: 16px 0 6px;
+}
+.row-head .row-title {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0; line-height: 1;
+  font-size: 12.5px; font-weight: 600; color: #5c6a7e;
+}
+.row-head .row-title .tag {
+  margin: 0; padding: 1px 7px; line-height: 1.5;
+  background: #eef2f8; color: #6b7788;
+}
+.row-head .fold-btn {
+  margin-left: auto;
+  height: 22px; padding: 0 10px; line-height: 20px;
+  display: inline-flex; align-items: center;
+}
+.wrap > .dir-bar + .row-head { margin-top: 0; }
+
+/* 迁移作业卡片之前带了 margin-top:16，导致它和标题条的间距比别处大一倍 */
+.wrap > .job { margin-top: 0 !important; }
+/* 兜底：任何紧跟标题条的卡片都不再自带上方外边距 */
+.row-head + .panels,
+.row-head + .job,
+.row-head + .picked-card,
+.row-head + .bottom-grid { margin-top: 0; }
+
+/* =====================================================================
+   v19：已选清单折叠态修复 + 标题条与卡片同色
+   ===================================================================== */
+
+/* ① 折叠时保留批量操作按钮（清单收起时仍要能全选/移除） */
+.picked-card.is-folded > .list-ops {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+/* =====================================================================
+   v20：迁移作业排版重做
+   原来是「按钮 + 细进度条」一行，下面还堆了扫描/百分比/统计三层，很散。
+   现在分三行：操作行（两端分布）→ 进度行（独占）→ 统计行
+   ===================================================================== */
+.job-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+.job-bar .job-actions { display: flex; align-items: center; gap: 8px; }
+.job-extra { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.job-extra .hint { margin: 0; }
+
+.job-progress { margin: 0 0 12px; }
+.jp-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 6px;
+}
+.jp-head .hint { margin: 0; font-size: var(--fs-xs); }
+#prog-right { font-variant-numeric: tabular-nums; }
+.job-progress .progress { height: 10px; border-radius: 999px; }
+
+/* 折叠时：操作行和进度行都保留，只有统计/提示收起 */
+.card.is-folded .job-bar { margin-bottom: 10px; }
+.card.is-folded .job-progress { margin-bottom: 0; }
+.card.is-folded .job-extra { display: none; }
+
+/* =====================================================================
+   v21：进度条底色加深 + 折叠态两栏合缝
+   ===================================================================== */
+
+/* 进度条容器原来 #e9edf3，在白卡上几乎看不见，只剩一条若有若无的线。
+   加深底色并加内阴影，让它明确是「一条槽」。 */
+.progress {
+  background: #dde4ee;
+  box-shadow: inset 0 1px 2px rgba(16, 32, 64, .10);
+}
+.progress.lg-prog { height: 12px; }
+/* 空态时也给出可见的轨道（原来空着就是一片灰白） */
+.progress > i { min-width: 0; }
+
+/* =====================================================================
+   v22：迁移作业内部节奏收口
+   实测 进度条底 → 统计行顶 = 40px（别处 6~12），因为中间的
+   #prog-active 空元素仍占着自己的 margin。空的时候直接不参与布局。
+   ===================================================================== */
+#prog-active:empty { display: none; }
+.job-progress { margin-bottom: 14px; }
+.card.is-folded .job-progress { margin-bottom: 0; }
+
+/* 作业卡片的三段统一从卡片内沿开始，左右不额外缩进 */
+.job .job-bar,
+.job .job-progress,
+.job .stats-inline { padding-left: 0; padding-right: 0; }
+
+/* =====================================================================
+   v23：折叠态的最终规则（重置前面十几轮的相互覆盖）
+   原则：**标题条在折叠/展开时长得完全一样**，它永远是卡片外面的一条。
+   状态提示交给卡片底色 + 「展开」按钮的强调色，不再给标题条染色。
+   （之前把标题条也染成浅蓝并和卡片合缝，结果标题看着像在卡片内部）
+   ===================================================================== */
+
+/* 1) 标题条：不染色、不加边框、不改高度，只保留 6px 到卡片 */
+.row-head.is-collapsed {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0 0 0 18px;
+  margin: 16px 0 6px;
+  min-height: 26px;
+}
+.wrap > .dir-bar + .row-head.is-collapsed { margin-top: 0; }
+
+/* 2) 「展开」按钮变成蓝色强调块 —— 用按钮而不是整条底色来表达状态 */
+.row-head.is-collapsed .fold-btn {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+.row-head.is-collapsed .fold-btn:hover {
+  color: #fff; background: var(--accent);
+}
+
+/* 3) 折叠卡片：中性浅灰，比纯白可辨、比大片蓝克制；四角完整圆角，
+      和展开态是同一个卡片，只是内容缩了 */
+.card.is-folded {
+  /* 页面底是 #f4f6f9，原来这里用 #f4f7fb 只差 2，折叠了看不出来。
+     改成比页面底深一档的冷灰，既能看出「这块是收起的」，又不像整片蓝那么重。 */
+  background: #e9eff8;
+  border: 1px solid #d8e3f2;
+  box-shadow: none;
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin: 0;
+  min-height: 0;
+}
+.card.is-folded:hover { background: #e2eaf6; border-color: #c9d8ec; }
+
+/* 关键：主区两栏是 flex column，align-self:start 会让卡片按「内容宽度」收缩
+   （实测折叠后宽度只剩 252 / 142，右边空一大片）。
+   列内必须 stretch 撑满列宽；底部是 grid，align-self 只作用于高度，才用 start。 */
+.panels .col > .card.is-folded {
+  align-self: stretch;
+  flex: 0 0 auto;
+  width: 100%;
+}
+.bottom-grid > .card.is-folded {
+  align-self: start;
+  width: 100%;
+}
+
+/* 4) 折叠卡片内的标题行：不再二次缩进（卡片已有 18px 内边距） */
+.card.is-folded .br-head,
+.card.is-folded .tdir-head,
+.card.is-folded .card-head { padding: 0; margin: 0; background: none; border: 0; }
+
+/* 5) 已选清单折叠时保留三行，行内文字单行截断，
+      否则长文件名折成三行、三行表格反而撑到 230px */
+.picked-card.is-folded .scroll td.name {
+  max-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.picked-card.is-folded .scroll table { table-layout: fixed; width: 100%; }
+.picked-card.is-folded .scroll td,
+.picked-card.is-folded .scroll th { padding: 6px 10px; }
+.picked-card.is-folded .scroll tbody td { font-size: var(--fs-xs); }
+
+/* =====================================================================
+   v24：清单表格改固定布局
+   问题：table-layout 是 auto，长文件名（100+ 字符）把「进度」列挤到 17px，
+   表头「进度」两个字被迫竖排。折叠态截断、展开态换行，两态也不一致。
+   ===================================================================== */
+.picked-card .scroll table {
+  table-layout: fixed;
+  width: 100%;
+}
+/* 列宽按百分比严格执行（表头里已有 30px / 32% / 11% / 10% / 16% / 60px） */
+.picked-card .scroll th:nth-child(5) { width: 11%; }   /* 进度 */
+.picked-card .scroll th:nth-child(6) { width: 15%; }   /* 备注 */
+
+/* 单元格统一单行截断，行高才会整齐；完整文件名在 title 里悬停可见 */
+.picked-card .scroll th,
+.picked-card .scroll td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.picked-card .scroll td.name { max-width: 0; }
+.picked-card .scroll tbody td { vertical-align: middle; }
+
+/* 折叠卡片内部的标题在浅蓝底上偏灰，读起来费劲，压深一档 */
+.card.is-folded h2,
+.card.is-folded h3 { color: #47546a; }
+.card.is-folded .tag {
+  background: rgba(255, 255, 255, .7);
+  color: #64738a;
+  border: 1px solid #dbe4f0;
+}
+
+/* =====================================================================
+   v25：折叠态收尾（按截图逐点修）
+   ===================================================================== */
+
+/* ① 折叠卡片底色去掉蓝调。
+   原来 #e9eff8 的蓝饱和度偏高，在白色页面里像一块色块。
+   改成中性灰蓝 #eef1f7（比页面底 #f4f6f9 深 6），靠边框和「展开」按钮表达状态。 */
+.card.is-folded {
+  background: #eef1f7;
+  border-color: #e0e6ef;
+}
+.card.is-folded:hover { background: #e8ecf4; border-color: #d3dbe8; }
+
+/* ② 折叠态里的「百度网盘 / 本地演示」这类标签：
+   我上一轮给它加了白底 + 边框，压在灰卡上就是「文字下面一块颜色」。去掉。 */
+.card.is-folded .tag {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #6b7a91;
+  font-weight: 500;
+}
+.card.is-folded .tag::before { content: "· "; opacity: .55; }
+
+/* ③ 已选清单折叠时不再显示那一排批量按钮（用户要求只留文件行）。
+   之前为了让按钮回来写过 .picked-card.is-folded > .list-ops { display: flex }，
+   现在这条改为隐藏，且优先级要够高。 */
+.picked-card.is-folded > .list-ops,
+.card.is-folded > .list-ops { display: none !important; }
+
+/* 折叠态表格不要白底：白表格压在灰卡上又是一块"颜色"。
+   去掉底色只留分隔线，整块折叠区域就是一个颜色。 */
+.picked-card.is-folded .scroll { background: transparent; }
+.picked-card.is-folded .scroll thead th {
+  background: transparent;
+  border-bottom: 1px solid #dbe3ee;
+  color: #6b7a91;
+}
+.picked-card.is-folded .scroll tbody td { border-bottom: 1px solid rgba(219, 227, 238, .7); }
+.picked-card.is-folded .scroll tbody tr:last-child td { border-bottom: 0; }
+
+/* 折叠态的行分隔线太淡（原来 .7 透明压在 #eef1f7 上看不出），加深到实色 */
+.picked-card.is-folded .scroll tbody td { border-bottom: 1px solid #dbe3ee; }
+
+/* 预设按钮：5 个挤一行（原来 auto-fit minmax(140px) 在设置卡里只放得下 4 个，
+   「自定义」被挤到第二行孤零零一个） */
+@media (min-width: 901px) {
+  .presets { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .preset { padding: 10px 10px; }
+  .preset span { font-size: 11px; }
+}
+
+/* =====================================================================
+   v26：版本号 + 自定义预设按钮
+   ===================================================================== */
+
+/* 品牌栏右侧的版本号：小、弱，但一直在，用于确认跑的是哪一版 */
+.ver {
+  margin-left: 10px; flex: 0 0 auto;
+  font-size: 11px; font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  background: #f3f6fa; border: 1px solid var(--line);
+  padding: 2px 7px; border-radius: 999px;
+  cursor: default;
+}
+
+/* 「自定义」预设是禁用态，原来的虚线边框太淡，看起来像一行飘着的文字。
+   给个实底 + 清楚一点的虚线，让它仍然是一个「格子」。 */
+.preset.custom {
+  border-style: dashed;
+  border-color: #c9d4e3;
+  background: #fafbfd;
+}
+.preset.custom b { color: #7b8798; }
+.preset.custom span { color: #9aa5b5; }
+.preset.custom:disabled { opacity: 1; cursor: default; }
+
+/* =====================================================================
+   v27：已选清单的「操作 + 筛选」合成一行
+   原来是上下两行（按钮一排、搜索/状态/排序一排），白占 40px 高度。
+   现在左边批量操作、右边筛选，中间用 auto margin 推开。
+   ===================================================================== */
+.picked-card .list-ops {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+
+/* 筛选组贴右，作为一行里的右半部分 */
+.picked-card .list-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 0 auto;
+  flex-wrap: nowrap;
+}
+.picked-card .list-filter input[type="search"] { width: 190px; }
+.picked-card .list-filter select { width: auto; }
+.picked-card .list-filter #pick-info { margin: 0; white-space: nowrap; }
+.picked-card .list-filter #list-info { margin: 0; white-space: nowrap; }
+
+/* 窄屏放不下一行时，筛选组整体落到第二行并占满 */
+@media (max-width: 1180px) {
+  .picked-card .list-filter {
+    margin-left: 0;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+  }
+  .picked-card .list-filter input[type="search"] { flex: 1 1 160px; width: auto; }
+}
+
+/* =====================================================================
+   设置折叠后显示「当前模式」：展开时不需要（预设按钮就在眼前），
+   折叠后光看标题不知道现在是哪档，补一句。
+   ===================================================================== */
+.fold-summary { display: none; }
+.card.is-folded .fold-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 1px 8px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(255, 255, 255, .85);
+  border: 1px solid #cddcf2;
+  border-radius: 999px;
+}
+.card.is-folded .fold-summary::before {
+  content: "当前";
+  font-weight: 400;
+  color: #7b8ba3;
+}
+
+/* 面板里的「目录」一行做成可点：点路径等于点「浏览」 */
+
+/* 顶部方向条去掉路径后，让「文件从这里来 / 设置」这一行撑开，
+   卡片高度不再被一条空路径框占着 */
+
+.dir-foot { flex: 1 1 100%; }
+
+/* =====================================================================
+   v31：目录栏做得更醒目 + 前缀标明「哪个网盘 / 哪个账号」
+   原来是一条和背景几乎同色的淡灰行（12.5px 灰字），扫一眼找不到；
+   现在给它白底、边框、加大的字号，前面挂上网盘名和账号。
+   ===================================================================== */
+.br-path {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 14px 10px;
+  padding: 7px 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: 0 1px 2px rgba(16, 32, 64, .04);
+}
+.br-path .crumbs {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0;
+}
+.br-path .crumbs a { color: var(--muted); }
+.br-path .crumbs a:hover { color: var(--accent); }
+/* 最后一级（当前所在目录）加粗，和上级区分开 */
+.br-path .crumbs a:last-child { color: var(--text); font-weight: 650; }
+
+/* 网盘名 + 账号：左侧的小色块前缀 */
+.dir-prov {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: .01em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.dir-prov:empty { display: none; }
+.dir-prov.dst { color: #6d47d9; background: #f3f0ff; }
+.dir-prov .acct {
+  font-weight: 500;
+  color: #5b6b83;
+  padding-left: 6px;
+  border-left: 1px solid rgba(37, 99, 235, .18);
+}
+.dir-prov.dst .acct { border-left-color: rgba(109, 71, 217, .18); }
+
+@media (max-width: 760px) {
+  .br-path { margin: 0 10px 8px; }
+  .dir-prov .acct { display: none; }   /* 手机宽度先只留网盘名 */
+}
+
+/* =====================================================================
+   v32：折叠态在卡片标题旁显示网盘名（同目录栏的胶囊样式）
+   展开时目录栏已经写明「哪个网盘｜哪个账号」，标题上再来一遍就是重复，
+   所以这个胶囊只在折叠时出现。
+   ===================================================================== */
+.head-prov { display: none; }
+.card.is-folded .head-prov:not(:empty) {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+/* 折叠卡内标题字号已经缩过，胶囊跟着缩一点，避免比标题还显眼。
+   底色改白：折叠卡本身是浅灰蓝，浅蓝胶囊压上去几乎同色，看不出边界。 */
+.card.is-folded .head-prov {
+  font-size: 11px;
+  padding: 1px 8px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #d9e3f1;
+}
+.card.is-folded .head-prov.dst { box-shadow: inset 0 0 0 1px #ddd4f5; }
+
+/* =====================================================================
+   v33：日志区封顶，不能无限往下长
+   之前有两条 `.bottom-grid .log-card .logbox { max-height: none }` 把
+   基础规则里的 220px 顶掉了，日志越攒越多、页面越拉越长。
+   ===================================================================== */
+.bottom-grid .log-card {
+  min-height: 0;
+}
+.bottom-grid .log-card .logbox,
+.bottom-grid .log-card > .fold-body {
+  min-height: 0;
+}
+.bottom-grid .log-card .logbox {
+  flex: 1 1 auto;
+  max-height: 240px;          /* 封顶：再多就在框内滚 */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* 设置卡片也封顶：展开「高级设置」时不要一路把整页撑长 */
+.bottom-grid > .card {
+  max-height: 420px;
+}
+.bottom-grid .setup > .fold-body {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+@media (max-width: 1120px) {
+  .bottom-grid .log-card .logbox { max-height: 220px; }
+  .bottom-grid > .card { max-height: none; }
+  .bottom-grid .setup > .fold-body { overflow: visible; }
+}
+
+/* =====================================================================
+   v35：整体界面优化（专业前端视角）
+   三组核心问题：
+     ① 信息重复 —— 品牌栏说一遍、方向条又说一遍、统计行再算一遍
+     ② 层次不清 —— 标题条 12.5px 灰字，和正文拉不开；卡片标题也不够重
+     ③ 主次不分 —— 「加入清单」和「全部格式」一样大，蓝色到处点
+   ===================================================================== */
+
+/* ---------- ① 字号与颜色层次 ---------- */
+:root {
+  --ink-1: #101828;   /* 标题 */
+  --ink-2: #344054;   /* 正文 */
+  --ink-3: #667085;   /* 次要 */
+  --ink-4: #98a2b3;   /* 辅助 */
+  --line-2: #e3e8ef;  /* 卡片描边 */
+}
+
+.card > h2,
+.br-head h2,
+.tdir-head h2,
+.card-head h2 { color: var(--ink-1); }
+
+/* 区块标题：从 12.5px 灰字提到 13px 深色，作为「这是第几块」的锚点 */
+.row-head .row-title {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+  letter-spacing: .01em;
+}
+.row-head .row-title .tag {
+  font-weight: 500;
+  color: var(--ink-4);
+  background: transparent;
+  border: 0;
+  padding: 0 0 0 6px;
+}
+
+/* 折叠按钮：文字缩小、加箭头，降低它和标题抢注意力 */
+.row-head .fold-btn,
+.card .fold-btn {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 2px 9px;
+  border-color: var(--line-2);
+}
+.row-head .fold-btn:hover,
+.card .fold-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---------- ② 方向条重做 ---------- */
+.dir-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+}
+
+.dir-card {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px 13px 21px;
+  border: 0;
+  border-radius: 0;
+  background: var(--card);
+}
+/* 左侧 3px 色条：不靠文字也能分出源/目标 */
+.dir-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+}
+.dir-card.dst::before { background: #7c5cd6; }
+
+.dir-top { display: flex; align-items: center; gap: 9px; min-width: 0; }
+/* 网盘名做主视觉：15px，比周围所有标签都重 */
+.dir-name {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  color: var(--ink-1);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dir-badge {
+  font-size: 10.5px; font-weight: 700;
+  padding: 1px 6px; border-radius: 4px;
+  background: var(--accent-soft); color: var(--accent);
+}
+.dir-card.dst .dir-badge { background: #f3f0ff; color: #6d47d9; }
+
+/* 登录状态：小圆点 + 文字，贴在右侧 */
+.dir-state { margin-left: auto; font-size: 11.5px; }
+.dir-state::before { width: 5px; height: 5px; }
+
+.dir-foot { display: flex; align-items: center; gap: 8px; }
+.dir-note {
+  font-size: 11.5px;
+  color: var(--ink-4);
+}
+/* 「设置」是这一端的唯一入口，做成有边框的小按钮，别当成说明文字 */
+.dir-set {
+  margin-left: auto;
+  font-size: 11.5px; font-weight: 550;
+  padding: 3px 11px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-2);
+}
+.dir-set:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+/* 中间交换区：独立的窄栏，两侧细分隔线，不再挤在两卡之间 */
+.dir-swap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 18px;
+  border-left: 1px solid var(--line-2);
+  border-right: 1px solid var(--line-2);
+  background: #fbfcfe;
+}
+.dir-swap::before, .dir-swap::after { display: none; }
+.swap-btn {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--line-2);
+  background: #fff;
+  color: var(--accent);
+  transition: transform .25s ease, background .15s ease, color .15s ease, border-color .15s ease;
+}
+.swap-btn:hover:not(:disabled) {
+  background: var(--accent); color: #fff; border-color: var(--line);
+  transform: rotate(180deg);
+}
+.swap-label { font-size: 10.5px; color: var(--ink-4); }
+
+/* ---------- ③ 按钮层级：主 / 次 / 幽灵 ---------- */
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, .18);
+}
+button.primary:hover:not(:disabled) { background: #1d4ed8; border-color: #1d4ed8; }
+/* 次要按钮：白底细边，别和主操作同色。
+   注意必须排除 .primary —— 直接写 `button.sm` 会和上面的 primary 同特异性，
+   后出现的白底会把主按钮的蓝底覆盖掉（实测「加入清单」变成空白框）。 */
+button.sm:not(.primary):not(.danger),
+button.lg:not(.primary):not(.danger) {
+  background: #fff;
+  color: var(--ink-2);
+  border-color: var(--line-2);
+}
+/* 主按钮再补一条，确保压过任何后写的白底 */
+button.primary, button.sm.primary, button.lg.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+button.danger { color: var(--danger); border-color: #f3c6c6; background: #fff; }
+button.danger:hover:not(:disabled) { background: var(--danger-soft); border-color: var(--danger); }
+
+/* ---------- ④ 进度条更清楚 ---------- */
+.job-progress .progress.lg-prog {
+  height: 10px;
+  background: #e6ebf3;
+  box-shadow: inset 0 1px 2px rgba(16, 32, 64, .08);
+}
+.job-progress .progress > i {
+  background: var(--accent);
+}
+
+/* ---------- ⑤ 卡片描边统一，避免糊成一片 ---------- */
+.card { border-color: var(--line-2); }
+.col .browser, .col .tdir, .job, .picked-card { box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
+
+/* 交换按钮：button 默认 padding 会把内部 SVG 挤扁（实测只剩 4px 宽） */
+.swap-btn {
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.swap-btn svg { flex: 0 0 auto; }
+
+/* 层级微调：卡片标题比区块标题大一档，避免两者看着一样重要 */
+.br-head h2,
+.tdir-head h2,
+.card-head h2 { font-size: 13.5px; font-weight: 650; }
+
+/* ---------- 报告 P3：移动端主按钮放大到 44px 触控标准 ---------- */
+@media (max-width: 760px) {
+  button.lg, .job-actions button, #btn-start { min-height: 44px; }
+  button.sm { min-height: 36px; }
+  
+}
+
+/* =====================================================================
+   v36：Windows DPI 缩放适配
+   DPI 放大后「有效 CSS 视口」会明显变小：
+     1920×1080 @125%  → 1536×730
+     1366×768  @125%  → 1093×570   ← 同时跨过 1120 断点变单列，页面被拉到 1800+
+     1366×768  @150%  →  911×460
+   实测问题：「开始迁移」被推到 y=927，而视口只有 570 —— 首屏根本看不到主操作。
+   ===================================================================== */
+
+/* 防止移动端 / 高 DPI 下浏览器自作主张放大字体，撑破布局 */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 单列时两块卡片不要各占满一整屏：目录列表用不着那么高 */
+@media (max-width: 1120px) {
+  .col .browser { max-height: 360px; }
+  .col .tdir { max-height: 248px; }
+  .col .browser .br-body { min-height: 200px; }
+  .col .tdir .tdir-list { min-height: 96px; }
+}
+
+/* 矮屏（高 DPI 笔记本 / 分屏）压缩头部与区块间距，把主操作拉回视野 */
+@media (max-height: 760px) {
+  .topbar { padding-top: 6px; padding-bottom: 6px; }
+  .brand .logo svg { width: 30px; height: 30px; }
+  .brand-txt strong { font-size: 15px; }
+  .brand-txt .slogan { display: none; }
+
+  .wrap { padding-top: 10px; }
+  .dir-bar { margin-bottom: 12px; }
+  .dir-card { padding: 10px 16px 9px 19px; gap: 6px; }
+  .dir-name { font-size: 14px; }
+  .dir-note { display: none; }
+
+  .row-head { margin: 10px 0 4px; min-height: 22px; }
+  .card:not(.browser) { padding: 14px; }
+}
+
+/* 又矮又窄（1366@125% 这种）：进一步压缩，并让卡片更矮 */
+@media (max-height: 620px) {
+  .topbar { padding-top: 4px; padding-bottom: 4px; }
+  .brand .logo svg { width: 26px; height: 26px; }
+  .dir-card { padding: 8px 14px 7px 17px; }
+  .dir-state { display: none; }     /* 登录状态在下面的目录栏里还有一份 */
+
+  .col .browser { max-height: 300px; }
+  .col .tdir { max-height: 210px; }
+  .job { padding: 12px 14px; }
+  .job .job-actions button { min-height: 32px; }
+}
+
+/* 断点下移：1093 / 1024 这类「高 DPI 笔记本」宽度其实撑得住双栏。
+   原来 1120 就转单列，导致两块卡片上下堆叠、页面被拉长近一倍，
+   「开始迁移」直接掉出首屏。1001–1120 保持双栏，更省高度。 */
+@media (min-width: 1001px) and (max-width: 1120px) {
+  .panels {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 14px;
+  }
+  .col .browser { max-height: 372px; }
+  .col .tdir { max-height: 372px; }
+}
+
+/* 又矮又宽的笔记本（1366@125% 这种）：再挤一轮，把「开始迁移」拉回首屏 */
+@media (min-width: 1001px) and (max-height: 640px) {
+  .topbar { padding-top: 3px; padding-bottom: 3px; }
+  .brand .logo svg { width: 24px; height: 24px; }
+  .brand-txt strong { font-size: 14px; }
+
+  .wrap { padding-top: 8px; }
+  .dir-bar { margin-bottom: 10px; }
+  .dir-card { padding: 7px 14px 6px 17px; gap: 4px; }
+  .dir-name { font-size: 13.5px; }
+  .swap-btn { width: 28px; height: 28px; }
+  .swap-label { display: none; }
+
+  .row-head { margin: 8px 0 3px; min-height: 20px; }
+  .row-head .row-title { font-size: 12px; }
+  .col .browser, .col .tdir { max-height: 336px; }
+
+  .job { padding: 11px 13px; }
+  .job-bar { margin-bottom: 8px; }
+  .job-progress { margin-bottom: 8px; }
+}
+
+/* 最紧的一档（1093×570 这类 1366@125%）：把列表区再收 40px，主操作回到首屏 */
+@media (min-width: 1001px) and (max-height: 600px) {
+  .col .browser, .col .tdir { max-height: 296px; }
+  .col .browser .br-body { min-height: 168px; }
+  .col .tdir .tdir-list { min-height: 84px; }
+  .dir-card { padding: 6px 14px 5px 17px; }
+  .dir-note, .dir-state { display: none; }
+  .row-head { margin: 7px 0 2px; }
+}
+
+/* ---- 兼容性提示（源/目标组合的硬限制）----
+   放在方向条下方：它描述的是「这两端组合起来」的限制，
+   贴在源/目标之间比塞进「文件与目标」里更符合语义，也不会割裂版面。 */
+.compat-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 16px;
+  margin: -8px 0 12px;
+  padding: 3px 4px;
+  background: none;
+  border: 0;
+  color: var(--muted, #6b7280);
+  font-size: 11.5px;
+  line-height: 1.55;
+  cursor: help;
+}
+.compat-hint .compat-line { display: inline; }
+.compat-hint .compat-line::before {
+  content: "⚠ ";
+  color: #c2802a;
+  font-size: 11px;
+  margin-right: 1px;
+}
+.compat-hint em { font-style: normal; font-weight: 600; color: #8a5a12; }
+.compat-hint:hover { color: var(--fg, #374151); }
+@media (max-width: 720px) {
+  .compat-hint { flex-direction: column; gap: 1px; }
+}
+
+/* =====================================================================
+   v15 · 收口层：把「区块」而不是「整页」当成版面单位
+   ---------------------------------------------------------------------
+   参照 vercel.com 的三条决策，从整页降到区块这一级：
+     ① 字号要有落差  —— 章节标题 13px → 20px，中间不设过渡档
+     ② 留白要有节奏  —— 块与块之间 36px，块内部仍是 8~12px，密的继续密
+     ③ 一个纯几何锚点 —— 橙三角（品牌）与橙方块（交换）是同一套语言
+   附带：拆掉蓝色渐变 + 蓝色网格（「模板感」的主要来源），全站只留一个彩色。
+   这一层放在文件最末，靠后写覆盖前面十几代的旧值。
+   ===================================================================== */
+
+:root {
+  --paper: #faf9f7;     /* 暖白纸：比冷灰更像排版，不像后台 */
+  --edge:  #e8e5df;     /* 发丝线 */
+  --ink:   #0b0b0c;     /* 标题：接近纯黑 */
+  --ink-2: #52525b;     /* 正文 */
+  --ink-3: #8d8b85;     /* 辅助 */
+  --r: 10px;            /* 圆角收紧：14px 偏软，10px 更利 */
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+/* 蓝网格底纹整块拆掉 —— 它和「渐变背景」一起构成了那种一眼可见的模板感 */
+body::before { display: none; }
+
+.wrap { max-width: 1220px; padding: 0 28px 64px; }
+
+/* ---------- 顶栏：让它是「一条线」而不是「一张卡」 ---------- */
+.topbar {
+  background: transparent;
+  border-bottom: 1px solid var(--edge);
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 16px 0 13px;
+}
+.tb-in { padding: 0 28px; }
+
+.brand { gap: 12px; }
+.brand .logo,
+.brand .logo:hover {
+  width: 34px; height: 34px; border-radius: 0;
+  background: none; box-shadow: none; transform: none;
+}
+.brand .logo svg { width: 34px; height: 34px; border-radius: 0; }
+.brand-txt strong {
+  font-size: 20px; font-weight: 800; letter-spacing: -.03em;
+  background: none; -webkit-text-fill-color: var(--ink); color: var(--ink);
+}
+.brand-txt .slogan {
+  font-size: 11px; color: var(--ink-3); margin-top: 3px;
+  letter-spacing: .14em;
+}
+
+/* 状态胶囊：压成技术标签的样子，而不是圆润的「药丸」 */
+.badge {
+  padding: 3px 9px; border-radius: 6px; font-size: 10.5px;
+  letter-spacing: .1em; background: transparent;
+  border: 1px solid var(--edge); color: var(--ink-3);
+}
+.badge .dot { width: 5px; height: 5px; }
+.ver { font-size: 10.5px; color: #b6b4ae; letter-spacing: .06em; }
+
+/* ---------- 章节标题：这一版的主角，字阶从这里拉开 ---------- */
+.row-head {
+  margin: 38px 0 12px;
+  padding: 0 1px;
+  min-height: 0;
+  gap: 14px;
+  align-items: baseline;
+}
+.wrap > .dir-bar + .row-head { margin-top: 30px; }
+.row-head .row-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  color: var(--ink);
+  display: inline-flex; align-items: baseline; gap: 8px;
+}
+/* 标题旁的计数/说明：退成上标感的小字，不和标题抢 */
+.row-head .row-title .tag {
+  font-size: 11px; font-weight: 500; letter-spacing: .04em;
+  color: var(--ink-3); background: none; border: 0; padding: 0;
+}
+/* 收起按钮：降到「附注」级别，只有指上去才亮 */
+.row-head .fold-btn {
+  font-size: 10.5px; letter-spacing: .1em; color: #b6b4ae;
+  border: 0; background: none; padding: 2px 4px; height: auto;
+  line-height: 1.4; box-shadow: none;
+}
+.row-head .fold-btn:hover {
+  color: var(--accent); background: none; border: 0;
+}
+
+/* ---------- 卡片：去重影，只用一根发丝线 + 极淡投影 ---------- */
+.card {
+  background: #fff;
+  border: 1px solid var(--edge);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 2px rgba(24, 20, 12, .035);
+}
+.card:hover {
+  border-color: #dcd8d1;
+  box-shadow: 0 2px 10px rgba(24, 20, 12, .05);
+}
+/* 卡片内标题：比章节标题低一整档，形成 20 → 15 → 13 → 11 的阶梯 */
+.br-head h2, .tdir-head h2, .card-head h2, .job-top h2,
+.list-head h3, .card:not(.browser) > h2 {
+  font-size: 15px; font-weight: 650; letter-spacing: -.015em; color: var(--ink);
+}
+.br-head h2 .ic, .card-head h2 .ic { color: #c4c1ba; font-size: 13px; }
+
+/* ---------- 方向条：几何锚点就住在这里 ---------- */
+.dir-bar {
+  background: #fff;
+  border: 1px solid var(--edge);
+  border-radius: var(--r);
+  box-shadow: 0 1px 2px rgba(24, 20, 12, .035);
+  margin-bottom: 0;
+}
+.dir-card { padding: 16px 18px 15px 21px; }
+.dir-card.dst::before { background: var(--ink); }   /* 目标端用墨色，不再引入第二个彩色 */
+.dir-name { font-size: 16px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+.dir-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  padding: 2px 6px; border-radius: 4px;
+}
+.dir-card.dst .dir-badge { background: #f1efeb; color: var(--ink); }
+.dir-note { font-size: 11px; letter-spacing: .02em; }
+.dir-set {
+  border-radius: 6px; font-size: 11px;
+  border-color: var(--edge); color: var(--ink-2);
+}
+.dir-swap {
+  background: #fff;
+  border-left: 1px solid var(--edge);
+  border-right: 1px solid var(--edge);
+  gap: 6px;
+}
+
+/* 交换按钮 = 这套界面的「那个几何物体」：实心橙、圆角方块、转起来 */
+.swap-btn {
+  width: 46px; height: 46px; border-radius: 12px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; background: var(--accent); color: #fff;
+  box-shadow: 0 6px 18px -6px rgba(255, 77, 20, .55);
+  transition: transform .3s cubic-bezier(.2, .9, .3, 1.2),
+              background .18s ease, box-shadow .3s ease;
+}
+.swap-btn:hover:not(:disabled) {
+  background: var(--accent-2);
+  transform: rotate(180deg) scale(1.05);
+  box-shadow: 0 10px 26px -8px rgba(255, 77, 20, .62);
+  border: 0;
+}
+.swap-btn:active:not(:disabled) {
+  transform: rotate(180deg) scale(.93);
+  box-shadow: 0 2px 8px -2px rgba(255, 77, 20, .45);
+}
+.swap-btn:disabled { opacity: .38; box-shadow: none; }
+.swap-label { font-size: 10px; letter-spacing: .14em; color: #b6b4ae; }
+
+/* ---------- 按钮：一个实心主操作，其余全部退成描边 ---------- */
+button { border-radius: 8px; }
+button.primary, button.sm.primary, button.lg.primary {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(255, 77, 20, .22);
+}
+button.primary:hover:not(:disabled),
+button.sm.primary:hover:not(:disabled),
+button.lg.primary:hover:not(:disabled) {
+  background: var(--accent-2); border-color: var(--accent-2);
+}
+button.sm:not(.primary):not(.danger),
+button.lg:not(.primary):not(.danger) {
+  background: #fff; color: var(--ink-2); border-color: var(--edge);
+  font-weight: 500;
+}
+button.sm:not(.primary):not(.danger):hover:not(:disabled),
+button.lg:not(.primary):not(.danger):hover:not(:disabled) {
+  border-color: #cfcbc3; color: var(--ink);
+}
+button.sm { padding: 4px 11px; font-size: 11.5px; }
+button.lg { padding: 8px 18px; font-size: 13px; }
+
+/* ---------- 进度条 / 表格 / 输入：只调色，不动结构 ---------- */
+.progress { background: #eeece7; }
+.progress > i { background: var(--accent); }
+
+th {
+  font-size: 10.5px; font-weight: 650; letter-spacing: .1em;
+  color: #a8a59e; text-transform: none;
+}
+td { color: var(--ink-2); }
+
+input[type="text"], input[type="search"], input[type="number"], select, textarea {
+  border-color: var(--edge); border-radius: 7px;
+  background: #fff; color: var(--ink);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent); outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 20, .10);
+}
+
+.scroll { border-color: var(--edge); border-radius: 8px; }
+
+/* ---------- 空状态：也给它一个几何标记，别只丢一行灰字 ---------- */
+#task-body td[colspan] {
+  padding: 56px 12px !important;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+#task-body td[colspan]::before {
+  content: "";
+  display: block;
+  width: 0; height: 0;
+  margin: 0 auto 18px;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 27px solid #e6e3dc;
+}
+
+/* ---------- 小屏回退：上面这些放大值必须收回去，否则一屏放不下 ---------- */
+@media (max-width: 1120px) {
+  .row-head { margin: 28px 0 10px; }
+  .row-head .row-title { font-size: 18px; }
+}
+@media (max-width: 760px) {
+  .wrap { padding: 0 16px 44px; }
+  .tb-in { padding: 0 16px; }
+  .row-head { margin: 24px 0 9px; }
+  .row-head .row-title { font-size: 17px; }
+  .card { padding: 14px; }
+  .brand-txt strong { font-size: 18px; }
+}
+@media (max-height: 720px) {
+  .row-head { margin: 24px 0 9px; }
+  .row-head .row-title { font-size: 17px; }
+  .topbar { padding: 10px 0 9px; }
+}
+
+/* ---------- v15b · 去蓝：把这些年攒下的冷色底一律换成暖中性 ----------
+   冷色 #fafbfd / #fbfcfe / #f7f9fc 单独看是「几乎白」，
+   但放在暖白画布上会整个泛蓝，于是界面同时存在橙、蓝、紫三种倾向 —— 
+   这就是「一眼像模板」的第二来源。这里逐个换掉，不留一个。 */
+.br-head,
+.br-nav,
+.tdir-list,
+.br-listwrap,
+.tdir-cur,
+.card.is-folded,
+.job .scroll thead,
+.scroll thead {
+  background: #fbfaf8;
+}
+
+.dirlist .it:hover,
+.nav-item:hover { background: #f6f4f0; }
+.job-progress .progress.lg-prog { background: #eeece7; box-shadow: none; }
+.tdir-list, .br-nav { border-color: var(--edge); }
+.job .scroll { border-color: var(--edge); }
+
+/* 交换图标在 46px 的方块里 18px 偏小，放大到 21px 才压得住 */
+.swap-btn svg { width: 21px; height: 21px; }
+
+/* ---------- v15c · 收掉最后两处「第二彩色」与装饰性小色块 ---------- */
+/* 目标端的路径胶囊原来用紫底紫字，是这套界面里唯一的紫；
+   改成中性灰胶囊，橙只留给「源」，颜色就只剩一个主张了。 */
+.dir-prov { background: #fdf1ea; color: #b93a0d; }
+.dir-prov.dst { background: #f1efeb; color: var(--ink-2); }
+.dir-prov .acct { color: #8d8b85; border-left-color: rgba(0, 0, 0, .1); }
+.dir-prov.dst .acct { border-left-color: rgba(0, 0, 0, .1); }
+
+/* 标题前那个小图标原来是个桃色圆角块，四个板块共四个色块，
+   在白卡上非常抢眼。改成不占版面的淡灰字符。 */
+.card h2 .ic,
+.br-head h2 .ic,
+.tdir-head h2 .ic,
+.card-head h2 .ic {
+  width: auto; height: auto; border-radius: 0;
+  background: none; color: #bcb8ae;
+  font-size: 12px; margin-right: 1px;
+}
+
+/* ---------- v15d · 预设档：把「选中」表达干净 ----------
+   截图里出现过「均衡」带橙框但不选中、「极速」是桃底却没有框的情况，
+   两套规则各写了一半。这里用 ID 级统一接管，只留一个明确的选中态。 */
+#presets .preset {
+  border: 1px solid var(--edge);
+  background: #fff;
+  box-shadow: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#presets .preset b { color: var(--ink); }
+#presets .preset span { color: #8d8b85; }
+#presets .preset:hover:not(:disabled) {
+  border-color: #cfcbc3;
+  background: #fffdfb;
+  box-shadow: 0 2px 8px rgba(24, 20, 12, .06);
+  transform: none;
+}
+#presets .preset.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+#presets .preset.on b { color: #b93a0d; }
+#presets .preset.custom { border-style: dashed; }
+#presets .preset.custom b { color: #8d8b85; }
+
+/* 高级设置的展开区原来是冷白底，跟着换暖 */
+.adv-body { background: #fbfaf8; border-color: var(--edge); }
+
+/* 选中态用 !important 钉死：上面十几代里有多条同权重规则在抢 border-color，
+   实测出现过「橙框但不选中 / 选中却白底」的分裂状态，这里不再留解释空间。 */
+#presets .preset {
+  border: 1px solid var(--edge) !important;
+  background: #fff !important;
+}
+#presets .preset.on {
+  border-color: var(--accent) !important;
+  background: var(--accent-soft) !important;
+  box-shadow: inset 0 0 0 1px var(--accent) !important;
+}
+/* ---------- v15e · 密度回调 ----------
+   20px 标题 + 38px 段落间距在 1440×1000 上会把「已选清单」挤到屏幕外，
+   选文件和待传清单必须同屏可见。标题降到 19px、段前收到 30px，
+   落差仍然成立（13 → 19），但一屏能装回四段。 */
+.row-head { margin: 30px 0 10px; }
+.wrap > .dir-bar + .row-head { margin-top: 24px; }
+.row-head .row-title { font-size: 19px; }
+.card { padding: 18px; }
+.dir-swap { gap: 4px; }
+.swap-label { margin-top: -1px; }
+
+/* =====================================================================
+   v18 · 配色收口：主题回蓝 + 把颜色种类砍到三组
+   ---------------------------------------------------------------------
+   盘点下来这套界面同时在用：品牌蓝、强调橙、目标紫、成功绿、警告琥珀、危险红，
+   外加十几档冷白（#fafbfd / #fbfcfe / #f4f7fb / #e9eff8 …）。
+   颜色越多，每一处越不成立 —— 这就是「看着杂」的全部原因。
+   收口原则：
+     · 主色只有一个：品牌蓝 #2563EB（强调、主按钮、选中态、进度条、源标记）
+     · 中性只有一组：暖白画布 + 墨色文字 + 发丝线
+     · 语义色只留两个，且只出现在极小面积：成功绿（状态点）、失败红（错误文字）
+     · 紫色、琥珀色整组删除 —— 它们不承载任何不可替代的信息
+   ===================================================================== */
+
+/* ① 主题色回蓝 */
+:root {
+  --accent: #2563EB;
+  --accent-2: #1D4ED8;
+  --accent-soft: #EEF3FE;
+  --ok: #15803D;
+  --ok-soft: #F0F7F3;
+  --warn: #8D8B85;        /* 警告不再是琥珀色，退成中性灰 */
+  --warn-soft: #F6F4F0;
+}
+
+/* ② 所有写死的橙色阴影换成蓝：换主题色最容易漏的就是这些 */
+.swap-btn {
+  background: var(--accent);
+  box-shadow: 0 6px 18px -6px rgba(37, 99, 235, .5);
+}
+.swap-btn:hover:not(:disabled) {
+  background: var(--accent-2);
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, .55);
+}
+.swap-btn:active:not(:disabled) {
+  box-shadow: 0 2px 8px -2px rgba(37, 99, 235, .40);
+}
+button.primary, button.sm.primary, button.lg.primary {
+  box-shadow: 0 1px 2px rgba(37, 99, 235, .22);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+
+/* ③ 删紫：目标端不再有第三种彩色，一律中性 */
+.dir-side.dst .dir-tag,
+.dir-card.dst .dir-badge,
+.dir-prov.dst {
+  background: #F1EFEB;
+  color: var(--ink-2);
+}
+.dir-card.dst { border-left-color: #B6B4AE; }
+.dir-card.dst::before { background: #B6B4AE; }   /* 中性灰标记，与源的蓝形成「有彩 / 无彩」对照 */
+.card.is-folded .head-prov.dst { box-shadow: inset 0 0 0 1px #DDD8D0; }
+.dir-prov.dst .acct { border-left-color: rgba(0, 0, 0, .1); }
+
+/* ④ 源的路径胶囊跟着主题色走（原来是橙调） */
+.dir-prov { background: #EEF3FE; color: #1D4ED8; }
+.dir-prov .acct { color: #8D8B85; border-left-color: rgba(37, 99, 235, .2); }
+
+/* ⑤ 删琥珀：提示语靠文字和符号说话，不需要颜色 */
+.dir-set.need:hover { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+.compat-hint .compat-line::before { color: #B6B4AE; }
+.compat-hint em { color: var(--ink); font-weight: 650; }
+
+/* ⑥ 登录面板的色条：源=蓝，目标=中性（原来是橙 / 绿两条渐变） */
+.end-src::before { background: linear-gradient(180deg, #2563EB, #1D4ED8); }
+.end-dst::before { background: linear-gradient(180deg, #C9C5BD, #A8A49C); }
+
+/* ⑦ 预设档选中字色跟着回蓝 */
+#presets .preset.on b { color: #1D4ED8; }
+
+/* ⑧ 冷白收尾：这些几乎看不出差别的冷白是「杂」的隐形来源，统一成暖中性 */
+.seg, .seg button,
+.br-path,
+.tdir-cur,
+.ext-menu,
+.adv-body,
+.logbox,
+.card.is-folded,
+.job .scroll thead,
+.scroll thead,
+.br-head,
+.br-nav,
+.br-listwrap,
+.tdir-list { background-color: #FBFAF8; }
+.seg button.on { background: var(--accent-soft); color: var(--accent); }
+.dirlist .it:hover, .nav-item:hover, .ext-item:hover { background-color: #F6F4F0; }
+
+/* ---------- v18b · 修两处被「收色」误伤的地方 ---------- */
+/* 「去登录」原本借 --warn 的琥珀色来醒目。--warn 被收成中性灰之后它变成灰按钮，
+   一个必做动作不该是灰的 —— 它本质是主操作，直接用主色。 */
+.dir-set.need {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.dir-set.need:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  color: #fff;
+}
+
+/* 目标端那条 3px 标记用中性灰太弱，看着像分隔线；用墨色，和源的蓝形成明确对照 */
+.dir-card.dst::before { background: #1A1A1C; }
+.dir-state::before { background: #C9C5BD; }
+/* 未登录只是「待办」，不是「警告」，用中性文字而不是彩色 */
+.dir-state.off { color: var(--ink-3); }
+.dir-state.off::before { background: #C9C5BD; }
+
+/* =====================================================================
+   v19 · 源 / 目标两卡对齐
+   ---------------------------------------------------------------------
+   问题：这两张卡从一开始就是两套几何。
+     .browser  padding:0             → 标题通栏、路径条贴边、列表直抵边缘
+     .tdir     padding:14px 16px 16px → 标题内缩、路径条再内缩 10px、列表是个盒子
+   于是「标题左边缘」和「内容左边缘」两边差 26px，肉眼一看就是歪的。
+   统一成同一个结构：
+     通栏标题带（浅底 + 下边线）+ 内容区左右 18px + 列表统一做成有边界的盒子
+   这样两卡从标题到列表，每一条水平线都落在同一根轴上。
+   ===================================================================== */
+
+/* ① 两卡都取消自带内边距，几何交给内部统一控制 */
+.browser, .tdir { padding: 0; }
+
+/* ② 标题带：同高、同底色、同下边线、同左右 18px */
+.br-head, .tdir-head {
+  padding: 13px 18px;
+  margin: 0;
+  background: #FBFAF8;
+  border-bottom: 1px solid var(--edge);
+  min-height: 48px;
+}
+.tdir-head h2, .tdir h2 { margin: 0; }
+
+/* ③ 内容区：左右一律 18px，两卡从第一个元素起就对齐 */
+.browser > .fold-body,
+.tdir > .fold-body { padding: 13px 18px 16px; }
+
+/* ④ 内部元素不再各自撑内边距，否则 18px 会被叠成 32px */
+.br-path,
+.tdir .br-path { padding: 0 0 10px; }
+.br-bar { padding: 0 0 10px; }
+.br-pathbox { padding: 0 0 10px; }
+
+/* ⑤ 两边的列表都做成「盒子」，尺寸语言一致 */
+.br-body {
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  min-height: 300px;
+}
+.br-nav {
+  padding: 8px 6px;
+  background: #FBFAF8;
+  border-right: 1px solid var(--edge);
+}
+.br-listwrap { padding: 6px 10px; }
+.tdir-list {
+  margin: 0;
+  min-height: 150px;
+  max-height: none;
+  background: #FBFAF8;
+}
+.tdir .row { margin: 10px 0 0 !important; }
+
+/* ⑥ 目标卡矮一截，内容区补一点下留白，两卡底部不至于一边贴一边空 */
+.tdir > .fold-body { padding-bottom: 18px; }
+
+/* =====================================================================
+   v20 · 折叠后的「可点」提示
+   ---------------------------------------------------------------------
+   JS 里已经让折叠后的整条标题行都能点开，但界面上没有半点暗示，
+   用户不会去试。这里补两个信号：指针变手型、指上去标题转主色。
+   ===================================================================== */
+.row-head.is-collapsed { cursor: pointer; }
+.row-head.is-collapsed .row-title { transition: color .15s ease; }
+.row-head.is-collapsed:hover .row-title,
+.row-head.is-collapsed:hover .row-title::before { color: var(--accent); }
+
+/* 卡片折叠后残留的标题带同样可点，给一致的反馈 */
+.card.is-folded .br-head,
+.card.is-folded .tdir-head,
+.card.is-folded .card-head { cursor: pointer; transition: background .15s ease; }
+.card.is-folded .br-head:hover,
+.card.is-folded .tdir-head:hover,
+.card.is-folded .card-head:hover { background: #F4F7FE; }
+.card.is-folded .br-head:hover h2,
+.card.is-folded .tdir-head:hover h2,
+.card.is-folded .card-head:hover h2 { color: var(--accent); }
+
+/* =====================================================================
+   v21 · 让两卡真正「一条一条对齐」
+   ---------------------------------------------------------------------
+   v19 只统一了左右内边距，但两卡的**行数**还是不一样：
+     左：标题带(含视图切换 26px) → 路径条 → 工具栏一行 → 列表盒
+     右：标题带(只有文字)         → 路径条 →            列表盒
+   于是标题带一高一矮，把下面每一行都往下推了 10px；再加上左边多出一整行
+   工具栏，两边的「列表盒」永远差一行。
+   视觉上要的是三条水平线各自对齐，所以：
+     ① 标题带钉死成同一个高度（52px），内容垂直居中 —— 第 1 条线对齐
+     ② 路径条紧随其后 —— 第 2 条线对齐
+     ③ 把工具栏和列表**并成一个盒子**（工具栏当盒子的表头），
+        这样「盒子起点」只由路径条决定 —— 第 3 条线对齐
+   ===================================================================== */
+
+/* ① 标题带等高 */
+.br-head, .tdir-head {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+}
+.br-head h2, .tdir-head h2 { line-height: 1.2; margin: 0; }
+.br-head .br-tools { flex: 0 0 auto; }
+
+/* ② 路径条等高，作为第 2 条线 */
+.br-path, .tdir .br-path {
+  min-height: 34px;
+  padding: 0 0 12px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* ③ 工具栏与列表合成一个盒子：工具栏是盒子的表头 */
+.br-bar {
+  border: 1px solid var(--edge);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: #FBFAF8;
+  padding: 8px 10px;
+  margin: 0;
+}
+.br-body {
+  border-radius: 0 0 8px 8px;
+  border-top: 1px solid var(--edge);
+  border-left: 1px solid var(--edge);
+  border-right: 1px solid var(--edge);
+  border-bottom: 1px solid var(--edge);
+}
+/* 粘贴路径的输入区若展开，也要接着盒子的两条竖边 */
+.br-pathbox {
+  border-left: 1px solid var(--edge);
+  border-right: 1px solid var(--edge);
+  background: #FBFAF8;
+  padding: 0 10px 10px;
+  margin: 0;
+}
+
+/* ④ 右卡列表撑满剩余高度，两卡底边对齐 */
+.tdir > .fold-body { display: flex; flex-direction: column; }
+.tdir-list { flex: 1 1 auto; }
+
+/* ---------- v21b · 真正清零右卡的 padding ----------
+   实测：.card.browser 的 padding 是 0，.card.tdir 却还是 18px —— 
+   左卡本来就是 0，v19 那行 .tdir{padding:0} 实际没竞争过 .card。
+   两卡内边距不同，标题带起点就永远差 18px，下面每一行跟着歪。
+   这里把两卡一起钉死，几何完全交给内部（标题带 / 内容区）控制。 */
+.card.browser, .card.tdir { padding: 0 !important; }
+
+/* 路径条高度也统一：左边 34、右边 40，差 6px 同样会把列表盒推歪 */
+.br-path, .tdir .br-path {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 0 12px;
+  box-sizing: content-box;
+  align-items: center;
+}
+
+/* ---------- v21c · 路径条去掉 14px 外缩 ----------
+   实测路径条比标题和列表盒都右缩 14px，来源是它自己的 margin: 0 14px 10px。
+   这三个元素应该共用同一条左轴线，所以把外缩归零，内边距保留（框里文字不贴边）。 */
+.br-path, .tdir .br-path {
+  margin: 0 0 10px;
+  padding: 7px 10px;
+  height: auto;
+  min-height: 40px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* ---------- v21d · 锁死路径条高度 ----------
+   去掉外缩之后两卡还差 2px：源端胶囊里是「网盘名 + 账号」，目标端同样是两段，
+   但文字宽度不同导致行盒高度略有差异。把路径条和里面的胶囊一起定高，差值为 0。 */
+.br-path, .tdir .br-path { height: 40px; min-height: 40px; }
+.br-path .dir-prov {
+  height: 24px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.br-path .br-up { height: 24px; min-height: 24px; }
+.br-path .crumbs { line-height: 1.4; }
+
+/* ---------- v21e · 折叠态的留白 ----------
+   v21b 用 !important 把两卡的 padding 清零，折叠后的窄条也跟着变成 0，
+   结果图标直接贴到卡片左边缘。折叠态自己有一套几何，这里单独还给它：
+     卡片给 18px 左右内边距，标题带自身的左右 padding 归零（否则会叠成 36px），
+     同时去掉那条已经无用的下边线。 */
+.card.browser.is-folded,
+.card.tdir.is-folded { padding: 0 18px !important; }
+
+.card.is-folded .br-head,
+.card.is-folded .tdir-head,
+.card.is-folded .card-head {
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 0;
+}
+
+/* 折叠条里的图标不要再带底色，一小块灰贴在浅底上很脏 */
+.card.is-folded h2 .ic { background: none; color: #b6b2a9; opacity: 1; }
+
+/* ---------- v21f · 折叠态悬停：不制造色差 ----------
+   v20 让折叠后的标题变蓝、标题带泛淡蓝底，作为「这里能点」的提示。
+   但整页只有它是蓝的，鼠标一划过就冒出一块颜色，反而像出了 bug。
+   改成「不加颜色、只加深已有的东西」：边框略深、折叠按钮压深一档，
+   两者本来就在这个色系里，划过时不会有第二种颜色跳出来。 */
+.row-head.is-collapsed:hover .row-title,
+.row-head.is-collapsed:hover .row-title::before { color: inherit; }
+
+.card.is-folded .br-head:hover,
+.card.is-folded .tdir-head:hover,
+.card.is-folded .card-head:hover { background: transparent; }
+.card.is-folded .br-head:hover h2,
+.card.is-folded .tdir-head:hover h2,
+.card.is-folded .card-head:hover h2 { color: var(--ink); }
+
+.card.is-folded { transition: border-color .15s ease; }
+.card.is-folded:hover { border-color: #cfcbc3; }
+
+/* 折叠态那个「展开」按钮是唯一的彩色，让它自己表达悬停 */
+.row-head.is-collapsed:hover .fold-btn {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  color: #fff;
+}
+
+/* ---------- v21g · 已选清单折叠后要「看得出收起了」 ----------
+   它折叠时保留三行表格作为预览，但空列表时那三行就是整个空状态框：
+   56px 上下留白 + 一个大三角，折叠前后高度几乎一样，看起来像没反应。
+   折叠态把预览区压到「表头 + 三行」的真实高度，空状态的白和三角一并收掉。 */
+.picked-card.is-folded .scroll { max-height: 138px; }
+.picked-card.is-folded #task-body td[colspan] {
+  padding: 16px 12px !important;
+  font-size: 11.5px;
+}
+.picked-card.is-folded #task-body td[colspan]::before { display: none; }
+
+/* =====================================================================
+   v21h · 折叠态悬停的淡蓝底 + 写入侧标签配色
+   ---------------------------------------------------------------------
+   ① 悬停色差：历史上有三处 .card.is-folded:hover 给整块刷了淡蓝底
+      （#e2ebf8 / #e2eaf6 / #e8ecf4）。v21f 只改了边框，没动背景，
+      所以鼠标一进折叠区，整块变成浅蓝色 —— 这就是看到的「色差」。
+      折叠态本来就有底色，悬停时保持它自己的底色即可。
+   ② 写入侧标签：目标端的网盘胶囊原来是灰底（#F1EFEB），
+      夹在白卡和发丝线之间，灰不灰白不白，看着像脏了一块。
+      改成白底 + 发丝线，靠「有框无框」区分源/目标，比靠灰色块干净。
+   ===================================================================== */
+
+.card.is-folded:hover {
+  background: #FBFAF8;
+  border-color: #cfcbc3;
+}
+
+/* 折叠态表格的边框也跟着中性化（原来是淡蓝 #dde6f2） */
+.picked-card.is-folded .scroll { border-color: var(--edge); }
+
+/* 写入侧：白底标签，不再是灰色块 */
+.dir-prov.dst {
+  background: #fff;
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+.dir-prov.dst .acct { border-left-color: rgba(0, 0, 0, .12); }
+
+/* =====================================================================
+   v24 · 小控件：复选框不再用系统默认外观
+   ---------------------------------------------------------------------
+   文件列表、清单、设置里全是原生 <input type=checkbox>，系统默认是「白底方块」。
+   浅色下还能看，一旦切到暗色就是一片刺眼的白点 —— 这类小控件是最容易被忘的。
+   两套主题共用一套自绘样式，颜色交给变量，暗色在 theme-dark.css 里再覆盖一档。
+   ===================================================================== */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px; height: 15px;
+  flex: 0 0 auto;
+  margin: 0;
+  border-radius: 4px;
+  border: 1px solid #C7D2E2;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  vertical-align: -2px;
+  transition: background .13s ease, border-color .13s ease, box-shadow .13s ease;
+}
+input[type="checkbox"]:hover { border-color: var(--accent); }
+input[type="checkbox"]:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, .18); outline: none; }
+input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4.4px; top: 1.2px;
+  width: 4px; height: 8px;
+  border: solid #fff;
+  border-width: 0 1.7px 1.7px 0;
+  transform: rotate(45deg);
+}
+input[type="checkbox"]:indeterminate {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type="checkbox"]:indeterminate::after {
+  content: "";
+  position: absolute;
+  left: 3px; top: 6px;
+  width: 7px; height: 1.7px;
+  background: #fff;
+  border-radius: 1px;
+}
+input[type="checkbox"]:disabled { opacity: .4; cursor: not-allowed; }
+
+/* 折叠后的「当前：极速」这类摘要标签，跟着冷白体系走 */
+.card.is-folded .fold-summary {
+  background: rgba(37, 99, 235, .07);
+  border-color: rgba(37, 99, 235, .22);
+}
+.card.is-folded .fold-summary::before { color: #7A879B; }
+
+/* =====================================================================
+   主题切换按钮（两套皮肤共用，所以写在基础样式里）
+   ---------------------------------------------------------------------
+   图标跟着当前主题反过来：浅色时显月亮（点它去暗），暗色时显太阳。
+   ===================================================================== */
+.theme-toggle {
+  width: 28px; height: 28px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, .06);
+  border: 1px solid rgba(37, 99, 235, .16);
+  color: #3B6BD8;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .25s ease;
+}
+.theme-toggle:hover { background: rgba(37, 99, 235, .12); border-color: rgba(37, 99, 235, .3); color: #1D4ED8; }
+.theme-toggle:active { transform: rotate(18deg) scale(.94); }
+.theme-toggle .i-sun { display: none; }
+html[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+html[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+html[data-theme="dark"] .theme-toggle {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .14);
+  color: #C8D2E2;
+}
+html[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(255, 255, 255, .12);
+  border-color: rgba(255, 255, 255, .26);
+  color: #fff;
+}
+
+/* =====================================================================
+   v25 · 折叠按钮的箭头改由 CSS 画
+   ---------------------------------------------------------------------
+   原来用字符「⌄ / ⌃」做箭头：这两个符号不在常规字重里，不同字体会给出
+   不同大小和基线，跟旁边的「展开」两个字怎么都对不齐，看起来是「跳」的。
+   这里删掉字符，用一条 5px 的边框旋转成 chevron：尺寸、颜色、位置全部可控，
+   翻转还有过渡 —— 状态变化靠动画表达，不需要箭头「跳」一下提醒。
+   ===================================================================== */
+.fold-btn::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 6px;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  border-radius: 0 0 1px 0;
+  /* 默认是「展开中」，按钮写着「收起」，箭头朝上 */
+  transform: translateY(1px) rotate(-135deg);
+  transition: transform .24s cubic-bezier(.2, .9, .3, 1.15);
+  vertical-align: middle;
+}
+/* 已经收起了，按钮写着「展开」，箭头朝下 */
+.row-head.is-collapsed .fold-btn::before,
+.card.is-folded .fold-btn::before {
+  transform: translateY(-2px) rotate(45deg);
+}
+/* 按钮本身不再需要那段字符留下的左右内距差 */
+.row-head .fold-btn { display: inline-flex; align-items: center; }
+
+/* ---------- v26 · 方向条不要顶着顶栏 ----------
+   v15 把顶栏的 margin-bottom 收成 0（为了让它变成「一条线」而不是「一张卡」），
+   结果首屏第一个元素 —— 方向条 —— 直接贴上了顶栏底边，上面一点气都不透。
+   间距补在这里，而不是补回顶栏：顶栏那条线要保持干净，呼吸给内容。 */
+.wrap > .dir-bar { margin-top: 24px; }
+
+/* ---------- v27 · 两排的竖缝对齐 ----------
+   主区两栏是 1.55 : 1，底部「设置 / 日志」是 1.45 : 1 —— 差 0.1fr，
+   于是上下两排的竖缝差了四十多像素，眼睛会顺着这条线看出来。
+   版式里只要出现第二条分栏线，就必须和第一条落在同一个 x 上。 */
+.bottom-grid {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+
+/* ---------- 页面缩放锁定（CSS 侧） ----------
+   meta viewport 只管移动端，桌面浏览器要靠 touch-action 和缩放事件拦。
+   这里再关掉文字自动放大，避免系统字号变化把版面撑开。 */
+html {
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 顶栏的「退出」：双击 .app 启动时没有终端可按 Ctrl+C，这是唯一的正常退出入口。
+   做成和主题切换同规格的小按钮，平时不抢视线，需要时一眼能找到。 */
+.quit-btn {
+  margin-left: 8px;
+  height: 28px;
+  padding: 0 10px;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.quit-btn:hover {
+  color: var(--danger);
+  border-color: currentColor;
+  background: rgba(220, 38, 38, .06);
+}
+.quit-btn:disabled { opacity: .5; cursor: default; }

@@ -1,0 +1,42 @@
+# ---------- 运行时数据（可能含账号凭据，绝不入库） ----------
+data/
+panmigrate/data/
+*.db
+config.json
+
+# 登录用的受控浏览器 profile（体积大且含登录态）
+.tylogin-profile/
+.weblogin-profile-*/
+*-browser.log
+
+# ---------- 构建产物 ----------
+build/
+dist/
+dist-win/
+*.spec.bak
+*.pyc
+__pycache__/
+*.pyo
+
+# ---------- 系统与编辑器 ----------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ---------- 本项目的内部工作记录（不上开源仓库） ----------
+.workbuddy/
+.agent-runs/
+
+# ---------- 临时文件 ----------
+*.log
+_t_*.png
+_full_*.png
+_collapsed*.png
+
+# ---------- 仓库里不需要的二进制/历史产物 ----------
+# qrcode 自带的命令行小工具（Windows exe），运行时用不到，只保留包本体
+vendor/bin/
+# 早期宣传图（当前版本在 posters/v126/）
+posters/poster-[1-5].png

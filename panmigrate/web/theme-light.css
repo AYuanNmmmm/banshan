@@ -1,0 +1,301 @@
+/* 搬山 · 浅色主题
+   和 theme-dark.css 平行的第二套皮肤：默认启用，切到暗色时整份关掉。
+   两套皮肤各自完整，不靠 !important 互相压制 —— 那是同一张表里切主题唯一走不通的地方。 */
+
+/* =====================================================================
+   v23 · 浅色主题：同一套「弥散光 + 玻璃」语言
+   ---------------------------------------------------------------------
+   暗色不是唯一的做法。同一套结构在浅底上换成「冷白 + 淡蓝光斑 + 半透明玻璃卡」，
+   观感更轻、更适合白天长时间看，但设计语言和暗色是同一套：
+     ① 一层固定的弥散光斑（结构同暗色，只是浓度降到 .10–.16）
+     ② 卡片半透明白 + 背景模糊，让光从卡片里透出来
+     ③ 单一主色蓝，仍只有三组颜色
+   颜色体系：底 #F4F7FC / 卡 rgba(255,255,255,.72) / 主色 #2563EB
+   ===================================================================== */
+
+:root {
+  --bg: #F4F7FC;
+  --paper: #F4F7FC;
+  --edge: #E2E8F2;
+  --line: #E2E8F2;
+  --card: #FFFFFF;
+  --text: #1A2230;
+  --muted: #5C6B80;
+  --faint: #93A0B4;
+  --ink: #0F172A;
+  --ink-2: #475569;
+  --ink-3: #8A94A6;
+  --accent: #2563EB;
+  --accent-2: #1D4ED8;
+  --accent-soft: #EEF4FF;
+}
+
+body {
+  background: #F4F7FC !important;
+  color: #33415A;
+}
+
+/* ① 弥散光：与暗色同一结构，浓度压低 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(880px 600px at 8% -6%, rgba(37, 99, 235, .17), transparent 62%),
+    radial-gradient(820px 560px at 96% 0%, rgba(14, 165, 233, .14), transparent 60%),
+    radial-gradient(900px 700px at 50% 114%, rgba(99, 102, 241, .10), transparent 64%);
+}
+
+/* ② 网格：极淡的蓝，只在顶部可见 */
+body::before {
+  display: block !important;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, .055) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+  mask-image: radial-gradient(1200px 780px at 50% 0%, #000 0%, transparent 80%);
+}
+
+/* ③ 玻璃卡：半透明白 + 背景模糊，光会从卡片里透出来 */
+.card, .dir-bar {
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(255, 255, 255, .95);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, .04),
+    0 20px 44px -26px rgba(23, 43, 99, .30),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  backdrop-filter: blur(16px) saturate(120%);
+}
+.card:hover, .dir-bar:hover {
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, .05),
+    0 26px 54px -26px rgba(23, 43, 99, .38),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* ④ 内嵌三层：比卡片再冷一档，形成深度 */
+.br-head, .tdir-head, .br-bar {
+  background-color: rgba(244, 247, 252, .85) !important;
+  border-color: rgba(37, 99, 235, .10) !important;
+}
+.br-body, .tdir-list, .scroll, .logbox, .adv-body {
+  background-color: rgba(252, 253, 255, .9) !important;
+  border-color: rgba(37, 99, 235, .12) !important;
+}
+.br-nav { background-color: rgba(246, 249, 254, .9) !important; }
+.card.is-folded { background-color: rgba(248, 250, 254, .9) !important; }
+.card.is-folded:hover { background-color: rgba(241, 245, 252, 1) !important; }
+.br-path { background: rgba(255, 255, 255, .85) !important; border-color: rgba(37, 99, 235, .12) !important; }
+.tdir-cur, .seg, .br-pathbox { background-color: rgba(246, 249, 254, .9) !important; }
+
+/* ⑤ 方向条：主角，多一层冷光 */
+.dir-bar {
+  background:
+    radial-gradient(620px 280px at 2% 0%, rgba(96, 165, 250, .18), transparent 72%),
+    rgba(255, 255, 255, .78);
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, .06),
+    0 24px 50px -28px rgba(23, 43, 99, .38),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.dir-card.dst::before { background: #94A3B8; }
+.dir-card.src::before {
+  background: linear-gradient(180deg, #60A5FA, #2563EB);
+  box-shadow: 0 0 14px rgba(59, 130, 246, .45);
+}
+
+/* ⑥ 按钮：浅底上辉光减弱，靠渐变和细边 */
+button.primary, button.sm.primary, button.lg.primary {
+  background: linear-gradient(180deg, #3B82F6, #2563EB);
+  border-color: rgba(37, 99, 235, .9);
+  box-shadow: 0 6px 18px -8px rgba(37, 99, 235, .75), inset 0 1px 0 rgba(255, 255, 255, .28);
+}
+button.primary:hover:not(:disabled),
+button.sm.primary:hover:not(:disabled),
+button.lg.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #4B8DF8, #1D4ED8);
+}
+button.sm:not(.primary):not(.danger),
+button.lg:not(.primary):not(.danger) {
+  background: rgba(255, 255, 255, .9);
+  border-color: rgba(37, 99, 235, .16);
+  color: #3B4A63;
+}
+button.sm:not(.primary):not(.danger):hover:not(:disabled),
+button.lg:not(.primary):not(.danger):hover:not(:disabled) {
+  background: #fff;
+  border-color: rgba(37, 99, 235, .34);
+  color: #1D4ED8;
+}
+
+/* ⑦ 交换按钮：浅底上的「发光体」 */
+.swap-btn {
+  background: linear-gradient(180deg, #3B82F6, #2158D8);
+  border: 1px solid rgba(37, 99, 235, .5);
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, .10),
+    0 10px 26px -8px rgba(37, 99, 235, .8),
+    inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.swap-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #4B8DF8, #1D4ED8);
+  box-shadow:
+    0 0 0 6px rgba(37, 99, 235, .13),
+    0 14px 32px -8px rgba(37, 99, 235, .9),
+    inset 0 1px 0 rgba(255, 255, 255, .4);
+}
+
+/* ⑧ 进度条：冷白轨道 + 蓝色发光填充 */
+.progress, .job-progress .progress.lg-prog { background: rgba(37, 99, 235, .10); }
+.progress > i {
+  background: linear-gradient(90deg, #1D4ED8, #60A5FA);
+  box-shadow: 0 0 12px rgba(59, 130, 246, .55);
+}
+
+/* ⑨ 网盘胶囊与选中态跟着冷白体系走 */
+.dir-prov { background: rgba(37, 99, 235, .10) !important; color: #1D4ED8 !important; }
+.dir-prov .acct { color: #7A879B; border-left-color: rgba(37, 99, 235, .18); }
+.dir-prov.dst {
+  background: rgba(255, 255, 255, .95) !important;
+  color: #475569 !important;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .16) !important;
+}
+#presets .preset {
+  background: rgba(255, 255, 255, .9) !important;
+  border-color: rgba(37, 99, 235, .14) !important;
+}
+#presets .preset:hover:not(:disabled) { background: #fff !important; border-color: rgba(37, 99, 235, .3) !important; }
+#presets .preset.on {
+  background: rgba(37, 99, 235, .07) !important;
+  border-color: rgba(37, 99, 235, .55) !important;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .3), 0 0 22px -8px rgba(37, 99, 235, .45) !important;
+}
+#presets .preset.on b { color: #1D4ED8 !important; }
+
+/* ⑩ 顶栏：一条发光细线，和暗色同一手法 */
+.topbar { background: transparent; border-bottom: 1px solid rgba(37, 99, 235, .10); position: relative; }
+.topbar::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, .35) 25%, rgba(96, 165, 250, .7) 50%, rgba(37, 99, 235, .35) 75%, transparent);
+}
+
+/* ---------- 浅色加强：弥散光要看得见 ----------
+   第一版把浓度压到 .10–.17，结果整页只是「一片浅灰」——光在，但看不出是光。
+   弥散感的本质是明暗差：底要略深、光要够亮、卡片要白。
+   这里把底压到 #EDF2FA，光斑提到 .18–.30，卡片提亮到 .82 白。 */
+body {
+  background: #EDF2FA !important;
+}
+body::after {
+  background:
+    radial-gradient(780px 540px at 6% -6%, rgba(37, 99, 235, .30), transparent 58%),
+    radial-gradient(700px 500px at 98% 0%, rgba(14, 165, 233, .22), transparent 58%),
+    radial-gradient(860px 660px at 52% 116%, rgba(99, 102, 241, .18), transparent 62%),
+    radial-gradient(520px 460px at 82% 42%, rgba(59, 130, 246, .10), transparent 66%);
+}
+
+/* 卡片提亮 + 阴影加深，才「浮」得起来 */
+.card, .dir-bar {
+  background: rgba(255, 255, 255, .82);
+  border: 1px solid rgba(255, 255, 255, .9);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, .05),
+    0 26px 52px -28px rgba(23, 43, 99, .42),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.card:hover, .dir-bar:hover {
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, .06),
+    0 32px 60px -28px rgba(23, 43, 99, .48),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* 方向条再多一层冷光，让它在页面里最亮 */
+.dir-bar {
+  background:
+    radial-gradient(560px 240px at 0% 0%, rgba(96, 165, 250, .26), transparent 72%),
+    radial-gradient(460px 220px at 100% 100%, rgba(37, 99, 235, .10), transparent 70%),
+    rgba(255, 255, 255, .86);
+}
+
+/* 标题带压一点蓝，和纯白内容拉开 */
+.br-head, .tdir-head, .br-bar {
+  background-color: rgba(238, 243, 251, .9) !important;
+  border-color: rgba(37, 99, 235, .12) !important;
+}
+
+/* 折叠态表头（浅色版，同理） */
+.picked-card.is-folded .scroll {
+  background: transparent !important;
+  border-color: rgba(37, 99, 235, .12) !important;
+  box-shadow: none !important;
+}
+.picked-card.is-folded .scroll thead th {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(37, 99, 235, .12) !important;
+  backdrop-filter: none !important;
+}
+
+/* ---------- 浅色再加强：光要铺到中间 ----------
+   前两版光都堆在四角，视口中间是一大片白，看起来只是「白底 + 一点渐变边」。
+   这里加一层覆盖中部的柔光，同时把底再压深、卡片降到 .72，光才穿得出来。 */
+body { background: #E9F0FA !important; }
+body::after {
+  background:
+    radial-gradient(820px 560px at 4% -8%, rgba(37, 99, 235, .34), transparent 58%),
+    radial-gradient(740px 520px at 99% -2%, rgba(14, 165, 233, .26), transparent 58%),
+    radial-gradient(1000px 720px at 50% 116%, rgba(99, 102, 241, .22), transparent 64%),
+    radial-gradient(1100px 900px at 50% 34%, rgba(147, 197, 253, .22), transparent 72%);
+}
+.card, .dir-bar { background: rgba(255, 255, 255, .72); }
+
+/* ---------- 浅色：把表格的暖白底清干净 ----------
+   v18 时期为了统一「暖中性」把表头和几处面设成了 #FBFAF8。
+   那是暖白主题的残留，放到现在的冷蓝体系里，整条表头会明显发黄。
+   表格相关的底色、分隔线统一换成冷调。 */
+.scroll thead,
+.job .scroll thead { background: transparent !important; }
+.scroll thead th,
+.job .scroll thead th,
+.picked-card .scroll thead th {
+  background: rgba(240, 245, 252, .96) !important;
+  color: #6B7A90 !important;
+  border-bottom: 1px solid rgba(37, 99, 235, .10) !important;
+}
+table, tbody, tr, td { background-color: transparent; }
+th, td { border-color: rgba(37, 99, 235, .10) !important; }
+.dirlist .it { border-bottom-color: rgba(37, 99, 235, .08) !important; }
+.picked-card.is-folded .scroll thead th {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(37, 99, 235, .12) !important;
+}
+
+/* 空状态那个三角原来是暖灰 #e6e3dc，在冷白卡上像块脏印子 */
+#task-body td[colspan]::before { border-bottom-color: rgba(37, 99, 235, .16) !important; }
+#task-body td[colspan] { color: #8494AB !important; }
+
+/* ---------- 目标端要有一点颜色 ----------
+   之前为了「颜色别太多」，把写入侧做成了纯中性灰 / 白底标签，
+   结果两端在视觉上完全等价 —— 分不出「从哪来」和「到哪去」，表意反而弱了。
+   解法不是加第三色，而是在同一个冷色家族里取第二档：
+     源 = 蓝  #2563EB
+     目标 = 青 蓝 #0EA5E9
+   两者是相邻色相，看上去仍是一套，但一眼能区分方向。 */
+.dir-card.dst .dir-badge {
+  background: rgba(14, 165, 233, .14);
+  color: #0277B6;
+}
+.dir-card.dst::before {
+  background: linear-gradient(180deg, #38BDF8, #0284C7);
+  box-shadow: 0 0 14px rgba(14, 165, 233, .5);
+}
+.dir-prov.dst {
+  background: rgba(14, 165, 233, .10) !important;
+  color: #0369A1 !important;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, .26) !important;
+}
+.dir-prov.dst .acct { color: #5C7C93; border-left-color: rgba(14, 165, 233, .22); }
