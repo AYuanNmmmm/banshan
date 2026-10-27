@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" name="viewport">
+<title>搬山 · 网盘迁移工具</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 34'%3E%3Cpath d='M1 31 L12.5 9 L24 31 Z' fill='%23123a9e'/%3E%3Cpath d='M14 31 L24.5 12.5 L35 31 Z' fill='%232563eb'/%3E%3C/svg%3E" rel="icon">
+<link href="/style.css" rel="stylesheet">
+<script>
+/* 锁住页面缩放：界面是按固定栅格排的，放大到 150% 之后两栏会互相挤压、
+   卡片内容溢出，反而没法用。所以把浏览器层级的缩放全部拦下来。
+   注意这会影响「用 Ctrl+滚轮放大看小字」这种习惯，属于刻意的取舍。 */
+(function () {
+  // ① Ctrl / ⌘ + 滚轮（浏览器把双指捏合也映射成这个事件）
+  window.addEventListener("wheel", function (e) {
+    if (e.ctrlKey || e.metaKey) e.preventDefault();
+  }, { passive: false });
+
+  // ② Ctrl / ⌘ + “+ / - / 0”（含小键盘）
+  var blockKeys = { Equal: 1, Minus: 1, NumpadAdd: 1, NumpadSubtract: 1, Digit0: 1, Numpad0: 1 };
+  window.addEventListener("keydown", function (e) {
+    if (!(e.ctrlKey || e.metaKey)) return;
+    if (blockKeys[e.code] || e.key === "+" || e.key === "-" || e.key === "0") {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // ③ 触控板的双指捏合（Safari / 部分 Chromium）
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function (name) {
+    document.addEventListener(name, function (e) { e.preventDefault(); }, { passive: false });
+  });
+})();
+</script>
+<!-- 两套皮肤各自一份文件：哪一个是 all、哪一个就是 not all，互不覆盖 -->
+<link href="/theme-light.css" id="theme-light" media="all" rel="stylesheet">
+<link href="/theme-dark.css" id="theme-dark" media="not all" rel="stylesheet">
+<script>
+/* 主题必须在样式生效前定好，否则先渲染浅色再跳暗色，会闪一下白。
+   取值优先级：URL 参数（临时预览 / 分享） > 上次选择 > 系统偏好 */
+(function () {
+  var t = null;
+  try { t = localStorage.getItem("pm.theme"); } catch (e) {}
+  if (t !== "light" && t !== "dark") {
+    var q = new URLSearchParams(location.search).get("theme");
+    if (q === "light" || q === "dark") t = q;
+  }
+  if (t !== "light" && t !== "dark") {
+    t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  document.documentElement.setAttribute("data-theme", t);
+  var dark = document.getElementById("theme-dark");
+  var light = document.getElementById("theme-light");
+  if (t === "dark") {
+    if (dark) dark.setAttribute("media", "all");
+    if (light) light.setAttribute("media", "not all");
+  }
+})();
+</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap tb-in">
+    <div class="brand">
+      <!-- 纯几何、无渐变、无底板：两个三角就是「山」，颜色回到品牌蓝 -->
+      <span aria-hidden="true" class="logo">
+        <svg aria-label="搬山" height="34" role="img" viewBox="0 0 36 34" width="34">
+          <path d="M1 31 L12.5 9 L24 31 Z" fill="#123a9e"/>
+          <path d="M14 31 L24.5 12.5 L35 31 Z" fill="#2563eb"/>
+        </svg>
+      </span>
+      <div class="brand-txt">
+        <strong>搬山</strong>
+        <span class="slogan">愚公移山，一键搬家</span>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="badges">
+        <!-- 源和目标的状态在下面的方向条上已经写清楚了，这里只留运行状态，避免一句话说三遍 -->
+        <span class="badge" id="badge-run"><i class="dot" id="dot-run"></i><span id="txt-run">空闲</span></span>
+      </div>
+      <button aria-label="切换深浅主题" class="theme-toggle" id="theme-toggle" title="切换深浅主题">
+        <svg aria-hidden="true" class="i-moon" height="15" viewBox="0 0 24 24" width="15">
+          <path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a6.6 6.6 0 0 0 11 11z" fill="currentColor"/>
+        </svg>
+        <svg aria-hidden="true" class="i-sun" height="15" viewBox="0 0 24 24" width="15">
+          <circle cx="12" cy="12" fill="currentColor" r="4.2"/>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"/>
+        </svg>
+      </button>
+      <span class="ver" id="app-ver" title="当前程序版本；如果和你说要的版本对不上，说明跑的是旧进程">v—</span>
+      <!-- 双击 .app 启动时没有终端可按 Ctrl+C，这是唯一的正常退出入口 -->
+      <button class="quit-btn" id="btn-quit" title="结束后台进程（迁移中会拒绝退出）" type="button">退出</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 方向条：两侧是「起终点」，中间只留一个对调按钮 ============ -->
+  <div class="dir-bar" id="dir-bar">
+    <div class="dir-card src">
+      <div class="dir-top">
+        <span class="dir-badge">源</span>
+        <strong class="dir-name" id="dir-src-name">未选择</strong>
+        <span class="dir-state" id="dir-src-state">未登录</span>
+      </div>
+      <div class="dir-foot">
+        <span class="dir-note">文件从这里来</span>
+        <button class="dir-set" id="dir-src-set">设置</button>
+      </div>
+    </div>
+
+    <div class="dir-swap">
+      <button class="swap-btn" id="btn-swap" title="把源和目标整体对调：网盘、登录状态、目录全部互换">
+        <svg aria-hidden="true" height="18" viewBox="0 0 24 24" width="18">
+          <path d="M7 7h10l-2.6-2.6M17 7l-2.6 2.6M17 17H7l2.6 2.6M7 17l2.6-2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"/>
+        </svg>
+      </button>
+      <span class="swap-label">交换</span>
+    </div>
+
+    <div class="dir-card dst">
+      <div class="dir-top">
+        <span class="dir-badge">目标</span>
+        <strong class="dir-name" id="dir-dst-name">未选择</strong>
+        <span class="dir-state" id="dir-dst-state">未登录</span>
+      </div>
+      <div class="dir-foot">
+        <span class="dir-note">文件到这里去</span>
+        <button class="dir-set" id="dir-dst-set">设置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 源/目标组合的限制提示：紧贴方向条，因为它说的就是这两端的组合 -->
+  <div class="compat-hint" id="compat-hint" style="display:none"></div>
+
+  <!-- ============ 主区：源（大，选文件）｜目标（小，只选目录） ============ -->
+  <div class="row-head">
+    <h3 class="row-title">文件与目标</h3>
+    <button class="fold-btn" data-fold-btn="browser" title="收起/展开这一排（左右同时）">收起</button>
+  </div>
+  <div class="panels">
+
+    <section class="col col-src">
+      <div class="card end end-src" id="panel-source"></div>
+
+      <section class="card browser foldable" data-fold="browser" id="browser">
+        <div class="br-head">
+          <h2><span class="ic">◱</span>选择要迁移的文件<span class="dir-prov head-prov" id="br-src-name"></span></h2>
+          <div class="br-tools">
+            <span class="hint" id="br-pickinfo"></span>
+            <div aria-label="显示方式" class="seg" role="group">
+              <button class="on" id="br-view-list" title="列表视图：信息密集，适合按名字/大小挑">☰</button>
+              <button id="br-view-grid" title="图标视图：一眼看清文件类型">▦</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fold-body" data-fold-body="browser">
+          <div class="br-path">
+            <span class="dir-prov" id="br-prov"></span>
+            <button class="br-up" id="br-up" title="返回上一级">↑</button>
+            <div class="crumbs" id="br-crumbs"></div>
+          </div>
+
+          <div class="br-bar">
+            <div class="ext-filter" id="br-ext-filter">
+            <button class="ext-trigger" id="br-ext-trigger" title="按文件格式筛选：候选项自动来自当前目录，点选即可，不用手输" type="button">
+              <span id="br-ext-label">全部格式</span>
+              <svg aria-hidden="true" height="12" viewBox="0 0 24 24" width="12">
+                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              </svg>
+            </button>
+            <div class="ext-menu" hidden id="br-ext-menu">
+              <div class="ext-search">
+                <input id="br-ext-q" placeholder="搜格式关键词，如 jpg" type="search">
+              </div>
+              <div class="ext-list" id="br-ext-list"></div>
+            </div>
+          </div>
+            <button class="sm" id="br-pickall" title="只勾选当前目录下的文件；文件夹请单独勾选后加入（会递归展开）">全选文件</button>
+            <button class="sm" id="br-picknone">清空勾选</button>
+            <button class="sm" id="br-paste">粘贴路径</button>
+            <button class="primary sm" id="br-add">加入清单</button>
+          </div>
+
+          <div class="br-pathbox" id="br-pathbox" style="display:none">
+            <textarea id="br-paths" placeholder="一行一个路径，支持文件或文件夹，例如：&#10;/照片/2024/a.jpg&#10;/视频/旅行"></textarea>
+            <div class="row" style="margin-top:6px">
+              <button class="sm primary" id="br-addpaths">按路径加入清单</button>
+              <span class="hint" style="margin:0">文件夹会递归展开；不存在或没权限的路径会被跳过并列出来</span>
+            </div>
+          </div>
+
+          <div class="br-body">
+            <nav aria-label="目录导航" class="br-nav" id="br-nav"></nav>
+            <div class="br-listwrap">
+              <div class="dirlist" id="br-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="col col-dst">
+      <div class="card end end-dst" id="panel-target"></div>
+
+      <section class="card tdir foldable" data-fold="tdir" id="target-dir">
+        <div class="tdir-head">
+          <h2><span class="ic">↙</span>写入位置<span class="dir-prov dst head-prov" id="tg-dst-name"></span></h2>
+        </div>
+        <div class="fold-body" data-fold-body="tdir">
+          <div class="br-path">
+            <span class="dir-prov dst" id="tg-prov"></span>
+            <button class="br-up" id="tg-up" title="返回上一级">↑</button>
+            <div class="crumbs" id="tg-crumbs"></div>
+          </div>
+          <div class="tdir-list" id="tg-list"></div>
+          <div class="row" style="margin-top:8px; gap:8px">
+            <button class="primary sm" id="tg-pick">就用这个目录</button>
+            <button class="sm" id="tg-mkdir">新建文件夹</button>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ============ 迁移作业：进度在上，已选清单紧随其后且可折叠 ============ -->
+  <div class="row-head">
+    <h3 class="row-title">迁移作业<span class="tag" id="run-tag"></span></h3>
+    <button class="fold-btn" data-fold-btn="job" title="收起/展开迁移作业">收起</button>
+  </div>
+  <section class="card job foldable" data-fold="job" id="job">
+    <!-- 操作行：主操作在左，次要操作（扫描）在右，两端分布 -->
+    <div class="job-bar">
+      <div class="job-actions">
+        <button class="primary lg" id="btn-start">开始迁移</button>
+        <button class="lg" id="btn-pause">暂停</button>
+        <button class="lg" id="btn-stop" title="停止迁移，并取消所有勾选（已传进度保留，随时可以重新勾选继续）">停止</button>
+      </div>
+      <div class="job-extra">
+        <button class="sm" id="btn-scan">扫描整个目录</button>
+        <button class="sm" id="btn-scan-stop" style="display:none">停止扫描</button>
+        <span class="hint" id="scan-hint"></span>
+      </div>
+    </div>
+
+    <!-- 进度行：独占一行，条 + 百分比 + 速度 -->
+    <div class="job-progress">
+      <div class="jp-head">
+        <span class="hint" id="prog-label">还没有任务</span>
+        <span class="hint" id="prog-right"></span>
+      </div>
+      <div class="progress lg-prog" id="prog"><i></i></div>
+    </div>
+
+    <div class="fold-body" data-fold-body="job">
+      <div class="hint prog-active" id="prog-active"></div>
+        <div class="stats-inline">
+          <span class="si"><b id="st-done">0</b> 已完成</span>
+          <span class="si"><b id="st-skip">0</b> 跳过</span>
+          <span class="si"><b id="st-fail">0</b> 失败</span>
+          <span class="si"><b id="st-total">0</b> 总文件</span>
+          <span aria-hidden="true" class="si-bar"></span>
+          <span class="si"><b id="st-speed">—</b></span>
+          <span class="si">剩 <b id="st-eta">—</b></span>
+          <span class="si-grow"></span>
+          <span class="hint" id="quota-info"></span>
+        </div>
+    </div>
+  </section>
+
+  <!-- ============ 已选清单（独立板块：标题条 + 卡片） ============ -->
+  <div class="row-head">
+    <h3 class="row-title">已选清单<span class="tag" id="task-count"></span></h3>
+    <button class="fold-btn" data-fold-btn="picked" title="收起/展开已选清单">收起</button>
+  </div>
+  <section class="card picked-card foldable" data-fold="picked" id="picked-card">
+    <!-- 操作与筛选合成一行：左边批量操作，右边搜索/状态/排序（原来是上下两行，占高度） -->
+    <div class="list-ops">
+      <label class="row chk" title="只勾选未完成的任务；已完成的不会被重新勾上"><input id="chk-all" type="checkbox"> 全选未完成</label>
+      <button class="sm" id="btn-pick-none">全不选</button>
+      <button class="sm" id="btn-pick-open">只选未完成</button>
+      <button class="sm" id="btn-retry">重试失败</button>
+      <button class="sm" id="btn-report">导出报告</button>
+      <button class="sm danger" id="btn-remove-all" title="把清单里的文件全部移除（网盘上的文件不动）">全部移除</button>
+
+      <div class="list-filter">
+        <input id="task-search" placeholder="搜文件名 / 路径" type="search">
+        <select id="task-filter">
+          <option value="all">全部状态</option>
+          <option value="open">未完成</option>
+          <option value="failed">只看失败</option>
+          <option value="done">只看完成</option>
+          <option value="pending">只看待传</option>
+        </select>
+        <select id="task-sort">
+          <option value="path">按路径</option>
+          <option value="size">按大小</option>
+          <option value="state">按状态</option>
+        </select>
+        <span class="hint" id="pick-info"></span>
+        <span class="hint" id="list-info"></span>
+      </div>
+    </div>
+    <div class="fold-body" data-fold-body="picked">
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th style="width:4%"></th><th style="width:44%">文件</th><th style="width:9%">大小</th><th style="width:8%">状态</th><th style="width:9%">进度</th><th style="width:18%">备注</th><th style="width:8%"></th></tr>
+          </thead>
+          <tbody id="task-body"><tr><td class="hint" colspan="7" style="padding:16px 10px">暂无任务，先在上方勾选文件，或点「扫描整个目录」</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 设置 + 日志（整排一个折叠控件） ============ -->
+  <div class="row-head">
+    <h3 class="row-title">设置与日志</h3>
+    <button class="fold-btn" data-fold-btn="settings" title="收起/展开这一排（左右同时）">收起</button>
+  </div>
+  <div class="bottom-grid" id="bottom-panel">
+    <section class="card setup foldable" data-fold="settings" id="settings">
+      <div class="card-head">
+        <h2><span class="ic">⚙</span>设置 <span class="tag">不知道怎么选就用「均衡」</span><span class="fold-summary" id="preset-now"></span></h2>
+      </div>
+      <div class="fold-body" data-fold-body="settings">
+        <div class="presets" id="presets">
+          <button class="preset" data-preset="safe"><b>稳妥</b><span>网络不稳时用</span></button>
+          <button class="preset on" data-preset="balanced"><b>均衡</b><span>推荐</span></button>
+          <button class="preset" data-preset="fast"><b>极速</b><span>跑满带宽</span></button>
+          <button class="preset" data-preset="gentle"><b>省流</b><span>不耽误上网</span></button>
+          <button class="preset custom" data-preset="custom" disabled><b>自定义</b><span>见高级设置</span></button>
+        </div>
+        <p class="hint" id="preset-note" style="margin:8px 0 0"></p>
+
+        <details class="adv" id="adv">
+          <summary>高级设置（一般不用改）</summary>
+          <div class="adv-body">
+            <div class="grid2" style="gap:0 18px">
+              <div>
+                <label class="f"><span>文件并发（同时处理几个文件）</span>
+                  <input id="cfg-file-conc" max="8" min="1" step="1" type="number">
+                </label>
+                <label class="f"><span>分片并发（单个文件同时传几块）</span>
+                  <input id="cfg-part-conc" max="12" min="1" step="1" type="number">
+                </label>
+                <label class="f"><span>限速（KB/s，0 表示不限）</span>
+                  <input id="cfg-bandwidth" max="1048576" min="0" step="128" type="number">
+                </label>
+              </div>
+              <div>
+                <label class="f"><span>分片大小（MB）<em class="chunk-tip" id="chunk-tip"></em></span>
+                  <input id="cfg-part-size" max="64" min="1" step="1" type="number">
+                </label>
+                <label class="f"><span>目标端已有同名文件（内容不同）</span>
+                  <select id="cfg-conflict">
+                    <option value="auto_rename">自动加序号，不中断（推荐）</option>
+                    <option value="skip">跳过，留在清单里标注</option>
+                    <option value="refuse">报错停下</option>
+                  </select>
+                </label>
+                <label class="f"><span>目标端目录结构</span>
+                  <select id="cfg-structure">
+                    <option value="keep">保留源目录层级</option>
+                    <option value="flat">全部平铺到目标目录</option>
+                  </select>
+                </label>
+                <!-- 登录用的浏览器：Windows 上只有「自动 / 只用 Chrome·Edge」两种实际效果，
+                     Safari 这一项只在 macOS 且有 safaridriver 时才显示 -->
+                <label class="f" id="f-login-browser"><span>网页登录用哪个浏览器</span>
+                  <select id="cfg-login-browser">
+                    <option value="auto">自动（优先 Chrome / Edge）</option>
+                    <option value="chromium">只用 Chrome / Edge</option>
+                    <option value="safari">只用 Safari（macOS）</option>
+                  </select>
+                </label>
+                <label class="f check">
+                  <input id="cfg-verify" type="checkbox">
+                  <span>传输后做完整性校验</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="card log-card foldable" data-fold="log" id="logcard">
+      <div class="card-head">
+        <h2><span class="ic">≡</span>运行日志</h2>
+      </div>
+      <div class="fold-body" data-fold-body="log">
+        <div class="logbox" id="logbox"><div class="hint">等待操作…</div></div>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<div class="mask" id="qr-mask">
+  <div class="dialog" style="max-width:420px">
+    <header>
+      <strong id="qr-title">扫码登录</strong>
+      <button class="sm" id="qr-close">关闭</button>
+    </header>
+    <div class="body" style="text-align:center">
+      <div id="qr-box" style="min-height:248px; display:flex; align-items:center; justify-content:center">
+        <span class="hint">正在获取二维码…</span>
+      </div>
+      <p class="hint" id="qr-hint" style="text-align:center; margin-top:12px"></p>
+      <p class="hint" id="qr-raw" style="text-align:center; font-size:11px; color:var(--faint); word-break:break-all"></p>
+    </div>
+    <footer>
+      <button id="qr-cancel">取消</button>
+      <button class="primary" id="qr-refresh">换个二维码</button>
+    </footer>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/app.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

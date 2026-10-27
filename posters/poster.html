@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html data-page-node-id="pazUzv4MunxDXUsPOLDV3E" lang="zh-CN">
+<head data-page-node-id="rYZ0Ku9ke9puDyK6MJ8nXQ">
+<script data-page-node-id="DFtHkUhRkERr1N2BTOTTpy" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="wUQaFO7jhiqlJzu4yJ9YgL" charset="utf-8">
+<title data-page-node-id="sUR0tkFXjoCmwBuMo5Saq0" data-pnid-children="OI2tiOZqgemsUHeCyW9KWT">【应用名】 · 海报</title>
+<style data-page-node-id="PvIHvyrJNJERVFTubK8vXH" data-pnid-children="tLxs2dXxOpp3IO6LoNkeBP">
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  html,body { background:#000; }
+  body {
+    font-family:"PingFang SC","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  }
+
+  .poster {
+    display:none;
+    position:relative;
+    width:1080px; height:1440px;
+    overflow:hidden;
+    background:
+      radial-gradient(1200px 700px at 78% 8%, rgba(45,212,255,.13), transparent 62%),
+      radial-gradient(900px 700px at 8% 96%, rgba(77,124,254,.15), transparent 60%),
+      #070B14;
+    color:#EAF2FF;
+  }
+  .poster.on { display:block; }
+
+  /* ---------- 背景层 ---------- */
+  .grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(140,185,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,185,255,.05) 1px, transparent 1px);
+    background-size:60px 60px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 32%, #000 0%, rgba(0,0,0,.35) 55%, transparent 82%);
+    mask-image:radial-gradient(ellipse 70% 55% at 50% 32%, #000 0%, rgba(0,0,0,.35) 55%, transparent 82%);
+  }
+  .horizon {
+    position:absolute; left:0; right:0; bottom:0; height:520px;
+    background:
+      linear-gradient(to top, rgba(45,212,255,.07), transparent 70%),
+      repeating-linear-gradient(to top, rgba(120,170,255,.09) 0 1px, transparent 1px 74px);
+    -webkit-mask-image:linear-gradient(to top, #000, transparent);
+    mask-image:linear-gradient(to top, #000, transparent);
+  }
+  /* 四角装饰 */
+  .corner { position:absolute; width:26px; height:26px; border:2px solid rgba(45,212,255,.42); }
+  .corner.tl { top:44px; left:44px; border-right:0; border-bottom:0; }
+  .corner.tr { top:44px; right:44px; border-left:0; border-bottom:0; }
+  .corner.bl { bottom:44px; left:44px; border-right:0; border-top:0; }
+  .corner.br { bottom:44px; right:44px; border-left:0; border-top:0; }
+
+  /* ---------- 通用元素 ---------- */
+  .brand { position:absolute; left:96px; top:88px; display:flex; align-items:center; gap:22px; }
+  .brand .ic { width:82px; height:82px; display:block; border-radius:22px; }
+  .brand .bname { font-size:38px; font-weight:700; letter-spacing:.10em; }
+  .brand .btag { font-size:23px; color:#7E93B4; letter-spacing:.16em; margin-top:6px; }
+
+  .eyebrow {
+    font-size:25px; letter-spacing:.34em; color:#2DD4FF; font-weight:600;
+    display:flex; align-items:center; gap:16px;
+  }
+  .eyebrow::before { content:""; width:46px; height:2px; background:linear-gradient(90deg,#2DD4FF,transparent); }
+
+  h1 {
+    font-size:106px; line-height:1.20; font-weight:800; letter-spacing:.01em;
+  }
+  h1 .hl {
+    background:linear-gradient(100deg,#2DD4FF 0%, #7FB0FF 58%, #A78BFA 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .foot {
+    position:absolute; left:96px; right:96px; bottom:88px;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    font-size:24px; color:#6E84A5; letter-spacing:.08em;
+  }
+  .foot .f2 { color:#93A9C8; }
+
+  .badges { display:flex; gap:14px; flex-wrap:wrap; }
+  .badge {
+    font-size:23.5px; color:#BFD3EE; letter-spacing:.05em;
+    padding:12px 24px; border-radius:999px; white-space:nowrap;
+    border:1px solid rgba(140,180,255,.22);
+    background:rgba(120,170,255,.06);
+  }
+  .badge em { font-style:normal; color:#2DD4FF; }
+
+  /* ---------- P1 封面 ---------- */
+  #p1 .stage { position:absolute; left:96px; right:96px; top:330px; }
+  #p1 .sub { margin-top:38px; font-size:36px; color:#95AACB; line-height:1.55; letter-spacing:.04em; }
+  #p1 .badges { margin-top:56px; }
+  #p1 .hero {
+    position:absolute; right:-70px; top:700px; width:820px; height:820px; opacity:.20;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(45,212,255,.5), transparent 62%);
+  }
+  #p1 .ring {
+    position:absolute; border:1px solid rgba(45,212,255,.30); border-radius:50%;
+  }
+  #p1 .r1 { width:560px; height:560px; right:-160px; top:760px; }
+  #p1 .r2 { width:820px; height:820px; right:-290px; top:630px; border-color:rgba(45,212,255,.16); }
+  #p1 .r3 { width:1080px; height:1080px; right:-420px; top:500px; border-color:rgba(45,212,255,.09); }
+  #p1 .cards { position:absolute; left:96px; right:96px; top:1000px; display:flex; gap:18px; }
+  #p1 .card {
+    flex:1; padding:30px 26px; border-radius:20px;
+    border:1px solid rgba(140,180,255,.16);
+    background:linear-gradient(160deg, rgba(120,170,255,.10), rgba(120,170,255,.02));
+  }
+  #p1 .card b { display:block; font-size:58px; color:#2DD4FF; font-weight:700; letter-spacing:-.01em; white-space:nowrap; }
+  #p1 .card b em { font-style:normal; font-size:30px; font-weight:600; margin-left:5px; letter-spacing:0; }
+  #p1 .card span { display:block; margin-top:12px; font-size:24px; color:#93A9C8; letter-spacing:.06em; }
+
+  /* ---------- P2 六模块 ---------- */
+  #p2 .stage { position:absolute; left:96px; right:96px; top:260px; }
+  #p2 h1 { font-size:88px; }
+  #p2 .list { position:absolute; left:96px; right:96px; top:600px; }
+  #p2 .item {
+    display:flex; align-items:center; gap:30px;
+    padding:26px 34px; margin-bottom:12px;
+    border-radius:18px;
+    border:1px solid rgba(140,180,255,.13);
+    background:linear-gradient(100deg, rgba(120,170,255,.075), rgba(120,170,255,.015));
+    border-left:3px solid rgba(45,212,255,.55);
+  }
+  #p2 .item .no {
+    font-size:30px; font-weight:700; color:#2DD4FF; letter-spacing:.02em;
+    font-family:"SF Mono",Consolas,monospace; width:52px;
+  }
+  #p2 .item .nm { font-size:42px; font-weight:700; width:230px; letter-spacing:.04em; }
+  #p2 .item .ds { font-size:26px; color:#8FA6C6; letter-spacing:.03em; }
+  #p2 .tail {
+    position:absolute; left:96px; right:96px; top:1100px;
+    padding:30px 36px; border-radius:20px;
+    border:1px dashed rgba(140,180,255,.24);
+    background:rgba(120,170,255,.045);
+    font-size:26px; color:#A8BEDC; line-height:1.8; letter-spacing:.03em;
+  }
+  #p2 .tail em { font-style:normal; color:#2DD4FF; font-weight:700; }
+
+  /* ---------- P3 后台页 ---------- */
+  #p3 .stage { position:absolute; left:96px; right:96px; top:260px; }
+  #p3 h1 { font-size:88px; }
+  #p3 .lead { margin-top:32px; font-size:31px; color:#95AACB; line-height:1.7; letter-spacing:.04em; }
+  #p3 .panel { position:absolute; left:96px; right:96px; top:730px; }
+  #p3 .row {
+    display:flex; gap:24px; align-items:flex-start;
+    padding:24px 0; border-top:1px solid rgba(140,180,255,.12);
+  }
+  #p3 .row:last-child { border-bottom:1px solid rgba(140,180,255,.12); }
+  #p3 .dot {
+    width:14px; height:14px; border-radius:50%; margin-top:14px; flex:none;
+    background:#2DD4FF; box-shadow:0 0 0 6px rgba(45,212,255,.16);
+  }
+  #p3 .k { font-size:34px; font-weight:700; letter-spacing:.04em; }
+  #p3 .v { font-size:25px; color:#8FA6C6; margin-top:10px; line-height:1.6; letter-spacing:.03em; }
+
+  /* ---------- P4 数据 ---------- */
+  #p4 .stage { position:absolute; left:96px; right:96px; top:260px; }
+  #p4 h1 { font-size:88px; }
+  #p4 .lead { margin-top:32px; font-size:31px; color:#95AACB; line-height:1.6; letter-spacing:.04em; }
+  #p4 .dash { position:absolute; left:96px; right:96px; top:680px; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  #p4 .cell {
+    padding:30px 30px; border-radius:20px;
+    border:1px solid rgba(140,180,255,.14);
+    background:linear-gradient(160deg, rgba(120,170,255,.09), rgba(120,170,255,.02));
+  }
+  #p4 .cell b { display:block; font-size:50px; font-weight:700; color:#EAF2FF; letter-spacing:-.01em; white-space:nowrap; }
+  #p4 .cell b:has(+ span) { font-variant-numeric:tabular-nums; }
+  #p4 .cell span { display:block; margin-top:10px; font-size:24px; color:#8FA6C6; letter-spacing:.08em; }
+  #p4 .note {
+    position:absolute; left:96px; right:96px; top:1050px;
+    padding:32px 38px; border-radius:20px;
+    border:1px solid rgba(45,212,255,.24);
+    background:rgba(45,212,255,.055);
+    font-size:27px; color:#C4D8F2; line-height:1.85; letter-spacing:.03em;
+  }
+  #p4 .note em { font-style:normal; color:#2DD4FF; font-weight:700; }
+
+  /* ---------- P5 技术实现 ---------- */
+  #p5 .stage { position:absolute; left:96px; right:96px; top:260px; }
+  #p5 h1 { font-size:88px; }
+  #p5 .lead { margin-top:32px; font-size:30px; color:#95AACB; line-height:1.6; letter-spacing:.04em; }
+  #p5 .tech { position:absolute; left:96px; right:96px; top:528px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  #p5 .tcard {
+    padding:23px 30px; border-radius:20px;
+    border:1px solid rgba(140,180,255,.14);
+    background:linear-gradient(160deg, rgba(120,170,255,.09), rgba(120,170,255,.02));
+    border-left:3px solid rgba(45,212,255,.45);
+  }
+  #p5 .tcard .tn { font-size:30px; font-weight:700; letter-spacing:.04em; }
+  #p5 .tcard .td { margin-top:13px; font-size:23px; color:#8FA6C6; line-height:1.9; letter-spacing:.03em; }
+  #p5 .seal {
+    position:absolute; left:96px; top:1188px; right:96px;
+    padding:28px 36px; border-radius:18px;
+    border:1px dashed rgba(45,212,255,.34);
+    font-size:27px; color:#BFD3EE; letter-spacing:.05em;
+  }
+  #p5 .seal em { font-style:normal; color:#2DD4FF; font-weight:700; }
+
+
+  /* ---------- 自定义：实拍大图 / 网盘矩阵 ---------- */
+  #shot .stage { position:absolute; left:96px; right:96px; top:236px; }
+  #shot h1 { font-size:86px; }
+  #shot .lead { margin-top:26px; font-size:29px; color:#95AACB; line-height:1.6; letter-spacing:.04em; }
+  #shot .frame {
+    position:absolute; left:96px; right:96px; top:548px;
+    height:500px; overflow:hidden; border-radius:18px;
+    border:1px solid rgba(140,180,255,.34);
+    box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(45,212,255,.10);
+    background:#fff;
+  }
+  #shot .frame img { width:100%; display:block; }
+  #shot .cap {
+    position:absolute; left:96px; right:96px; top:1064px;
+    display:flex; justify-content:space-between; font-size:23px; color:#7E93B4; letter-spacing:.05em;
+  }
+  #shot .cap em { font-style:normal; color:#2DD4FF; }
+  #shot .tips { position:absolute; left:96px; right:96px; top:1104px; display:flex; gap:14px; }
+  #shot .tip {
+    flex:1; padding:22px 24px; border-radius:16px;
+    border:1px solid rgba(140,180,255,.14);
+    background:linear-gradient(160deg, rgba(120,170,255,.09), rgba(120,170,255,.02));
+  }
+  #shot .tip b { display:block; font-size:26px; font-weight:700; }
+  #shot .tip span { display:block; margin-top:10px; font-size:21px; color:#8FA6C6; line-height:1.75; }
+
+  #net .stage { position:absolute; left:96px; right:96px; top:236px; }
+  #net h1 { font-size:86px; }
+  #net .lead { margin-top:26px; font-size:29px; color:#95AACB; line-height:1.6; letter-spacing:.04em; }
+  #net .grid4 {
+    position:absolute; left:96px; right:96px; top:632px;
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+  }
+  #net .np {
+    display:flex; align-items:center; gap:24px;
+    padding:28px 30px; border-radius:20px;
+    border:1px solid rgba(140,180,255,.16);
+    background:linear-gradient(160deg, rgba(120,170,255,.10), rgba(120,170,255,.02));
+  }
+  #net .np img {
+    width:94px; height:94px; flex:none; border-radius:20px;
+    object-fit:contain; padding:12px; background:#fff;
+  }
+  #net .np .n { font-size:33px; font-weight:700; letter-spacing:.04em; }
+  #net .np .tags { display:flex; gap:9px; margin-top:12px; }
+  #net .np .tags span {
+    font-size:19px; color:#A6BAD8; letter-spacing:.04em; white-space:nowrap;
+    padding:4px 12px; border-radius:999px;
+    background:rgba(120,170,255,.10);
+    border:1px solid rgba(140,180,255,.16);
+  }
+  #net .note {
+    position:absolute; left:96px; right:96px; top:1048px;
+    padding:30px 36px; border-radius:18px;
+    border:1px solid rgba(45,212,255,.22);
+    background:rgba(45,212,255,.05);
+    font-size:25px; color:#C4D8F2; line-height:1.9; letter-spacing:.03em;
+  }
+  #net .note em { font-style:normal; color:#2DD4FF; font-weight:700; }
+
+  /* ---------- PX 实拍 ---------- */
+  #px .stage { position:absolute; left:96px; right:96px; top:240px; }
+  #px h1 { font-size:88px; }
+  #px .lead { margin-top:28px; font-size:30px; color:#95AACB; line-height:1.7; letter-spacing:.04em; }
+  #px .shots { position:absolute; left:96px; right:96px; top:530px; display:flex; gap:24px; }
+  #px .frame {
+    flex:1; height:660px; overflow:hidden; border-radius:18px;
+    border:1px solid rgba(140,180,255,.30);
+    box-shadow:0 24px 64px rgba(0,0,0,.5);
+    background:#fff;
+  }
+  #px .frame img { width:100%; display:block; margin-top:-44px; }
+  #px .cap {
+    position:absolute; left:96px; right:96px; top:1214px;
+    text-align:center; font-size:24px; color:#7E93B4; letter-spacing:.06em;
+  }
+  #px .cap em { font-style:normal; color:#2DD4FF; }
+</style>
+</head>
+<body data-page-node-id="fekjPjXVb4odST2zyQpuuE">
+
+<!--pnid:wRW2IQUooS47sqJHZxDFc6--><!-- 应用图标：把 symbol 内容替换成你自己的图标 path（viewBox 1024x1024） -->
+<svg data-page-node-id="agF1ZaWQ2ymaWkuZ1J5rfK" id="icon" style="display:none">
+  <symbol data-page-node-id="rNfXJaJXrUDoFq6mdVA9KN" id="app-icon" viewBox="0 0 40 40">
+    <defs data-page-node-id="Chm7u7pqQ5fUsKc5anCWU9">
+      <linearGradient data-page-node-id="M4yg9mXJNSWYK6f20Z2sKs" id="pg" x1="0" x2="1" y1="0" y2="1">
+        <stop data-page-node-id="47cxae5pQZO5tRxgyyHQci" offset="0" stop-color="#6fa2ff"/><stop data-page-node-id="eqohoYA1jMORp8CHxnXHmk" offset=".5" stop-color="#2f6beb"/><stop data-page-node-id="nP2b901lqEiZqTfVwOruau" offset="1" stop-color="#123a9e"/>
+      </linearGradient>
+      <linearGradient data-page-node-id="C2G0ZJjxuYlXNhjdaw1NmE" id="pm" x1="0" x2="0" y1="0" y2="1">
+        <stop data-page-node-id="k59Z4cO4KvUgfdzaL967zE" offset="0" stop-color="#ffffff"/><stop data-page-node-id="1EGLtqRCSgh6hA4WjnuzR0" offset="1" stop-color="#cfe0ff"/>
+      </linearGradient>
+      <linearGradient data-page-node-id="mTURkIK93QVZksU9xjP5LG" id="ph" x1="0" x2="0" y1="0" y2="1">
+        <stop data-page-node-id="XOWmwrbkLTugInndJw5r1p" offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop data-page-node-id="ZkhhP1nsLUUwJtpxGTpDBl" offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect data-page-node-id="Of5WpT1T1qyMn1NkKZrHH0" fill="url(#pg)" height="40" rx="11" width="40"/>
+    <path data-page-node-id="i0gZxH5t9e3hCEjlFX8wgq" d="M0 11C0 4.9 4.9 0 11 0h18c6.1 0 11 4.9 11 11v6H0z" fill="url(#ph)"/>
+    <path data-page-node-id="3CK4U4dqLmjygYYh7bboiX" d="M6.5 31.5 L14.5 18 L22.5 31.5 Z" fill="#ffffff" opacity=".26"/>
+    <ellipse data-page-node-id="reN44jvAlAwn3RihjsQVRw" cx="24" cy="31.5" fill="#0a2a7a" opacity=".28" rx="15" ry="2.2"/>
+    <path data-page-node-id="oql28Cp8aaN9MGnIjCJpVM" d="M13.5 31.5 L24 11.5 L34.5 31.5 Z" fill="url(#pm)"/>
+    <path data-page-node-id="MGhf8hWIyfUM8H2Ay2mziO" d="M24 11.5 L28.6 22" fill="none" opacity=".85" stroke="#ffffff" stroke-linecap="round" stroke-width="1.1"/>
+    <circle data-page-node-id="s19yukxyDK8CPJqLOvRUoj" cx="24" cy="11.5" fill="#ffd76a" opacity=".26" r="3.7"/>
+    <circle data-page-node-id="DrWdbexxbBUw9GMZGNm4Ti" cx="24" cy="11.5" fill="#ffe9a8" r="1.85"/>
+  </symbol>
+</svg>
+
+<!--pnid:ynexGC168no2FKTeKNIqsP--><!--
+  ================= 版式速查 =================
+  P1 封面      eyebrow + 两行大标题 + 单行副标 + 4 徽章 + 3 数字卡
+  P2 模块列表  编号/名称/一行卖点，≤4 条，底部可加补充条 .tail
+  P3 要点罗列  4 行 .row（k 标题 + v 说明）
+  PX 实拍截图  两张面板图并排 .frame（img margin-top:-44px 裁窗口栏），底部 .cap 标注「演示数据」
+  P4 数据面板  3×2 .dcell 格子 + .note 强调框
+  P5 技术卡片  2 栏 .tcard ×6 + .seal 虚线框
+  按需删减 section；页数由脚本自动统计，加页减页都不必改代码。
+  红线：行首禁虚词（的了和与或…）· 禁过度承诺 · 导出前跑 check-typo.js
+-->
+
+<!--pnid:7VFMgnJanVf756sG3VXQny--><!-- ================= P1 封面 ================= -->
+<section data-page-node-id="Z5NpilLd8UE1ewzzG4czwg" class="poster on" id="p1">
+  <div data-page-node-id="tBuu6iI2F4TYSCj9s45SDp" class="grid"></div><div data-page-node-id="jTTPmkpTtYiSSORgWcjs8w" class="horizon"></div>
+  <div data-page-node-id="sdQ9bRtorItCxGc2HPWc3x" class="r1 ring"></div><div data-page-node-id="NjO3LkHAclUYvUIHMrL23h" class="r2 ring"></div><div data-page-node-id="xrJmdnCTsbYhS4UBbsXKrM" class="r3 ring"></div>
+  <i data-page-node-id="GWlISRsbTdcbWl50kqtjRb" class="corner tl"></i><i data-page-node-id="acZuigR72R7JL2lLeFCBXJ" class="corner tr"></i><i data-page-node-id="fWk1TdSxQhL6PtDgjAo035" class="corner bl"></i><i data-page-node-id="DL2PvVX729Kr8NZhqy8io2" class="corner br"></i>
+
+  <div data-page-node-id="HJ2JzSlfWLBSP1QNBt2nYb" class="brand">
+    <img data-page-node-id="kXBEuUfAvuIy2u8TNBkYLg" alt class="ic" src="img/logo.svg">
+    <div data-page-node-id="FA7dzTmGZxaMJ0M7AzEH4s"><div data-page-node-id="B4NrRcOQ8l9inIfR0FZsDp" class="bname"><!--pnid:ef8OLRxFYddomZWGCTaoMb-->搬山</div><div data-page-node-id="qPkb1BGaXN5pcPkEHlL2bA" class="btag"><!--pnid:xL3z3TlrBCvsGbKZSN9DCE-->CLOUD MIGRATOR</div></div>
+  </div>
+
+  <div data-page-node-id="gW08qHwWqWeb084E4Hd4wa" class="stage">
+    <div data-page-node-id="bXMn6Di4oCA1uMQtQZdeIW" class="eyebrow"><!--pnid:m2FNlMNkYDoWhMTb2bVVa3-->四个网盘 · 一个文件</div>
+    <h1 data-page-node-id="YwOJk59r0Vbj5tKz4zIhO7" style="margin-top:46px"><!--pnid:CvlgIE5Frd3h2u1cPmNe2f-->网盘之间<br data-page-node-id="5Tpq2pXM3hBLu8qlDiqvA6"><span data-page-node-id="AcRt9fQwuwqAxhwsGfQUX6" class="hl"><!--pnid:u1RQvItaywwqduCFSlg3nZ-->搬一次山</span></h1>
+    <div data-page-node-id="nixVlDXpnVYyiCQI0TP6RM" class="sub"><!--pnid:mxT5NzBHqYxlmAEFtCjETy-->选文件、选去向、点开始<br data-page-node-id="IPz4FVRasWRP7ewr1V7g6Q"><!--pnid:3HnUKz8ZDOuCqFr29JDidS-->切分、重试、校验交给它</div>
+    <div data-page-node-id="0JldtO3V4a1RhvYCePCCOw" class="badges">
+      <div data-page-node-id="c8fr371KzuIZ1QtlKQicxj" class="badge"><em data-page-node-id="e83wKyKvT2zfnoSEhKmcHg"><!--pnid:MRlGFa1UpkKv53cI0Mj3To-->Windows</em><!--pnid:6irUrHrGNJtNfnSzGgPs8p--> 单文件</div>
+      <div data-page-node-id="g929dRpn4VPKYJ074sZEYe" class="badge"><!--pnid:tTCDsdrK5VsEInnsCyTlzF-->双击即用</div>
+      <div data-page-node-id="fX4B0DyZH4ydcPxxORsWDM" class="badge"><!--pnid:sZYda6bqkNzD940QMESe31-->浏览器即界面</div>
+      <div data-page-node-id="Q18qyuN7S3ktpV3Ie7ahU1" class="badge"><!--pnid:Q92M4bNrRkFg0c8SK2icDn-->不落本地磁盘</div>
+    </div>
+  </div>
+
+  <div data-page-node-id="unGUSe1KfRnyCh4bJnvv3N" class="cards">
+    <div data-page-node-id="ZdOHReH2OwzB1iveE9gxeC" class="card"><b data-page-node-id="YUYbtBEtbGMDxEFUFQS0Vk"><!--pnid:xgu2ucnHvysX3OGcMmgWjX-->18<em data-page-node-id="M8fAVqDqKYkSwhfFHv3pFO"><!--pnid:BzxN1xEF1r1yyBtuUaxzfE-->MB</em></b><span data-page-node-id="2x7eQjyHvMlrYmTcMwdu6q"><!--pnid:WGAF38bQ32IfSpdrmZaxYF-->单文件体积</span></div>
+    <div data-page-node-id="2KuMKHUcE1Qes3YrTlQMQb" class="card"><b data-page-node-id="pprRYfLKvz1ePtIw9DuQYd"><!--pnid:hF9tEsfZZwY6V2Zdvz60HW-->4</b><span data-page-node-id="aQsS21sQkHZjlhtEV5RSwM"><!--pnid:tYW9pYvq1IiFwvMTnNU1iB-->网盘双向迁移</span></div>
+    <div data-page-node-id="whmNq2nU79AfvNLtN578gq" class="card"><b data-page-node-id="JzBpeNnJjEIOBSQAuKhTTq"><!--pnid:kvM2XaRBYkGTWTsMO94z3o-->187</b><span data-page-node-id="FIqQo26C1izCcJ7fmstOOY"><!--pnid:Glpf1BMiWtjicghSjSPFsI-->项自动化测试</span></div>
+  </div>
+
+  <div data-page-node-id="hUl4dfLI08QMy19vZE9ERN" class="foot"><span data-page-node-id="vv33Lz07jidcwDcXhfurHN"><!--pnid:7jkxhZ3bwlhIHBpPLS9gK8-->搬山 v1.25</span><span data-page-node-id="1wt2cE0nDTu718SEoTL0PB" class="f2"><!--pnid:hNnXs36bJOyisziJcpkU7J-->个人项目 · 非商业发行</span></div>
+</section>
+
+<!--pnid:gBMRayGwpJ8NoVMJoiEcvh--><!-- ================= P2 实际界面 ================= -->
+<section data-page-node-id="BC1VjZyyJLx5Jzpi9C1Bzl" class="poster" id="shot">
+  <div data-page-node-id="COS5P4k3bJDDMIXW9BeevV" class="grid"></div><div data-page-node-id="8c976hZb5rHeqKHTDF7Jml" class="horizon"></div>
+  <i data-page-node-id="PEhgkBzdnlTnreptCYSbJe" class="corner tl"></i><i data-page-node-id="SO1H53IaY2hoPsTBqAebvX" class="corner tr"></i><i data-page-node-id="eiSbnuIIkZSEBtw5HTfqmx" class="corner bl"></i><i data-page-node-id="5t7XRuZrzCoBnnWJHyJ0mP" class="corner br"></i>
+
+  <div data-page-node-id="KjI1ZLT6r5gSHz9qldHxbU" class="brand">
+    <img data-page-node-id="YX4neI5lmy52fEKx88IwFd" alt class="ic" src="img/logo.svg">
+    <div data-page-node-id="eqg6pZw4a7heZReqqyRkhB"><div data-page-node-id="HDgbcEUc1AJRvta77si9fY" class="bname"><!--pnid:FoL5GER4GGCdop07UlFyWJ-->搬山</div><div data-page-node-id="GUr3HP5NgWXPnnwraWq1Hh" class="btag"><!--pnid:8vaR8ivnHQmxE0LdV8jmkn-->INTERFACE</div></div>
+  </div>
+
+  <div data-page-node-id="o4igziWz4wuFKrb3GXBRCK" class="stage">
+    <div data-page-node-id="A9lvWRHt2z9ngYuPjDAwpM" class="eyebrow"><!--pnid:pA3uwuBBseizJeT5UnnI1a-->实际界面</div>
+    <h1 data-page-node-id="IvaY31yOf9Q2OlCJr9XBG1" style="margin-top:30px"><!--pnid:QnwqXv8ICURs7s7OaaXrZd-->打开就能用</h1>
+    <div data-page-node-id="oTnDYuzlUTd4NE2ekBPJLL" class="lead"><!--pnid:cg81ekUoNvxDsIPFUrzBAk-->双击 exe 浏览器自动打开<br data-page-node-id="RgPOuRzAGi2MY4BTn4W2KS"><!--pnid:Dn7RW9nZCkK0uv5JdTt5wj-->左边挑文件，右边选去向</div>
+  </div>
+
+  <div data-page-node-id="VX8Tpe21OuX1yixL6ncx04" class="frame">
+    <img data-page-node-id="XGQJa5u7D2APfbXJPE5Kch" alt="界面截图" src="img/ui-done.png">
+  </div>
+
+  <div data-page-node-id="T7AUeddnq9Mg8SwOc5Mtai" class="cap">
+    <span data-page-node-id="pRgMus7bDpBfBNHpDHF3Gc"><!--pnid:PthYB4htjyV1eE9qG1fMS5-->界面实拍 · 文件与目录均为<em data-page-node-id="76jYelh9xIflZQ3Iv3D2mT"><!--pnid:XVcyi4hL0C8idjFoGwCHcz-->演示数据</em></span>
+    <span data-page-node-id="KCCSXwh43PGAzX1J1RLNVk"><!--pnid:w7A4MDhDnAcdYDBRFyv8T4-->1280 × 820</span>
+  </div>
+
+  <div data-page-node-id="7vEflvRGTzSLHvWwbvNXvo" class="tips">
+    <div data-page-node-id="dEGD8eVgsL78nmCXhQS81K" class="tip"><b data-page-node-id="q731Hlrs4jur3tzVFlK83u"><!--pnid:crKFyeZEJBAbwATtlclKLL-->方向看得见</b><span data-page-node-id="EK4G2NR1HMnIb3lYMfqeqj"><!--pnid:NDK2TvCLsKoXq9LpAcyOZJ-->源与目标各一张卡，中间一个交换键</span></div>
+    <div data-page-node-id="ab3qnEEgACfj9CkVWcVJkf" class="tip"><b data-page-node-id="PJmvmTlWlKmp8N9yIVPCvB"><!--pnid:IjuDdhQaSOU3zAkxenAiJC-->三块可折叠</b><span data-page-node-id="OaFP5IiKZp11kjsb14BtPP"><!--pnid:xZ4PfO2u6C33AXYJBZDVVo-->窄屏或分屏时只留当前要用的</span></div>
+    <div data-page-node-id="afLXHdJoAqGBlWP6vIGVtT" class="tip"><b data-page-node-id="NZExnrJJ5lPrEyzbSKPi5A"><!--pnid:QkROX57ep6mMmcYQpJchxY-->进度清单同屏</b><span data-page-node-id="LntG7KESTMKsac06l1VFaF"><!--pnid:DWQ1N3iIikWckXD63AVvf5-->传到哪、还剩什么</span></div>
+  </div>
+
+  <div data-page-node-id="quOZ6CYmcbMR8yxiijCBsP" class="foot"><span data-page-node-id="0VpB4EQPkr5QGJzB7FX2Q7"><!--pnid:mu1KV5czC4CuI8LBAux1de-->搬山 v1.25</span><span data-page-node-id="H2LGQ5QvGvpx0Pwys9p6Oi" class="f2"><!--pnid:2aLnppldr8UG40sSrAU9J6-->界面由浏览器渲染 · 不打包 Electron</span></div>
+</section>
+
+<!--pnid:cT1lNbPOLLMhhnmxh545To--><!-- ================= P3 支持的网盘 ================= -->
+<section data-page-node-id="Swj31IcUA7W6Dn5fxRZfx7" class="poster" id="net">
+  <div data-page-node-id="NPYZvuP2NLSShfD0jKbC4R" class="grid"></div><div data-page-node-id="XgwS5bvIjLph2MPg0bTpCK" class="horizon"></div>
+  <i data-page-node-id="gA9lq77yOldoY4DeQOQLYY" class="corner tl"></i><i data-page-node-id="tDtZijpwEQa5Y5xoxtAveJ" class="corner tr"></i><i data-page-node-id="nWB2GPIDORN2w4vhtKsTrV" class="corner bl"></i><i data-page-node-id="o3yDPLEyjTWhdFNXYDCwXG" class="corner br"></i>
+
+  <div data-page-node-id="sNVxAbrz0jcFRVQkqXbxx3" class="brand">
+    <img data-page-node-id="Wvq9U1tzZtq8lWwlCmcySF" alt class="ic" src="img/logo.svg">
+    <div data-page-node-id="acKskLFLCADDLDUS8Zm7vy"><div data-page-node-id="O9Pkr6rFoDkaah0zLAPOee" class="bname"><!--pnid:chVvJTO1xUX3sEJopQY4YP-->搬山</div><div data-page-node-id="YOx6bzRXJ7fgSQDDNctRiS" class="btag"><!--pnid:u3BQmIZ48dnsEPrnmGjrKY-->SUPPORTED DRIVES</div></div>
+  </div>
+
+  <div data-page-node-id="2ARkPJe9BW2nXI9avan8Pp" class="stage">
+    <div data-page-node-id="0R5jpuc6tlzEiLzyVVhge6" class="eyebrow"><!--pnid:RbViOTcXk8MCFpkoJHHpDc-->支持的网盘</div>
+    <h1 data-page-node-id="waUTZ9LLYLwfOYELAhVShP" style="margin-top:30px"><!--pnid:wifcckB96mCtXtsaPd81tc-->四个网盘<br data-page-node-id="q0kQ0ykUCQvTSFLjavWvBv"><span data-page-node-id="44tO0AnJwP6uJGD45rsQ95" class="hl"><!--pnid:DlXIPIpIwDSUwD4wu9CP9N-->任意方向</span></h1>
+    <div data-page-node-id="m2HqPdhHB8BEEqLPViMArh" class="lead"><!--pnid:yfCOMtLdEksz3Wij5dYSvG-->两端都能选中任意网盘<br data-page-node-id="hEkxs4uhCiPhON8s4AqxXz"><!--pnid:GsuslvYopaWK4PNJQkUm5p-->来源与目的地随时互换</div>
+  </div>
+
+  <div data-page-node-id="lw192HLeWxGcvmX4f6ZiDY" class="grid4">
+    <div data-page-node-id="j7IplcNls3gjHtAV7l7tIf" class="np"><img data-page-node-id="rhKfQJphGoUExMbOWoH5zw" alt="百度网盘" src="img/baidu.png">
+      <div data-page-node-id="S7R27DV0SFONLANZC6hn1w"><div data-page-node-id="L9boAf25WcgRZBp3VL51MB" class="n"><!--pnid:FDMu98OCYGXLGubi7pirzj-->百度网盘</div><div data-page-node-id="lSLI0QOOBHEzNK32gbUxIG" class="tags"><span data-page-node-id="MBhENN2SKtEnn2UuYGn4tJ"><!--pnid:sKO6N0ApDhpSKie66P2Fd0-->扫码登录</span><span data-page-node-id="ufeIgksqVBmVQOEkfN3mDY"><!--pnid:kvIUUEZaOcML6u9DhuWOw2-->双向可写</span></div></div></div>
+    <div data-page-node-id="VwALePhX8Q4PbXyMrUX5VB" class="np"><img data-page-node-id="gJRX6u33Htm2MUutxmK9Ve" alt="阿里云盘" src="img/aliyun.jpg">
+      <div data-page-node-id="nwampoLz19LhOhxUR2xyMU"><div data-page-node-id="VkMqNxPwtzSrMkcCckiZ5e" class="n"><!--pnid:PGI11IaDETVwmdPc3tTnJU-->阿里云盘</div><div data-page-node-id="aSV9NEYwCNJ7zet86IAhzQ" class="tags"><span data-page-node-id="sCHPBXz0WJEKxGXETtVKmO"><!--pnid:33LJs57sAEze8zNHVDf1M7-->平台令牌</span><span data-page-node-id="ZonRDs7bftB7VOWnj2mMHw"><!--pnid:8oq6N81bi8KhFh7WUTz7Ns-->双向可写</span></div></div></div>
+    <div data-page-node-id="ueV7wMItU8MNTfrO54zQ6j" class="np"><img data-page-node-id="UAh5rBu5wROL3E2XGzWS1K" alt="夸克网盘" src="img/quark.png">
+      <div data-page-node-id="363suDLEjm8rs5Q3WAgxHN"><div data-page-node-id="feT8cqYjetUls6sn7QbWVc" class="n"><!--pnid:qvZCSYQzDbx632N2eoEYIb-->夸克网盘</div><div data-page-node-id="529VdGLj8g39hAonhLTJzk" class="tags"><span data-page-node-id="gXep2kTEF1vNEgwyBCVnX7"><!--pnid:hccrsZq7XFeQjn39euy3Xf-->扫码登录</span><span data-page-node-id="8AqMyqHJNnN5p5q2mY4Jwn"><!--pnid:tbCe343U7cmyHPkpL5LGJh-->双向可写</span></div></div></div>
+    <div data-page-node-id="zy1xnvMyerMcIL3TUlHMiH" class="np"><img data-page-node-id="aFeW343FQj7RrpMSE2pVVD" alt="天翼云盘" src="img/tianyi.png">
+      <div data-page-node-id="G2irQRY4QgEsllGrphXLTu"><div data-page-node-id="hpO7iw17X5wiGtbcQUJ8N3" class="n"><!--pnid:bUOPZhxhmNFF41yzV7MK5Y-->天翼云盘</div><div data-page-node-id="WcOek6VfLPO8fpu7Ze3GyZ" class="tags"><span data-page-node-id="qpT8hlELjrFkARD2WuxqlI"><!--pnid:VvyOLLvJLMcujDk7EAF4Pj-->网页登录</span><span data-page-node-id="SQgtLertsCkTXsWc3ZEYvj"><!--pnid:URbT4JYmdINuJrKwmQGoVf-->双向可写</span></div></div></div>
+  </div>
+
+  <div data-page-node-id="X9tef7BS5DxFEdw2VJzojg" class="note"><!--pnid:UWMMUwwN7Qwiq6WG5CZuWj-->
+    每个网盘的<em data-page-node-id="iZbI3RP2foKcDtghH30VzJ"><!--pnid:o5YcjFp3z7lVmDkn9xnpNY-->上传分片、并发上限</em><!--pnid:lwiyF2ywwBCUHnqV6XsTkX-->各不相同<br data-page-node-id="q3CQjwgI6HmMGXdC478ExP"><!--pnid:ReEFLbxLd7JcN6LsLZW80e-->工具按目标端能力自动收敛，不给跑不通的档位
+  </div>
+
+  <div data-page-node-id="FIzrlqENYHbENMkJbv2pOk" class="foot"><span data-page-node-id="y2WxP59BjB0rY3lU4jVi6h"><!--pnid:p1doUylNlprVXVQ5td7VPx-->搬山 v1.25</span><span data-page-node-id="E9uVfuj9U8jO8CL0sUIkU4" class="f2"><!--pnid:0PgvauoT7hIl6Y79SZtib4-->网盘接口以其官方能力为准</span></div>
+</section>
+
+<!--pnid:waqpeOnCYfjseIGHscy6wP--><!-- ================= P4 数据面板 ================= -->
+<section data-page-node-id="5LpX7A3xjoA4mnKe2VAJB2" class="poster" id="p4">
+  <div data-page-node-id="ynzxc53yAYyKFYouKus2pV" class="grid"></div><div data-page-node-id="M7vUv9jyN9oxyOpuoHg77H" class="horizon"></div>
+  <i data-page-node-id="Z955cvJHjrj6MSkQOtz823" class="corner tl"></i><i data-page-node-id="un07aviUPwD9Ohnta3muj2" class="corner tr"></i><i data-page-node-id="V3cLIQspsqanJDPrh44yia" class="corner bl"></i><i data-page-node-id="cAbs1sQwM5xJ04upeZOX5T" class="corner br"></i>
+
+  <div data-page-node-id="rvqyjKBO3RrdJRkjz60fYa" class="brand">
+    <img data-page-node-id="95zlV01WNJobUl14CfGV3N" alt class="ic" src="img/logo.svg">
+    <div data-page-node-id="eF81W82dicrJPAr4tI15YY"><div data-page-node-id="S73Ob8L1gxt9h8FMKJXfGF" class="bname"><!--pnid:u7ypI6wz9QhqMdHIne9XpY-->搬山</div><div data-page-node-id="GVuV0Udhakk0Ri8cB0yXX7" class="btag"><!--pnid:duCDiLisg6Bf6UMQlSINEN-->BY THE NUMBERS</div></div>
+  </div>
+
+  <div data-page-node-id="xVJjgzr8bukNMhpIZjHVfS" class="stage">
+    <div data-page-node-id="QRDSD307ksIKiDK6rJZhec" class="eyebrow"><!--pnid:ToLpOucJmtgtEZPdMIx9yM-->体积与工程</div>
+    <h1 data-page-node-id="Gr6QWcqJX9Ts3QMtXOvsCx" style="margin-top:30px"><!--pnid:Mz24z3f5A5FywHKpwQefRh-->小，是<br data-page-node-id="rPxK2lbfWaywHDYvfyGPc2"><span data-page-node-id="iWpMomeK68dg3mqrivpMV6" class="hl"><!--pnid:khRy6tzqpE9xbZzswU4ZV0-->设计出来的</span></h1>
+    <div data-page-node-id="VZig6C3tSLaQY1wPyaTvNt" class="lead"><!--pnid:N1A0D1kOkT5uV8yaDBU9Sc-->不打包浏览器内核<br data-page-node-id="xsEabvtKuwoDkF8i1wVFaI"><!--pnid:Jc7sX70lHcYZBuhKghxnrb-->界面交给系统浏览器</div>
+  </div>
+
+  <div data-page-node-id="R8o78A6x5dpSDsMMJwAkJ4" class="dash">
+    <div data-page-node-id="QETrf5tDngN5NJstL7hbOW" class="cell"><b data-page-node-id="a7z7K1LqUGvbhjy5uVD15L"><!--pnid:IehobrIYyZRzJopwP5pEKI-->18 MB</b><span data-page-node-id="EwHRGkGI0AdJxgVKpE5qui"><!--pnid:zyrza4789UkrezQfZmen70-->单个 exe</span></div>
+    <div data-page-node-id="M3r4XNLabnD8TeKp0hahgP" class="cell"><b data-page-node-id="1vEDspDosXRrFQ9uBM1Iix"><!--pnid:MURFXNrsdEd01AUDqN0AL4-->4</b><span data-page-node-id="oCwIOn1IOonZZROgyJyLzD"><!--pnid:PdciTsTvKEOc1okcbrllFS-->个网盘双向</span></div>
+    <div data-page-node-id="HUC9HLNTyMjaTH0Og9dN6O" class="cell"><b data-page-node-id="jdfAj1VfNzlC0b2PpLDNtS"><!--pnid:oJ7XdX4m44UtmwdCbdsSdM-->187</b><span data-page-node-id="BDNfqJGkpcVjP7hE0iiGnP"><!--pnid:2ZkYBfUVX61XiY2aMiLFvi-->项自动化测试</span></div>
+    <div data-page-node-id="PV8ljZjZWZdwXKEobkX3WU" class="cell"><b data-page-node-id="dkomAHrjeSZ4D7czjVB8fE"><!--pnid:tAG72rLTLX8OsZ2i1XVlsT-->0</b><span data-page-node-id="R9Wfwk72Obe7hnIGlzHLV5"><!--pnid:XMws5RaeDs0L7yp8oHjsKs-->前端框架</span></div>
+    <div data-page-node-id="MnfvtFsixHvsbuAOLCwazK" class="cell"><b data-page-node-id="8zXmARum33tlpUWIWjtBCv"><!--pnid:KrLlRl1eJtA8EEcHVf7D4C-->12</b><span data-page-node-id="yFrN6YATBkXVLjTddIHqas"><!--pnid:2o3DsVXO1O3pFI6RDYmyWt-->路并发上限</span></div>
+    <div data-page-node-id="3ILgvHcLIfBF1UY51XjHZH" class="cell"><b data-page-node-id="GErDyuwDIY6SdA4pzL26NZ"><!--pnid:2pmISYwAlkpLWBf2RxPpnu-->100%</b><span data-page-node-id="M64SkGW7wLbic7SAmShJz2"><!--pnid:bqykGHRywb5EVdyVLKozl4-->凭据只存本机</span></div>
+  </div>
+
+  <div data-page-node-id="cbyIvDrFXDRHs3NzHF5ZO6" class="note">
+    <em data-page-node-id="ija4Lnk3DSCIUH5S3zHrPC"><!--pnid:ZNJLi3oCCG3oPAycJ4fyQE-->轻量的来源</em><br data-page-node-id="xMUtDT2dqVmEsVfARMvy9F"><!--pnid:eeNTLyfMHyDrOgX947p0F2-->
+    后端只用 Python 标准库起 HTTP 服务<br data-page-node-id="oxZU4IknZdgQrgK6epQMEC"><!--pnid:r9V3kVSLzXigFbeYNbtj1B-->
+    前端手写 HTML/CSS/JS<br data-page-node-id="4g4MmdWnNDJVAMvzBDS3dT"><!--pnid:P8BrdoFlm0u8rFSl3ExwFv-->
+    没有 Electron / WebView2 / Node 依赖树
+  </div>
+
+  <div data-page-node-id="9gIbkcS1aSacCs15jggtr7" class="foot"><span data-page-node-id="1baWjMkwSbDcE8QgUtAowX"><!--pnid:AEDmG7fpNgE5sencwlZKZ4-->搬山 v1.25</span><span data-page-node-id="OUeBeHAF0bBvavWBFWV966" class="f2"><!--pnid:TWWsqDT9j1eBv6WXCiNQUn-->体积与系统有关 · 以实际产物为准</span></div>
+</section>
+
+<!--pnid:zAxoyB3qg0uBzzYhtxLRoh--><!-- ================= P5 技术实现 ================= -->
+<section data-page-node-id="higTUuB5yOzkLIfFA8NQpW" class="poster" id="p5">
+  <div data-page-node-id="9A2EKDUE3BJC43cvtwk6di" class="grid"></div><div data-page-node-id="d4rrTzUrxaopd385oiiiS6" class="horizon"></div>
+  <i data-page-node-id="qLIBZm1OfY5rPJEQtWC8Yv" class="corner tl"></i><i data-page-node-id="YDrl6qlvgzEI8I3SBPUysp" class="corner tr"></i><i data-page-node-id="SNUyqTPP9cJrU0f0vKPDNW" class="corner bl"></i><i data-page-node-id="AXIqtweSyw2wDgi8sjXoGo" class="corner br"></i>
+
+  <div data-page-node-id="4hbcRS1kehNEalSqyjczOs" class="brand">
+    <img data-page-node-id="JQ1dx8skyqK0GF7iK1iQSc" alt class="ic" src="img/logo.svg">
+    <div data-page-node-id="kU1R3FOX3oKMVVqF4GPP0R"><div data-page-node-id="PrkDTOULCZ2OZ7XiIUmbRu" class="bname"><!--pnid:fWZiEmE3C39OuY7HwcBlUg-->搬山</div><div data-page-node-id="18ZK7mz2xbzgyhgQhvCEIZ" class="btag"><!--pnid:edhQhqNoVSDUO8HLzqPbeS-->UNDER THE HOOD</div></div>
+  </div>
+
+  <div data-page-node-id="T7oxgvzdysc2R3JCyPskDb" class="stage">
+    <div data-page-node-id="X0ccJHX5DDd8kB5Q05sxcZ" class="eyebrow"><!--pnid:O8GSb5ChEsPzGME5KKPU8f-->实现</div>
+    <h1 data-page-node-id="G3isnD0ePTEuD1bYI5sOvx" style="margin-top:30px"><!--pnid:mbi7fql3rhlWsNbsP057oe-->怎么搭的</h1>
+    <div data-page-node-id="YWytNhxLK3cq1oLvkggQU9" class="lead"><!--pnid:zTrr1i1q0W5KH5VwlppW6h-->六块拼起来，每块只做一件事</div>
+  </div>
+
+  <div data-page-node-id="M8Q8jqQeZIcuuPA33BLbqm" class="tech">
+    <div data-page-node-id="nCwL1CaceP9SBk73Usie57" class="tcard"><div data-page-node-id="xV88ROK841n00qiQRSS6By" class="tn"><!--pnid:XHyWu5uZyirN2vfDhprxz3-->本地 HTTP 服务</div><div data-page-node-id="Ovsq5wTlQH4sYy0eR4wK7X" class="td"><!--pnid:G6xhpnEMfqBNwyIDdqwXry-->标准库起的本地服务<br data-page-node-id="EHxawOYAfqcptmRGdxXTgj"><!--pnid:EoqItoFfZ7IQs1PdpjskHl-->只监听 127.0.0.1</div></div>
+    <div data-page-node-id="O5EPDAHg1TM52WFJibfvXK" class="tcard"><div data-page-node-id="URAZ2igQKj4oH0bPJtzFBs" class="tn"><!--pnid:PJh1OEUdx5bd0Gcms2kbbY-->浏览器即界面</div><div data-page-node-id="UKCxU5mogFOZIHpPZlssqu" class="td"><!--pnid:Ru7F9Myp11hIYE3uYBfRWw-->手写 HTML/CSS/JS<br data-page-node-id="WqyduzaUFkhqZTqvV9JQUt"><!--pnid:jhbMVzgTWWuMqfqmP9srlO-->改完刷新即生效</div></div>
+    <div data-page-node-id="mZlNkHQZhlFzOj2ZQDWFxp" class="tcard"><div data-page-node-id="k088e9nmca1BxXs80qxX92" class="tn"><!--pnid:Wcq5j3P7fRSjv8oxXHskmv-->适配器模式</div><div data-page-node-id="BOt8UWHpcCrrCJEwZNbJTt" class="td"><!--pnid:mESdm69vN2dClHtcfJJgJM-->每个网盘一个 adapter<br data-page-node-id="moNyhEohNL3ZjF678yyfVn"><!--pnid:O8NsDcwVm7GYRa3cW03v81-->统一 Source/Sink 接口</div></div>
+    <div data-page-node-id="IL8T53OalPYNRdqQzbc8au" class="tcard"><div data-page-node-id="0D7Zh4AG8hokdAbst9YpR0" class="tn"><!--pnid:JmhZf3WSC1Qian4oNSVPqe-->SQLite 任务库</div><div data-page-node-id="ncBpnzDbVjyAGnOp70GoAX" class="td"><!--pnid:OHPPkYCQ5QVf5t4yy3WdiS-->分片进度落盘<br data-page-node-id="yWuJHVtYCatHbQ4eGsxbMC"><!--pnid:M5yo0Z58pmkMT8P6B20dOS-->关掉再开能接着传</div></div>
+    <div data-page-node-id="pUurKOPlWFfyKGvG1IX33N" class="tcard"><div data-page-node-id="np0xG207spirElvHaDDZq3" class="tn"><!--pnid:HqpjshQMXbj8YPnsYRECxE-->分片直传</div><div data-page-node-id="F9vYFzErW60wL8DjSSi7yb" class="td"><!--pnid:VV1hFCegUuESITfN2sMMux-->读一块传一块，多块并行<br data-page-node-id="0KvwKRH8H4fPgAjoAAwhWX"><!--pnid:aDyJHvWNsBkmEgi4xPEi3i-->整文件不落本地</div></div>
+    <div data-page-node-id="sz1CtyUBEQGhiHthtsFTAU" class="tcard"><div data-page-node-id="ZyM1h0AML3s0SZOUYHwL0g" class="tn"><!--pnid:bFyA5pF2KTYvv9dNPDc2My-->完整性校验</div><div data-page-node-id="0s0tMmAzqiHSB5XfDS85jR" class="td"><!--pnid:U4wFpgXwoBZAFp4EZ1vD4c-->传完比对大小与抽样内容<br data-page-node-id="hr0g2ZsVmNhIENNPJFL8Sr"><!--pnid:bcV56tGI4CNPq6YZ8IfHns-->不一致即判失败</div></div>
+  </div>
+
+  <div data-page-node-id="tZWqR2Rwk45X8yXahdtZg5" class="seal">
+    <em data-page-node-id="GxpZXOtZDQxf9ZUklr5cjE"><!--pnid:AUuxaIK7tVVg5WDn1KPAPt-->单机运行</em><!--pnid:xUjXhp27X00hHy78VFYwWm--> · 凭据不上传第三方 · 账号只存本机
+  </div>
+
+  <div data-page-node-id="zIb19YQTePpPzTBs94lwlF" class="foot"><span data-page-node-id="2TE198jBi2naCVRCkCy08Z"><!--pnid:SCwi4KMCAlz7aigJpnMza5-->搬山 v1.25</span><span data-page-node-id="SF0UMa62CQniYrYvAIWysa" class="f2"><!--pnid:ILKv7iCA5Wo1Is02ElgbUB-->个人项目 · 非商业发行</span></div>
+</section>
+
+<script data-page-node-id="vVotKaBXGbnC7wqw9nTxmJ" data-pnid-children="RRtXSi61s9zm3GSYwkG69f">
+  // 按 DOM 顺序切页，插入/删除 section 不用改 id
+  function show(i) {
+    document.querySelectorAll('.poster').forEach(function (p) { p.classList.remove('on'); });
+    var ps = document.querySelectorAll('.poster');
+    if (ps[i - 1]) ps[i - 1].classList.add('on');
+    document.title = 'poster-' + i;
+  }
+</script>
+</body>
+</html>

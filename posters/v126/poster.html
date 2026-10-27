@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html data-page-node-id="vPw1r0NZXbG0dQQ0DWrItA" lang="zh-CN">
+<head data-page-node-id="8E19jnHMQgm9kB10ulAOga">
+<script data-page-node-id="AMLUkRU7jsoF1uHjT7KT66" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="zUGpYOOI6YKHKV8mHPj4sC" charset="utf-8">
+<title data-page-node-id="5NmA6CClW9pdPvo42V25p7" data-pnid-children="7nFC0eUa8DgYOa2V8GYgDT">搬山 · v1.26.0 更新</title>
+<style data-page-node-id="C9cmTx0HqZ6BmuoB6O0aBv" data-pnid-children="zGZv42YKfVSsDaQ6VWzmzP">
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  html,body { background:#000; }
+  body { font-family:"PingFang SC","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif; }
+
+  .poster {
+    display:none; position:relative;
+    width:1080px; height:1440px; overflow:hidden;
+    background:
+      radial-gradient(1200px 700px at 78% 8%, rgba(45,212,255,.13), transparent 62%),
+      radial-gradient(900px 700px at 8% 96%, rgba(77,124,254,.15), transparent 60%),
+      #070B14;
+    color:#EAF2FF;
+  }
+  .poster.on { display:block; }
+
+  .grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(140,185,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,185,255,.05) 1px, transparent 1px);
+    background-size:60px 60px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 32%, #000 0%, rgba(0,0,0,.35) 55%, transparent 82%);
+    mask-image:radial-gradient(ellipse 70% 55% at 50% 32%, #000 0%, rgba(0,0,0,.35) 55%, transparent 82%);
+  }
+  .horizon {
+    position:absolute; left:0; right:0; bottom:0; height:520px;
+    background:
+      linear-gradient(to top, rgba(45,212,255,.07), transparent 70%),
+      repeating-linear-gradient(to top, rgba(120,170,255,.09) 0 1px, transparent 1px 74px);
+    -webkit-mask-image:linear-gradient(to top, #000, transparent);
+    mask-image:linear-gradient(to top, #000, transparent);
+  }
+  .corner { position:absolute; width:26px; height:26px; border:2px solid rgba(45,212,255,.42); }
+  .corner.tl { top:44px; left:44px; border-right:0; border-bottom:0; }
+  .corner.tr { top:44px; right:44px; border-left:0; border-bottom:0; }
+  .corner.bl { bottom:44px; left:44px; border-right:0; border-top:0; }
+  .corner.br { bottom:44px; right:44px; border-left:0; border-top:0; }
+
+  .brand { position:absolute; left:96px; top:88px; display:flex; align-items:center; gap:22px; }
+  .brand svg { display:block; }
+  .brand .bname { font-size:38px; font-weight:700; letter-spacing:.10em; }
+  .brand .btag { font-size:23px; color:#7E93B4; letter-spacing:.16em; margin-top:6px; }
+
+  .eyebrow { font-size:25px; letter-spacing:.34em; color:#2DD4FF; font-weight:600; display:flex; align-items:center; gap:16px; }
+  .eyebrow::before { content:""; width:46px; height:2px; background:linear-gradient(90deg,#2DD4FF,transparent); }
+
+  h1 { font-size:106px; line-height:1.20; font-weight:800; letter-spacing:.01em; }
+  h1 .hl { background:linear-gradient(100deg,#2DD4FF 0%, #7FB0FF 58%, #A78BFA 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  .foot { position:absolute; left:96px; right:96px; bottom:88px; display:flex; justify-content:space-between; align-items:flex-end; font-size:24px; color:#6E84A5; letter-spacing:.08em; }
+  .foot .f2 { color:#93A9C8; }
+
+  .badges { display:flex; gap:14px; flex-wrap:wrap; }
+  .badge { font-size:25px; color:#BFD3EE; letter-spacing:.06em; padding:13px 26px; border-radius:999px; border:1px solid rgba(140,180,255,.22); background:rgba(120,170,255,.06); }
+  .badge em { font-style:normal; color:#2DD4FF; }
+
+  /* ---------- P1 封面 ---------- */
+  #p1 .stage { position:absolute; left:96px; right:96px; top:330px; }
+  #p1 .sub { margin-top:38px; font-size:36px; color:#95AACB; line-height:1.55; letter-spacing:.04em; }
+  #p1 .badges { margin-top:56px; }
+  #p1 .hero { position:absolute; right:-70px; top:700px; width:820px; height:820px; opacity:.20; background:radial-gradient(circle at 50% 50%, rgba(45,212,255,.5), transparent 62%); }
+  #p1 .ring { position:absolute; border:1px solid rgba(45,212,255,.30); border-radius:50%; }
+  #p1 .r1 { width:560px; height:560px; right:-160px; top:760px; }
+  #p1 .r2 { width:820px; height:820px; right:-290px; top:630px; border-color:rgba(45,212,255,.16); }
+  #p1 .r3 { width:1080px; height:1080px; right:-420px; top:500px; border-color:rgba(45,212,255,.09); }
+  #p1 .cards { position:absolute; left:96px; right:96px; top:1000px; display:flex; gap:18px; }
+  #p1 .card { flex:1; padding:30px 26px; border-radius:20px; border:1px solid rgba(140,180,255,.16); background:linear-gradient(160deg, rgba(120,170,255,.10), rgba(120,170,255,.02)); }
+  #p1 .card b { display:block; font-size:58px; color:#2DD4FF; font-weight:700; letter-spacing:-.01em; }
+  #p1 .card span { display:block; margin-top:12px; font-size:24px; color:#93A9C8; letter-spacing:.06em; }
+
+  /* ---------- P2 本次更新 ---------- */
+  #p2 .stage { position:absolute; left:96px; right:96px; top:250px; }
+  #p2 h1 { font-size:88px; }
+  #p2 .lead { margin-top:28px; font-size:29px; color:#95AACB; line-height:1.60; letter-spacing:.04em; }
+  #p2 .list { position:absolute; left:96px; right:96px; top:652px; }
+  #p2 .item { display:flex; align-items:center; gap:28px; padding:25px 34px; margin-bottom:12px; border-radius:18px; border:1px solid rgba(140,180,255,.13); background:linear-gradient(100deg, rgba(120,170,255,.075), rgba(120,170,255,.015)); border-left:3px solid rgba(45,212,255,.55); }
+  #p2 .item .no { font-size:29px; font-weight:700; color:#2DD4FF; letter-spacing:.02em; font-family:"SF Mono",Consolas,monospace; width:50px; }
+  #p2 .item .nm { font-size:40px; font-weight:700; width:210px; letter-spacing:.04em; }
+  #p2 .item .ds { font-size:25px; color:#8FA6C6; letter-spacing:.03em; }
+  #p2 .tail { position:absolute; left:96px; right:96px; top:1118px; padding:30px 36px; border-radius:20px; border:1px dashed rgba(140,180,255,.24); background:rgba(120,170,255,.045); font-size:26px; color:#A8BEDC; line-height:1.80; letter-spacing:.03em; }
+  #p2 .tail em { font-style:normal; color:#2DD4FF; font-weight:700; }
+
+  /* ---------- P3 技术底子 ---------- */
+  #p3 .stage { position:absolute; left:96px; right:96px; top:250px; }
+  #p3 h1 { font-size:88px; }
+  #p3 .lead { margin-top:28px; font-size:30px; color:#95AACB; line-height:1.60; letter-spacing:.04em; }
+  #p3 .tech { position:absolute; left:96px; right:96px; top:598px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  #p3 .tcard { padding:22px 30px; border-radius:20px; border:1px solid rgba(140,180,255,.14); background:linear-gradient(160deg, rgba(120,170,255,.09), rgba(120,170,255,.02)); border-left:3px solid rgba(45,212,255,.45); }
+  #p3 .tcard .tn { font-size:30px; font-weight:700; letter-spacing:.04em; }
+  #p3 .tcard .td { margin-top:9px; font-size:23px; color:#8FA6C6; line-height:1.80; letter-spacing:.03em; }
+  #p3 .seal { position:absolute; left:96px; top:1214px; right:96px; padding:28px 36px; border-radius:18px; border:1px dashed rgba(45,212,255,.34); font-size:27px; color:#BFD3EE; letter-spacing:.05em; line-height:1.70; }
+  #p3 .seal em { font-style:normal; color:#2DD4FF; font-weight:700; }
+</style>
+</head>
+<body data-page-node-id="8NFbPRs9jtcHe0gMzO3Ise">
+
+<!--pnid:qmgvouCkv2caGT3EhODr4P--><!-- ================= P1 封面 ================= -->
+<section data-page-node-id="CFxX9Kl9YUxVuQ10xqHzK5" class="poster on" id="p1">
+  <div data-page-node-id="zgrvjnsUdFoPbTe4R6vsUq" class="grid"></div><div data-page-node-id="gW4xFKJjkeJXTJ29ByyHKs" class="horizon"></div>
+  <div data-page-node-id="U8jGR7G7NICtXLxIvolccq" class="r1 ring"></div><div data-page-node-id="V2U1GNCDRHfqNWFXv1uyXC" class="r2 ring"></div><div data-page-node-id="vRb8BYXfQ1DygHMIWf4ZAQ" class="r3 ring"></div>
+  <i data-page-node-id="surjxfKf64xVn9VS9u7bNN" class="corner tl"></i><i data-page-node-id="I0cyPEh8Ke9SNOoYIjOzqc" class="corner tr"></i><i data-page-node-id="zgPO5M8PB3SSGt9kvhOvsc" class="corner bl"></i><i data-page-node-id="piAzIEAz3kj0S5T9Hfhjem" class="corner br"></i>
+
+  <div data-page-node-id="76rQgBEnpfdzOvZvo9QQXE" class="brand">
+    <svg data-page-node-id="R8FisUi3654HMY6VIIogg8" height="72" viewBox="0 0 36 34" width="76">
+      <polygon data-page-node-id="oqUf3zfNyUeNLp7KEDStmu" fill="#1F4FD8" points="1,31 12.5,9 24,31"/>
+      <polygon data-page-node-id="PEovYCpRmPHFRFhq3C28lj" fill="#3B82F6" points="14,31 24.5,12.5 35,31"/>
+    </svg>
+    <div data-page-node-id="aPF0nKacQfcBcVDVTlxer0"><div data-page-node-id="M1OfssP9WTG1FDBUzSWgEU" class="bname"><!--pnid:QnRzDY3CYNCiNsyMS5suRv-->搬山</div><div data-page-node-id="maMGXYad4z1ldu46BAgBHt" class="btag"><!--pnid:2YfU010V17bLMrNTqkeajc-->PANMIGRATE</div></div>
+  </div>
+
+  <div data-page-node-id="OgZsqMlmqbTSW3SY6qumCA" class="stage">
+    <div data-page-node-id="VCihBNWCtFXrpq05ywcqVZ" class="eyebrow"><!--pnid:B7kwSvJmK8RfDlxZZaM20F-->VERSION 1.26.0</div>
+    <h1 data-page-node-id="rO5X5c9eZCoC0MidE9xm4V" style="margin-top:46px"><!--pnid:9goll8PUzHXa8EPxQqR7WO-->两套皮肤<br data-page-node-id="ljjmLDYMarPJRmgdSO0cDA"><span data-page-node-id="qBb5PJf3nlqZqYgIrHTjSy" class="hl"><!--pnid:wxStPCXnc7Tsj32EpvG525-->一个界面</span></h1>
+    <div data-page-node-id="Iv5QN5A9br3FZdC6a9M51k" class="sub"><!--pnid:kSsd1Qbg8RlSvJm81mQ3fR-->深色弥散，浅色通透<br data-page-node-id="DW6Qz7UqXX6c1dkiq5ZOPD"><!--pnid:SUY2pNgQIiUwk0gVHxz76w-->点一下换个心情，选过就记住</div>
+    <div data-page-node-id="XuaEiY9SoVipjo238ve9F6" class="badges">
+      <div data-page-node-id="UZGbkc0KHmFQGHhTlzaQ6N" class="badge"><em data-page-node-id="cMnQui4t9QjnUWbsCR3Gyp"><!--pnid:dv1PHjXmNu3YksXyfxFiqJ-->六家</em><!--pnid:cMTzjBBzzMal20uCsUIsAE--> 网盘互通</div>
+      <div data-page-node-id="rTXq83IBB5i0MDkZJwg9QQ" class="badge"><em data-page-node-id="Vd2OQFVQxZrPN6VCHlnjid"><!--pnid:YkEPCbSD4aS6DLCM5FxbE8-->双向</em><!--pnid:GbldZCMoIDMQgX6GvjIswp--> 读写</div>
+      <div data-page-node-id="U9jIkXwgBKOb95OHbQVc7X" class="badge"><em data-page-node-id="f57LrnEE0i3QzhUZYpevQL"><!--pnid:wL6yWmgKIGvRKznLQj5pVo-->单机</em><!--pnid:v1FM3Hi9CUo0GFl3H9bhlM--> 运行</div>
+      <div data-page-node-id="d5GkI6lkoz4H6TFusEpkc8" class="badge"><!--pnid:qXdmKrHlhSmP5QqaJoN6Uq-->整文件不落本地</div>
+    </div>
+  </div>
+
+  <div data-page-node-id="egZdlbvmxMUuuJFVpIjx3r" class="cards">
+    <div data-page-node-id="Y2mtVwvNR93JwwHXVn9WDc" class="card"><b data-page-node-id="h2zxwnBZcKQPsSfh6NqfT6"><!--pnid:d5XyGLAo0IQsztElBT6PUZ-->2</b><span data-page-node-id="SenOFCWXhzpiB0JjvqBd78"><!--pnid:giPUI2iDfAo2WDxaKzMlXW-->套主题</span></div>
+    <div data-page-node-id="RbuTXdlly7ehGObMQoXNoo" class="card"><b data-page-node-id="OkqnyXECVLESGwdXPjBgOo"><!--pnid:MJtw4AwmdkL1VjZacmutXR-->2</b><span data-page-node-id="Xqtk8Y0v196HNAPAgoIjfs"><!--pnid:FC2krqGycIfzrRpugJl6SN-->家新接入</span></div>
+    <div data-page-node-id="lW7SnjYsf1WCrxwn0uq9fE" class="card"><b data-page-node-id="3prqWGBilvAboOyLT5JOBo"><!--pnid:vLrrorMiRrN6yCzr0NaV3S-->242</b><span data-page-node-id="D3HKu1Yaio76yaRKvIEgIB"><!--pnid:LWlmqoHcfOkB8KbprmUxIT-->个自动化测试</span></div>
+  </div>
+
+  <div data-page-node-id="zEypskNrkql5j5tLMOc8gN" class="foot"><span data-page-node-id="64CoEq8KCJmBXQAe7aL4as"><!--pnid:q1biEqKPjMl2A1HB5FZUg0-->搬山 v1.26.0</span><span data-page-node-id="zsUpZptxE1zycfXQ67QK7G" class="f2"><!--pnid:Dds9YY9mOZ480eGkf8yJno-->个人作品 · 非商业发行</span></div>
+</section>
+
+<!--pnid:j1l7L3LOxXh3o0IOlK5e09--><!-- ================= P2 本次更新 ================= -->
+<section data-page-node-id="Xytti3Uqbe7q9GUAEJaxaX" class="poster" id="p2">
+  <div data-page-node-id="K4jwsWyTW0A7OtmD2822sP" class="grid"></div><div data-page-node-id="IRLGJd24ROohmSQaJHR9Ox" class="horizon"></div>
+  <i data-page-node-id="5RbRhNUxhTS6oeilDolPbJ" class="corner tl"></i><i data-page-node-id="r2pukqAPmkIUFuGNIv4niJ" class="corner tr"></i><i data-page-node-id="nPRxgySDsfQI3xjHLixAHE" class="corner bl"></i><i data-page-node-id="Cg25AI6bZ4w1RDK1LLNll3" class="corner br"></i>
+
+  <div data-page-node-id="Qi7Ent5ZrnoqapumNrkaii" class="brand">
+    <svg data-page-node-id="bLetJvtAoq5ZyTpAWqAXY0" height="57" viewBox="0 0 36 34" width="60">
+      <polygon data-page-node-id="gcMXaI9OOJZoCFBQLxMl60" fill="#1F4FD8" points="1,31 12.5,9 24,31"/>
+      <polygon data-page-node-id="ziVe1jV0NYfeGqJln2rP5h" fill="#3B82F6" points="14,31 24.5,12.5 35,31"/>
+    </svg>
+    <div data-page-node-id="UIkC0DZYxAHNcrN5wFKDTL"><div data-page-node-id="ONlq3Uk3vG8IJ4upo8WFDh" class="bname"><!--pnid:jsQuxujkbRnV1tmxDqjzID-->搬山</div><div data-page-node-id="cCHrgAsak7te52EbEGEymO" class="btag"><!--pnid:4AEgNnDYFCygyHy9SfJDSB-->WHAT'S NEW</div></div>
+  </div>
+
+  <div data-page-node-id="d6YeuroOm0ZsR7QIVPtoTm" class="stage">
+    <div data-page-node-id="7rGJ5RLhQYXQtPfR4aicWv" class="eyebrow"><!--pnid:G2fgSqrZBMl3HV0V9npbZF-->本次更新</div>
+    <h1 data-page-node-id="PgruZLyqHVAzTZFOqhwebC" style="margin-top:44px"><!--pnid:3SGoCmouOqMA1QjVc3cZrB-->四条<br data-page-node-id="66VtDinlRBSHyhNLLL5pUR"><span data-page-node-id="HLgBTq27SD8spTg0G2BEwI" class="hl"><!--pnid:qYdh1ZoN7ahuTEELl5T4o7-->看得见的改动</span></h1>
+    <div data-page-node-id="i4crGfEuXPun0Q1YdugETo" class="lead"><!--pnid:vK9TCUS6YUTaYCafGzVqCA-->不是加功能，是把已有的做得更像样</div>
+  </div>
+
+  <div data-page-node-id="Yl1h2ZjrbYi5CUZESnbPd0" class="list">
+    <div data-page-node-id="X1PO70Zwn58FVwpspzA0vT" class="item"><div data-page-node-id="1eAj5lBjMOecCmOSFLZ8TS" class="no"><!--pnid:auKry1hdEqBdEsl5KjKlux-->01</div><div data-page-node-id="07bomzcswB0roUphMirNor" class="nm"><!--pnid:stZb2WDodjqV8acBfVKCEb-->双主题</div><div data-page-node-id="FHf2V8im8T87NxcRka7QPB" class="ds"><!--pnid:8k1KqNe1cRhrwIrj73P5eS-->深色弥散 · 浅色通透，一键切换</div></div>
+    <div data-page-node-id="h6dKsvGQljzGAKLPuDZ5tr" class="item"><div data-page-node-id="AWDtolSj11H6iNohtr93ed" class="no"><!--pnid:sOdFnIjbo8FyzwOVW8cJVs-->02</div><div data-page-node-id="2Lwz7JRO4mAL9NTGwFRBdP" class="nm"><!--pnid:pk72B0qaEzz8BOWnzuaMo0-->两家新盘</div><div data-page-node-id="tDAp9o4FDGBype4FPudhn5" class="ds"><!--pnid:FlpX9U1yc8feJurKCk6d7p-->123 云盘、115 云盘，读写双向</div></div>
+    <div data-page-node-id="BlYwoE8nK1MacI4T0cfhQd" class="item"><div data-page-node-id="OlPqbexnwtylFi0iXp0TWv" class="no"><!--pnid:s2XHC8UAzYgppOm3OHfr4p-->03</div><div data-page-node-id="d6mmflJ9BDkyrghCHXV3Us" class="nm"><!--pnid:6OIoeROsATaOZbFtnfZ7gt-->扫码即登</div><div data-page-node-id="uCwj9g8tIgmCnfYUyTNf9R" class="ds"><!--pnid:ds0YaBI5aKXGFMzDHLCgCN-->扫一下就连上账号，密钥不自己抓</div></div>
+    <div data-page-node-id="mCdvuti47rrbBol1vmNeSb" class="item"><div data-page-node-id="naYr6XgXtaYlyFRwMycxTM" class="no"><!--pnid:ZAulFA5KXRGW1iJMV73QxC-->04</div><div data-page-node-id="W6k2CSA6WcBuxGFiUg4pY2" class="nm"><!--pnid:VYpUBY5YizERWHKPzKzPDm-->界面收口</div><div data-page-node-id="0mTzkSW1vegXwIKRUEbMqE" class="ds"><!--pnid:MvDaGx1DuCt7JjbpcUyDmZ-->颜色砍到三组，两栏竖缝对齐</div></div>
+  </div>
+
+  <div data-page-node-id="FzfrpbKeRIcC8v0CDHpHmO" class="tail"><!--pnid:bD1aGc6UOguNOxNpP7Ztln-->老版本配置与任务记录<em data-page-node-id="K9dHyRF7yOwd0yFUGuaEZn"><!--pnid:ZY5tFv3KoKXu2yA7913nZC-->原样保留</em><!--pnid:ezbJCGShNwgJ8g3qEwYG9u-->，覆盖安装就行，不必重新登录</div>
+
+  <div data-page-node-id="InGPoviRoBvXmcpZcHjKFn" class="foot"><span data-page-node-id="qucAaYo0vFynXTku19t2wD"><!--pnid:NswBHzv4GcvMNHZNhem5RR-->搬山 v1.26.0</span><span data-page-node-id="QS2Xm1nISQtqFR5hlLRem6" class="f2"><!--pnid:XmNOBqpic5OxluVQfYeGVK-->个人作品 · 非商业发行</span></div>
+</section>
+
+<!--pnid:NwczPwvSxc1CMvARceRHgE--><!-- ================= P3 技术底子 ================= -->
+<section data-page-node-id="gkNjXlzCPFBLKW6Yny9Wgv" class="poster" id="p3">
+  <div data-page-node-id="SbzCM30EzOrXlUPiW3g19J" class="grid"></div><div data-page-node-id="t7AFU2Ix58EgqTvcdREwFs" class="horizon"></div>
+  <i data-page-node-id="zW97KGiitia277no5bNUDE" class="corner tl"></i><i data-page-node-id="dphN3Eq2rwsxU9kpBboygM" class="corner tr"></i><i data-page-node-id="xT5Mo66rhsnyzVvizVMHmL" class="corner bl"></i><i data-page-node-id="C4mii2OBhh5UvyeMo6Eegg" class="corner br"></i>
+
+  <div data-page-node-id="8BSf5Qw1cddibt7lystvjA" class="brand">
+    <svg data-page-node-id="pH1tXQ809cLCFkMXA4RsQN" height="57" viewBox="0 0 36 34" width="60">
+      <polygon data-page-node-id="OsF3s0pCQxfxZpo2oG8Yib" fill="#1F4FD8" points="1,31 12.5,9 24,31"/>
+      <polygon data-page-node-id="H0vcAUJNM4blW5dGsyneAm" fill="#3B82F6" points="14,31 24.5,12.5 35,31"/>
+    </svg>
+    <div data-page-node-id="cDo8poYLeXj6wFpCAZlqx3"><div data-page-node-id="X7oeUb3yVTX4me4z5l14wQ" class="bname"><!--pnid:eUm0q28Uqe8sj1VhcjILbY-->搬山</div><div data-page-node-id="TarExsBP7ClVbGt9dmhmpj" class="btag"><!--pnid:wheAvDwqsG4jwcOr8TVqqs-->UNDER THE HOOD</div></div>
+  </div>
+
+  <div data-page-node-id="JKZCER1xKdybPfjp4jNBte" class="stage">
+    <div data-page-node-id="5kq1iKRvr9qwFL8OWzwNRz" class="eyebrow"><!--pnid:8xRr3AWWO0y0juF4u8aLcF-->怎么搭的</div>
+    <h1 data-page-node-id="Tjn6Yv0O5Mp2K9PVdySYoX" style="margin-top:44px"><!--pnid:0Vw83obnWdHSkLLtVX0hF9-->好看之外<br data-page-node-id="gYbSI8MFDS98QUVX0UgOho"><span data-page-node-id="Vu7VNBYBC75MKGydxe52Cr" class="hl"><!--pnid:UkY1ILCEEKqdHoEcg5zR3r-->底子也收拾过</span></h1>
+    <div data-page-node-id="NDXWN0qarD2n8LaNhclLPO" class="lead"><!--pnid:1NGuV5qiFtkt5Ulcu8YCZx-->两套皮肤是两份完整样式表，不是叠一层滤镜</div>
+  </div>
+
+  <div data-page-node-id="t5XGWIIRJhjQxVl2oVpt2m" class="tech">
+    <div data-page-node-id="eV1HAMvCEHflGk9nI1ydon" class="tcard"><div data-page-node-id="O0vbBFUjTCHMsUMZUhBLwy" class="tn"><!--pnid:vibTJ4v2VZpb4lqGEfTruj-->双皮肤分文件</div><div data-page-node-id="0HcVY4r7Hm4bbE9855jjLo" class="td"><!--pnid:9wVQ1jxKw4kcEHK6GhzF6P-->两份 CSS 互为开关<br data-page-node-id="2FF9aBfJYdgkWXlvW5KQ0C"><!--pnid:mFeB6QB7i96LO4xTZ1nquG-->不靠权重互相压制</div></div>
+    <div data-page-node-id="Kx1YyXU8HSWYj4Q32Qa4IC" class="tcard"><div data-page-node-id="DlPzRHS0PbvgHK4IMaTDdB" class="tn"><!--pnid:U8vQSZcI5zxCsH8F0Vcp7M-->分片直传</div><div data-page-node-id="Qrmu7C92shotMQXooXXwoU" class="td"><!--pnid:EH3yH905UhTGgwez7iujYz-->读一块传一块，多块并行<br data-page-node-id="FcOekhOa9JiePUxkYgB0UR"><!--pnid:efFvifJc5uQZq2WfVE8aFr-->整文件不落本地</div></div>
+    <div data-page-node-id="Vu5cdJSZE4HsRZ6jORo5Bw" class="tcard"><div data-page-node-id="dd8RWk4rKFLgJVH5KgWcdy" class="tn"><!--pnid:EYz89VAid5lt3DpbwjOexI-->242 个测试</div><div data-page-node-id="1yApRBCya3H91jNSLn7T97" class="td"><!--pnid:nJ52hHcbHmYAn2tjLaLPB9-->每个网盘适配器<br data-page-node-id="oZ3bYEhQlUyX8fwuc3Ybzo"><!--pnid:ZF7aRe4t7tEJob0l7fLRHP-->各有真机验证记录</div></div>
+    <div data-page-node-id="omdcZUuPuT7ATaSNIkDBof" class="tcard"><div data-page-node-id="DltKFD7YGcAV1oZwbUh1L3" class="tn"><!--pnid:pIWepO9BQmIoINk7qt4yPH-->纯标准库</div><div data-page-node-id="UpN1IXOudDwsVJ5DMu02VV" class="td"><!--pnid:JCJisxxGmux72ZVOWFTxYW-->环境零配置<br data-page-node-id="MeAG7z0264XMPpoMM45oHE"><!--pnid:7xlsxBNguTlo8gh8fZva1X-->双击就能起来</div></div>
+    <div data-page-node-id="is65JAykfwI1avouNuk0KB" class="tcard"><div data-page-node-id="gmuchatfQzqSBtLADVIHtj" class="tn"><!--pnid:E01KDUmIk5CwP7p3NWet1H-->18MB 单文件</div><div data-page-node-id="snvMmkrarzB0NTlnGM6EfX" class="td"><!--pnid:vZMfd9CgJG3hIITUXjezEx-->一个 exe，免安装<br data-page-node-id="DWfwAk91ZREqYqIhSzGqwg"><!--pnid:6GW5xrITo6Ej2V7n0KYZF6-->拷到哪都能跑</div></div>
+    <div data-page-node-id="fr5QCD4wxOcSxeQf2F7pjm" class="tcard"><div data-page-node-id="YGmEBzK9GAkDhlqBHsrKW4" class="tn"><!--pnid:Iv8lxSBd2lMhkDBd3JXXeJ-->凭据只存本机</div><div data-page-node-id="b3SuyJvF8qbTYbCRWg8hZ7" class="td"><!--pnid:230rtyva5wGRFQlKuP3orS-->登录信息不出这台电脑<br data-page-node-id="rg1zMHg3Jd3jb79rsUswNw"><!--pnid:lbAlt1u5ltX6ATnygQxunR-->不经过任何第三方</div></div>
+  </div>
+
+  <div data-page-node-id="kLTJW5TY9rwfLLizZQqQaC" class="seal"><!--pnid:56Zr87FiOAes7Lw8q5REC0-->深浅两套皮肤<em data-page-node-id="ik4BeE96uoBSElNVXCo161"><!--pnid:6B5SgMPrxnva5zIL8M0oNu-->随时切换</em><!--pnid:imYi9qS1bMQsrKYLmNZyKs-->，选择写在本机 · 换台电脑重选一次而已</div>
+
+  <div data-page-node-id="3UFIeeyHJ1ioLnvrYh7301" class="foot"><span data-page-node-id="iBEUVegbCipKdk02n6uhNt"><!--pnid:1LkA0RHP7XxVj1lKiXuCiK-->搬山 v1.26.0</span><span data-page-node-id="JoHEfnyyN3Enq7r9kCmvFF" class="f2"><!--pnid:ZcRM3HVQIXCJxGObIGcZ1o-->个人作品 · 非商业发行</span></div>
+</section>
+
+<script data-page-node-id="kdC6kqgfqAHF9tnB5Sv3Mx" data-pnid-children="cCX7Z33BT01FwTpju46Kwa">
+  // 逐页静态导出：?p=N 只显示第 N 页，配合无头浏览器按 1080×1440 截图
+  function show(i) {
+    document.querySelectorAll('.poster').forEach(function (p) { p.classList.remove('on'); });
+    var ps = document.querySelectorAll('.poster');
+    if (ps[i - 1]) ps[i - 1].classList.add('on');
+    document.title = 'poster-' + i;
+  }
+  var n = parseInt(new URLSearchParams(location.search).get('p') || '1', 10);
+  show(n);
+</script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+/* 搬山 · 暗色主题
+   独立成文件，由 app.js 通过 <link id="theme-dark"> 的 disabled 开关切换。
+   好处是两套皮肤互不覆盖 —— 同一文件里靠 !important 打架是走不通的。 */
+
+/* =====================================================================
+   v22 · 暗色皮肤：弥散光 + 玻璃 + 单一主色
+   ---------------------------------------------------------------------
+   参照两张大屏：深底、弥散光斑、半透明玻璃卡、细发光描边。
+   这一层只换「皮肤」，不动版式 —— 两卡对齐、折叠、字号阶梯全部沿用。
+   颜色克制在三条：
+     ① 主色 蓝 #3B82F6（按钮、选中、进度、源标记、光斑）
+     ② 中性 冷灰（文字与发丝线，全部走白色不同透明度）
+     ③ 语义 绿=成功 / 红=危险，只在极小面积出现
+   ===================================================================== */
+
+:root {
+  --bg: #080B12;
+  --card: rgba(255, 255, 255, .035);
+  --line: rgba(255, 255, 255, .08);
+  --text: #E6EBF5;
+  --muted: #97A3B8;
+  --faint: #5D6A80;
+  --accent: #3B82F6;
+  --accent-2: #2563EB;
+  --accent-soft: rgba(59, 130, 246, .16);
+  --paper: #080B12;
+  --edge: rgba(255, 255, 255, .08);
+  --ink: #F2F6FF;
+  --ink-2: #B9C4D6;
+  --ink-3: #7C889C;
+  --ok: #34D399;
+  --danger: #F87171;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-lg: 0 24px 60px -30px rgba(0, 0, 0, .9);
+}
+
+/* ---------- 底：三层弥散光 + 极淡网格 ---------- */
+body {
+  background:
+    radial-gradient(900px 620px at 10% -8%, rgba(37, 99, 235, .30), transparent 62%),
+    radial-gradient(1000px 720px at 94% 2%, rgba(14, 165, 233, .18), transparent 64%),
+    radial-gradient(1100px 900px at 50% 118%, rgba(59, 130, 246, .13), transparent 62%),
+    #080B12;
+  background-attachment: fixed;
+  color: #E6EBF5;
+}
+/* 科技感的来源不是多画东西，是一层几乎看不见的网格 */
+body::before {
+  display: block;
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .028) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(1200px 800px at 50% 0%, #000 0%, transparent 78%);
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar { background: transparent; border-bottom: 1px solid rgba(255, 255, 255, .07); }
+.brand-txt strong { background: none; -webkit-text-fill-color: #F2F6FF; color: #F2F6FF; }
+.brand-txt .slogan { color: #6C7A90; }
+.badge { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .1); color: #97A3B8; }
+.ver { color: #4C5769; }
+
+/* ---------- 玻璃卡 ---------- */
+.card {
+  background: rgba(255, 255, 255, .035);
+  border: 1px solid rgba(255, 255, 255, .075);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 24px 60px -34px rgba(0, 0, 0, .9);
+  backdrop-filter: blur(14px);
+}
+.card:hover { border-color: rgba(255, 255, 255, .13); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 28px 70px -34px rgba(0, 0, 0, .95); }
+
+/* ---------- 标题字阶沿用，只换颜色 ---------- */
+.row-head .row-title { color: #F2F6FF; }
+.row-head .row-title .tag { color: #6C7A90; }
+.br-head h2, .tdir-head h2, .card-head h2, .job-top h2, .list-head h3,
+.card:not(.browser) > h2 { color: #E6EBF5; }
+.card h2 .ic, .br-head h2 .ic, .tdir-head h2 .ic, .card-head h2 .ic { color: #5C6879; }
+.hint, .card .hint { color: #6C7A90; }
+
+/* ---------- 标题带 ---------- */
+.br-head, .tdir-head {
+  background: rgba(255, 255, 255, .035);
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+/* ---------- 方向条：这一版唯一「有光」的东西 ---------- */
+.dir-bar {
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(255, 255, 255, .09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 24px 60px -34px rgba(0, 0, 0, .95);
+  backdrop-filter: blur(16px);
+}
+.dir-card { background: transparent; }
+.dir-card.dst::before { background: rgba(255, 255, 255, .22); }
+.dir-card.src::before { background: linear-gradient(180deg, #60A5FA, #2563EB); box-shadow: 0 0 18px rgba(59, 130, 246, .7); }
+.dir-name { color: #F2F6FF; }
+.dir-note { color: #6C7A90; }
+.dir-badge { background: rgba(59, 130, 246, .2); color: #93C5FD; }
+.dir-card.dst .dir-badge { background: rgba(255, 255, 255, .07); color: #B9C4D6; }
+.dir-state { color: #7C889C; }
+.dir-state.on { color: #34D399; }
+.dir-state::before, .dir-state.off::before { background: rgba(255, 255, 255, .25); }
+.dir-state.on::before { background: #34D399; box-shadow: 0 0 8px rgba(52, 211, 153, .8); }
+.dir-set { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .12); color: #B9C4D6; }
+.dir-set:hover { background: rgba(59, 130, 246, .2); border-color: rgba(96, 165, 250, .5); color: #93C5FD; }
+.dir-swap { background: transparent; border-left: 1px solid rgba(255, 255, 255, .07); border-right: 1px solid rgba(255, 255, 255, .07); }
+.swap-label { color: #5C6879; }
+
+/* 交换按钮：整套界面唯一自带光晕的物件 */
+.swap-btn {
+  background: linear-gradient(180deg, #4C8DFF, #2158D8);
+  border: 1px solid rgba(147, 197, 253, .45);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .12), 0 10px 28px -8px rgba(37, 99, 235, .85), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.swap-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #5E9BFF, #2A66F0);
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, .16), 0 14px 34px -8px rgba(37, 99, 235, .95), inset 0 1px 0 rgba(255, 255, 255, .4);
+}
+
+/* ---------- 按钮 ---------- */
+button, button.sm:not(.primary):not(.danger), button.lg:not(.primary):not(.danger) {
+  background: rgba(255, 255, 255, .055);
+  border-color: rgba(255, 255, 255, .12);
+  color: #C8D2E2;
+}
+button:hover:not(:disabled),
+button.sm:not(.primary):not(.danger):hover:not(:disabled),
+button.lg:not(.primary):not(.danger):hover:not(:disabled) {
+  background: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .2);
+  color: #F2F6FF;
+}
+button.primary, button.sm.primary, button.lg.primary {
+  background: linear-gradient(180deg, #4C8DFF, #2158D8);
+  border-color: rgba(147, 197, 253, .4);
+  color: #fff;
+  box-shadow: 0 8px 24px -10px rgba(37, 99, 235, .9), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+button.primary:hover:not(:disabled),
+button.sm.primary:hover:not(:disabled),
+button.lg.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #5E9BFF, #2A66F0);
+  border-color: rgba(191, 219, 254, .55);
+}
+button.danger { background: rgba(248, 113, 113, .1); border-color: rgba(248, 113, 113, .3); color: #FCA5A5; }
+button.danger:hover:not(:disabled) { background: rgba(248, 113, 113, .18); border-color: rgba(248, 113, 113, .5); }
+button:disabled { opacity: .35; }
+
+/* ---------- 输入 / 下拉 ---------- */
+input[type="text"], input[type="search"], input[type="number"], select, textarea {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .12);
+  color: #E6EBF5;
+}
+input::placeholder, textarea::placeholder { color: #4C5769; }
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(96, 165, 250, .8);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .18);
+}
+
+/* ---------- 路径条 / 胶囊 ---------- */
+.br-path {
+  background: rgba(255, 255, 255, .04);
+  border-color: rgba(255, 255, 255, .09);
+  box-shadow: none;
+}
+.br-path .crumbs { color: #C8D2E2; }
+.br-up { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .12); color: #97A3B8; }
+.br-up:hover:not(:disabled) { background: rgba(59, 130, 246, .2); border-color: rgba(96, 165, 250, .5); color: #93C5FD; }
+.dir-prov { background: rgba(59, 130, 246, .18); color: #93C5FD; }
+.dir-prov .acct { color: #7C889C; border-left-color: rgba(255, 255, 255, .14); }
+.dir-prov.dst { background: rgba(255, 255, 255, .06); color: #C8D2E2; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.dir-prov.dst .acct { border-left-color: rgba(255, 255, 255, .14); }
+
+/* ---------- 列表 / 目录 ---------- */
+.br-body, .tdir-list, .scroll {
+  background: rgba(255, 255, 255, .02);
+  border-color: rgba(255, 255, 255, .08);
+}
+.br-nav {
+  background: rgba(255, 255, 255, .03);
+  border-right: 1px solid rgba(255, 255, 255, .07);
+}
+.br-bar {
+  background: rgba(255, 255, 255, .04);
+  border-color: rgba(255, 255, 255, .08);
+}
+.nav-item { color: #C8D2E2; }
+.nav-item:hover, .dirlist .it:hover, .ext-item:hover { background: rgba(255, 255, 255, .06); color: #F2F6FF; }
+.dirlist .it { border-bottom: 1px solid rgba(255, 255, 255, .045); color: #C8D2E2; }
+.dirlist .it.file:hover { background: rgba(255, 255, 255, .07); }
+.dirlist .it.picked { background: rgba(59, 130, 246, .16); }
+.seg { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); }
+.seg button { background: transparent; color: #97A3B8; }
+.seg button + button { border-left-color: rgba(255, 255, 255, .1); }
+.seg button.on { background: rgba(59, 130, 246, .28); color: #93C5FD; }
+.ext-trigger { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .12); color: #C8D2E2; }
+.ext-menu { background: rgba(14, 18, 28, .98); border-color: rgba(255, 255, 255, .12); box-shadow: 0 24px 60px -20px #000; }
+
+/* ---------- 表格 ---------- */
+th { color: #6C7A90; border-color: rgba(255, 255, 255, .08); }
+td { color: #C3CCDC; border-color: rgba(255, 255, 255, .055); }
+.job .scroll thead, .scroll thead { background: rgba(255, 255, 255, .04); }
+tbody tr:hover { background: rgba(255, 255, 255, .045); }
+
+/* ---------- 进度 / 统计 ---------- */
+.progress, .job-progress .progress.lg-prog { background: rgba(255, 255, 255, .09); box-shadow: none; }
+.progress > i { background: linear-gradient(90deg, #2563EB, #60A5FA); box-shadow: 0 0 14px rgba(59, 130, 246, .7); }
+.stats-inline { color: #7C889C; }
+.stats-inline b { color: #F2F6FF; }
+.si-bar { background: rgba(255, 255, 255, .12); }
+
+/* ---------- 预设档 ---------- */
+#presets .preset {
+  background: rgba(255, 255, 255, .04) !important;
+  border-color: rgba(255, 255, 255, .1) !important;
+  box-shadow: none !important;
+}
+#presets .preset b { color: #E6EBF5; }
+#presets .preset span { color: #7C889C; }
+#presets .preset:hover:not(:disabled) { background: rgba(255, 255, 255, .08) !important; border-color: rgba(255, 255, 255, .18) !important; }
+#presets .preset.on {
+  background: rgba(59, 130, 246, .18) !important;
+  border-color: rgba(96, 165, 250, .75) !important;
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, .5), 0 0 22px -6px rgba(59, 130, 246, .6) !important;
+}
+#presets .preset.on b { color: #93C5FD; }
+#presets .preset.custom { border-style: dashed !important; }
+
+/* ---------- 折叠 / 日志 ---------- */
+.card.is-folded { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .08); }
+.card.is-folded:hover { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .14); }
+.fold-btn, .row-head .fold-btn { color: #6C7A90; border-color: rgba(255, 255, 255, .1); background: transparent; }
+.row-head.is-collapsed .fold-btn { color: #93C5FD; border-color: rgba(96, 165, 250, .45); background: rgba(59, 130, 246, .16); }
+.logbox { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .08); color: #8E9BB0; }
+.logbox .lv-error { color: #FCA5A5; }
+.logbox .lv-warn { color: #FCD34D; }
+.adv > summary { color: #7C889C; }
+.adv-body { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .08); }
+
+/* ---------- 兼容性提示 / 空状态 ---------- */
+.compat-hint { color: #6C7A90; }
+.compat-hint em { color: #B9C4D6; }
+.compat-hint .compat-line::before { color: #5C6879; }
+#task-body td[colspan] { color: #6C7A90; }
+#task-body td[colspan]::before { border-bottom-color: rgba(255, 255, 255, .1); }
+
+/* ---------- 弹层 / 滚动条 ---------- */
+.mask { background: rgba(4, 6, 12, .72); backdrop-filter: blur(6px); }
+.dialog { background: #0E1420; border: 1px solid rgba(255, 255, 255, .1); box-shadow: 0 40px 90px -30px #000; }
+.dialog header { border-bottom-color: rgba(255, 255, 255, .08); }
+.dialog footer { border-top-color: rgba(255, 255, 255, .08); }
+.toast { background: #0E1420; border: 1px solid rgba(255, 255, 255, .12); color: #E6EBF5; box-shadow: 0 20px 50px -20px #000; }
+* { scrollbar-color: rgba(255, 255, 255, .18) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .16); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, .26); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* =====================================================================
+   v22b · 把 v15–v21 留下的浅色底扫干净
+   ---------------------------------------------------------------------
+   暗色主题最容易翻车的地方不是「没改」，是「漏了一个浅色底」：
+   #FBFAF8 / #F1EFEB / #EEF3FE 这些在亮色下是「几乎白」，
+   放到深底上就变成一块刺眼的白斑。这里逐个按组件清掉。
+   ===================================================================== */
+.br-body,
+.br-listwrap,
+.br-nav,
+.br-head,
+.tdir-head,
+.br-bar,
+.br-pathbox,
+.tdir-list,
+.tdir-cur,
+.adv-body,
+.seg { background-color: rgba(255, 255, 255, .03) !important; }
+
+/* 列表本体透明，让外壳的玻璃感透上来；行靠发丝线分隔 */
+.br-body { background-color: rgba(255, 255, 255, .012) !important; }
+.dirlist, .dirlist .it { background-color: transparent !important; }
+.dirlist .it:hover, .nav-item:hover, .ext-item:hover { background-color: rgba(255, 255, 255, .06) !important; }
+.dirlist .it.picked { background-color: rgba(59, 130, 246, .16) !important; }
+
+/* 折叠态 */
+.card.is-folded { background-color: rgba(255, 255, 255, .03) !important; }
+.card.is-folded:hover { background-color: rgba(255, 255, 255, .05) !important; }
+.card.is-folded .br-head:hover,
+.card.is-folded .tdir-head:hover,
+.card.is-folded .card-head:hover { background-color: transparent !important; }
+
+/* 网盘胶囊 */
+.dir-prov { background-color: rgba(59, 130, 246, .18) !important; color: #93C5FD !important; }
+.dir-prov.dst { background-color: rgba(255, 255, 255, .06) !important; color: #C8D2E2 !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1) !important; }
+
+/* 顶栏：版本号不要白底胶囊，logo 提亮一档才压得住深底 */
+.ver { background: transparent; border: 0; color: #4C5769; }
+.brand .logo svg path:first-child { fill: #60A5FA; }
+.brand .logo svg path:last-child { fill: #2563EB; }
+
+/* 表格 / 输入 兜底 */
+.scroll, .job .scroll { background-color: rgba(255, 255, 255, .012) !important; border-color: rgba(255, 255, 255, .08) !important; }
+select option { background: #0E1420; color: #E6EBF5; }
+
+/* =====================================================================
+   v22c · 把光做出来
+   ---------------------------------------------------------------------
+   上一版的问题：光是有的，但太弱 —— 深底上几乎看不见，只剩「灰暗」。
+   弥散光的要点不是「有渐变」，而是「亮部足够亮、暗部足够暗」；
+   同时卡片必须和背景拉开层次，否则玻璃感无从谈起。
+   ===================================================================== */
+
+/* ① 光：四层，亮的那两层放到 50% 以上透明度才看得出来 */
+body {
+  background:
+    radial-gradient(780px 540px at 6% -6%, rgba(37, 99, 235, .55), transparent 58%),
+    radial-gradient(860px 640px at 98% 4%, rgba(56, 189, 248, .34), transparent 60%),
+    radial-gradient(900px 720px at 58% 116%, rgba(59, 130, 246, .30), transparent 62%),
+    radial-gradient(700px 600px at 32% 58%, rgba(99, 102, 241, .14), transparent 66%),
+    #060910 !important;
+  background-attachment: fixed;
+}
+
+/* ② 卡片：底色压暗一档 + 描边提亮，才能从光里「浮」出来 */
+.card,
+.dir-bar {
+  background: rgba(13, 18, 30, .62);
+  border: 1px solid rgba(255, 255, 255, .1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .08),
+    0 1px 2px rgba(0, 0, 0, .6),
+    0 30px 60px -30px rgba(0, 0, 0, 1);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* ③ 卡片顶部一道极细高光：玻璃的「边」靠它成立 */
+.card { position: relative; }
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .07), transparent 88px);
+  opacity: .9;
+}
+
+/* ④ 内嵌的面（列表、表格、标题带）比卡片再亮一档，形成三层深度 */
+.br-head, .tdir-head, .br-bar {
+  background-color: rgba(255, 255, 255, .045) !important;
+  border-color: rgba(255, 255, 255, .08) !important;
+}
+.br-body, .tdir-list, .scroll {
+  background-color: rgba(255, 255, 255, .025) !important;
+  border-color: rgba(255, 255, 255, .1) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .45);
+}
+.br-nav { background-color: rgba(255, 255, 255, .035) !important; }
+
+/* ⑤ 方向条再亮一点：它是这一屏的主角 */
+.dir-bar {
+  background: rgba(16, 22, 36, .75);
+  border-color: rgba(255, 255, 255, .13);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .1),
+    0 0 0 1px rgba(37, 99, 235, .12),
+    0 30px 70px -30px rgba(0, 0, 0, 1),
+    0 0 90px -40px rgba(37, 99, 235, .9);
+}
+
+/* ⑥ 主按钮的辉光再明显些，它是整屏唯一的「发光体」 */
+button.primary, button.sm.primary, button.lg.primary {
+  box-shadow:
+    0 8px 26px -10px rgba(37, 99, 235, 1),
+    0 0 42px -14px rgba(59, 130, 246, .95),
+    inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+.swap-btn {
+  box-shadow:
+    0 0 0 5px rgba(37, 99, 235, .14),
+    0 0 34px -4px rgba(37, 99, 235, .95),
+    0 14px 34px -10px rgba(0, 0, 0, .9),
+    inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+
+/* ⑦ 进度条：填充带辉光，像一条流动的线 */
+.progress > i {
+  background: linear-gradient(90deg, #1D4ED8, #60A5FA 70%, #93C5FD);
+  box-shadow: 0 0 16px rgba(59, 130, 246, .85), 0 0 4px rgba(147, 197, 253, .9);
+}
+
+/* ---------- v22d · 光要落在视口里 ----------
+   v22c 的光斑中心写在 6% -6%，落在视口外面，只看到一点边角，
+   所以肉眼仍然是一片黑。中心移进视口、半径放大、衰减延后，
+   同时把卡片压薄（.62 → .44），光才能从卡片背后透出来。 */
+body {
+  background:
+    radial-gradient(920px 620px at 10% 4%, rgba(37, 99, 235, .72), transparent 64%),
+    radial-gradient(820px 580px at 94% 2%, rgba(56, 189, 248, .46), transparent 62%),
+    radial-gradient(1040px 760px at 52% 108%, rgba(59, 130, 246, .40), transparent 66%),
+    radial-gradient(680px 620px at 46% 46%, rgba(99, 102, 241, .16), transparent 70%),
+    #05080F !important;
+  background-attachment: fixed;
+}
+
+.card, .dir-bar { background: rgba(13, 18, 30, .44); }
+.dir-bar { background: rgba(16, 22, 36, .6); }
+
+/* 顶栏下方一条发光细线，把「科技感」压在第一眼 */
+.topbar { position: relative; }
+.topbar::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, .55) 22%, rgba(147, 197, 253, .85) 50%, rgba(59, 130, 246, .55) 78%, transparent);
+  filter: blur(.3px);
+}
+
+/* ---------- v22e · 光在卡片里，不在背景上 ----------
+   前两版一直想让背景光「透过」卡片，但卡片有 blur + 深色叠加，光全被吃掉了。
+   参考图的做法相反：光长在卡片自己身上（卡片内部有彩色径向渐变）。
+   所以这里只给两张主卡加内部光晕 —— 全都加会腻，一张都不加则死板。 */
+.card {
+  background:
+    radial-gradient(680px 300px at 4% 0%, rgba(59, 130, 246, .13), transparent 72%),
+    rgba(13, 18, 30, .46);
+}
+
+.dir-bar {
+  background:
+    radial-gradient(620px 300px at 2% 0%, rgba(96, 165, 250, .26), transparent 70%),
+    radial-gradient(520px 260px at 100% 100%, rgba(37, 99, 235, .18), transparent 72%),
+    rgba(16, 22, 36, .62);
+}
+
+/* 迁移作业：主操作所在，给一层从左上打过来的光 */
+.card.job {
+  background:
+    radial-gradient(700px 260px at 0% 0%, rgba(59, 130, 246, .18), transparent 72%),
+    rgba(13, 18, 30, .46);
+}
+
+/* 背景光收成「光球」而不是弥散一片：半径小、浓度高，才看得见 */
+body {
+  background:
+    radial-gradient(560px 440px at 7% 0%, rgba(37, 99, 235, .85), transparent 56%),
+    radial-gradient(520px 400px at 96% 0%, rgba(56, 189, 248, .55), transparent 58%),
+    radial-gradient(900px 620px at 50% 112%, rgba(37, 99, 235, .42), transparent 64%),
+    #04060B !important;
+  background-attachment: fixed;
+}
+
+/* 版本号在深底上几乎看不见，提一档 */
+.ver { color: rgba(255, 255, 255, .30) !important; }
+
+/* 网格稍微透一口气，科技感的「刻度」靠它 */
+body::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px) !important;
+  background-size: 34px 34px !important;
+}
+
+/* ---------- v22f · sticky 表头自带底色 ----------
+   表格表头是 position: sticky，为了遮挡滚动内容单独写死了浅色底 #fafbfd。
+   暗色下这一条会变成整块白条 —— 必须连同 sticky 的底色一起换掉。 */
+.scroll thead th,
+.job .scroll thead th,
+.picked-card .scroll thead th {
+  background: rgba(255, 255, 255, .05) !important;
+  color: #7C889C !important;
+  backdrop-filter: blur(8px);
+}
+.scroll thead,
+.job .scroll thead { background: transparent !important; }
+
+/* ---------- v22g · 光斑改成独立的固定层 ----------
+   把光写在 body 的 background 上 + background-attachment: fixed，
+   整页截图时 Chrome 会把渐变按文档高度重复拉伸，页面底部会冒出一块莫名的色带。
+   改成一层 position: fixed 的伪元素：只绘制一次、不随滚动重绘、也不会被拉伸。 */
+body {
+  background: #04060B !important;
+  background-attachment: scroll !important;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(560px 440px at 7% 0%, rgba(37, 99, 235, .80), transparent 56%),
+    radial-gradient(520px 400px at 96% 0%, rgba(56, 189, 248, .50), transparent 58%),
+    radial-gradient(900px 620px at 50% 108%, rgba(37, 99, 235, .38), transparent 64%);
+}
+
+/* ---------- 暗色：小控件 ----------
+   原生复选框在深底上是一块纯白，视觉上比正文还亮，必须重新配色。 */
+input[type="checkbox"] {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(255, 255, 255, .26);
+}
+input[type="checkbox"]:hover { border-color: #60A5FA; }
+input[type="checkbox"]:checked,
+input[type="checkbox"]:indeterminate {
+  background: #2563EB;
+  border-color: #60A5FA;
+  box-shadow: 0 0 12px -2px rgba(37, 99, 235, .9);
+}
+input[type="checkbox"]:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, .35); }
+
+/* 折叠摘要标签 */
+.card.is-folded .fold-summary {
+  background: rgba(59, 130, 246, .18);
+  border-color: rgba(96, 165, 250, .42);
+  color: #93C5FD;
+}
+.card.is-folded .fold-summary::before { color: #7C889C; }
+
+/* 筛选候选里的计数徽章 */
+.ext-item .ext-count { background: rgba(255, 255, 255, .1); color: #C8D2E2; }
+.ext-item.on .ext-count { background: rgba(59, 130, 246, .3); color: #BFDBFE; }
+
+/* 卡片里的小 tag 不做白底 */
+.card.is-folded .tag { background: rgba(255, 255, 255, .07); color: #97A3B8; }
+.card h2 .tag { color: #6C7A90; }
+
+/* ---------- 折叠态表头 ----------
+   折叠后整块只剩「表头 + 一行提示」，表头如果还带着自己的底色，
+   就会变成一条比卡片更深的横带、上下还有直角，和 12px 圆角的玻璃卡明显打架。
+   折叠态下把表格和表头都放平：融进卡片，只用一条发丝线分隔。 */
+.picked-card.is-folded .scroll {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, .09) !important;
+  box-shadow: none !important;
+}
+.picked-card.is-folded .scroll thead th {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .09) !important;
+  backdrop-filter: none !important;
+}
+
+/* 目标端：暗色下的青蓝，比源端亮一档才压得住深底 */
+.dir-card.dst .dir-badge {
+  background: rgba(14, 165, 233, .24);
+  color: #7DD3FC;
+}
+.dir-card.dst::before {
+  background: linear-gradient(180deg, #38BDF8, #0369A1);
+  box-shadow: 0 0 18px rgba(14, 165, 233, .8);
+}
+.dir-prov.dst {
+  background-color: rgba(14, 165, 233, .20) !important;
+  color: #7DD3FC !important;
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, .34) !important;
+}
+.dir-prov.dst .acct { color: #7C889C; border-left-color: rgba(56, 189, 248, .3); }
