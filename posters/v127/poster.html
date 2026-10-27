@@ -125,6 +125,18 @@
     letter-spacing:.005em;margin-bottom:6px;
   }
 
+  /* ── 第 2 页：界面截图 ── */
+  .ui-title{margin-top:44px;font-size:64px;line-height:1.18;font-weight:700;letter-spacing:-.025em}
+  .shot{
+    margin-top:46px;background:#fff;border:1px solid var(--hair);border-radius:20px;
+    padding:10px;box-shadow:0 26px 60px rgba(19,21,25,.10);
+  }
+  .shot img{
+    display:block;width:100%;height:740px;object-fit:cover;object-position:top center;
+    border-radius:12px;
+  }
+  .ui-note{margin-top:24px;font-size:16px;letter-spacing:.1em;color:var(--muted)}
+
   /* 单页预览：URL 带 ?p=N 时只显示第 N 页 */
   body[data-only="1"] .page{display:none}
   body[data-only="1"] .page.on{display:block}
@@ -175,7 +187,25 @@
   </div>
 </section>
 
-<!-- ══════════ 第 2 页 · 更新要点 ══════════ -->
+<!-- ══════════ 第 2 页 · 界面 ══════════ -->
+<section class="page">
+  <div class="glow"></div><div class="glow-2"></div>
+  <div class="inner">
+    <div class="kicker"><i></i>Interface</div>
+
+    <h2 class="ui-title">一屏看全，<br>不用翻页。</h2>
+
+    <div class="shot">
+      <img src="../../screenshots/主界面-浅色.png" alt="搬山主界面">
+    </div>
+
+    <div class="ui-note">左边挑文件，右边选去向，下面看进度 · 截图为演示数据</div>
+
+    <div class="foot"><span>搬山 v1.26.0</span><span>02 / 04</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 第 3 页 · 更新要点 ══════════ -->
 <section class="page">
   <div class="glow"></div><div class="glow-2"></div>
   <div class="inner">
@@ -204,7 +234,7 @@
       </div>
     </div>
 
-    <div class="foot"><span>搬山 v1.26.0</span><span>02 / 03</span></div>
+    <div class="foot"><span>搬山 v1.26.0</span><span>03 / 04</span></div>
   </div>
 </section>
 

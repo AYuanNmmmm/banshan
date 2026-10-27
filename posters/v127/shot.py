@@ -2,7 +2,7 @@
 """把海报 HTML 逐页截成 PNG（1080×1440，2x）。
 
 用法：python3 shot.py <poster.html> <输出目录> [页数]
-输出：<输出目录>/poster-1.png … poster-N.png
+输出：<输出目录>/poster-1.png … poster-N.png（默认 4 页）
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ W, H = 1080, 1440
 def main() -> int:
     html = Path(sys.argv[1]).resolve()
     outdir = Path(sys.argv[2]).resolve()
-    pages = int(sys.argv[3]) if len(sys.argv) > 3 else 3
+    pages = int(sys.argv[3]) if len(sys.argv) > 3 else 4
     outdir.mkdir(parents=True, exist_ok=True)
 
     proc = subprocess.Popen([
